@@ -3,6 +3,8 @@
  */
 package urllistcompare;
 
+import java.util.Scanner;
+
 /**
  * @author Rocco Barbini
  * @email roccobarbi@gmail.com
@@ -92,5 +94,57 @@ public enum URLFormat {
 	public String normalisePath(String url){
 		// This method MUST be overridden by each individual value of the enumeration.
 		return url;
+	}
+	
+	// Prints a list of all available formats, preceded by their index
+	// 0 : first format
+	// 1 : second format
+	// ...
+	private static void printFormatsList(){
+		for(URLFormat format : URLFormat.values()){
+			System.out.println(format.ordinal() + " : " + format.getFormatSample());
+		}
+	}
+	
+	public static URLFormat inputFormat(){
+		// Variables needed to process the input loop
+		char selector = 0;
+		String input;
+		Scanner keyboard = new Scanner(System.in);
+		// Variables needed to parse the desired index
+		StringBuilder indexString = new StringBuilder();
+		int index = 0;
+		// Loop until aborted (or returned from inside the loop
+		while(selector != 'x'){
+			// Prompt the user
+			System.out.println("Select the right format from the available ones:");
+			printFormatsList();
+			System.out.println("x : abort and exit");
+			System.out.print(">: ");
+			input = keyboard.nextLine().toLowerCase();
+			if(input.length() > 0){ // Otherwise keep loopint
+				selector = input.charAt(0);
+				if(selector != 'x'){ // Otherwise the user is aborting all operation
+					// Parse the input number, assume that all digits are valid until a non-digit is found
+					int i = 0;
+					while(i < input.length() && Character.isDigit(input.charAt(i))){
+						indexString.append(input.charAt(i));
+						i++;
+					}
+					if(i > 0){
+						// If a number was actually entered by the user, parse it
+						index = Integer.parseInt(indexString.toString());
+						if(index < URLFormat.values().length){
+							// If the number is a valid index, return the corresponding format
+							return URLFormat.values()[index];
+						}
+					}
+				}
+			}
+		}
+		// If the loop is ended without returning, it means the user is aborting and exiting
+		System.out.println("Aborting as requested...");
+		System.exit(0);
+		return WTKDEF; // Filler, this position should never be reached
 	}
 }
