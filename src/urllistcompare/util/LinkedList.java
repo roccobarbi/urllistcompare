@@ -79,24 +79,6 @@ public class LinkedList<T> implements Iterator{
 		return output;
 	}
 	
-	// TODO: complete the functionality
-	
-	// Inner class that represents the list nodes
-	private class ListNode{
-		T payload;
-		ListNode next;
-		
-		private ListNode(){
-			this.payload = null;
-			this.next = null;
-		}
-		
-		private ListNode(T payload, ListNode next){
-			this.payload = payload;
-			this.next = next;
-		}
-	}
-	
 	/**
 	 * Resets the current iterator to the list head.
 	 */
@@ -115,6 +97,24 @@ public class LinkedList<T> implements Iterator{
 		if(!hasNext()) throw new NoSuchElementException();
 		else current = current.next;
 		return current;
+	}
+	
+	// TODO: complete the functionality
+	
+	// Inner class that represents the list nodes
+	private class ListNode{
+		T payload;
+		ListNode next;
+		
+		private ListNode(){
+			this.payload = null;
+			this.next = null;
+		}
+		
+		private ListNode(T payload, ListNode next){
+			this.payload = payload;
+			this.next = next;
+		}
 	}
 
 }
