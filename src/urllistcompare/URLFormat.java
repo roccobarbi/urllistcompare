@@ -56,7 +56,7 @@ public enum URLFormat {
 		public String normalisePath(String url){
 			url = url.toLowerCase();
 			url = url.split("#")[0];
-			url = url.split("?")[0];
+			url = url.split("\\?")[0];
 			if(url.contains("://")){
 				url = url.substring(url.indexOf("://") + 3);
 			}
@@ -70,8 +70,9 @@ public enum URLFormat {
 	},
 	GOOG("/path/path/file.ext?query#fragment"){
 		public String normalisePath(String url){
+			url = url.toLowerCase();
 			url = url.split("#")[0];
-			url = url.split("?")[0];
+			url = url.split("\\?")[0];
 			return url;
 		}
 	};
