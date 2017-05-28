@@ -14,9 +14,11 @@ import urllistcompare.exceptions.InvalidUrlException;
  * to the URLMap based on its normalised path and format.
  * 
  * If the url field is null, it's a signal that the element is broken and MUST NOT be used.
+ * 
+ * Note: this class has a natural ordering that is inconsistent with equals.
  *
  */
-public class URLElement{
+public class URLElement implements Comparable{
 	private final String url;
 	private final URLFormat format;
 	private final int impressions;
@@ -72,6 +74,9 @@ public class URLElement{
 		return format.normalisePath(url);
 	}
 	
+	/**
+	 * @return true if the contents are equal and not null, false otherwise
+	 */
 	public boolean equals(Object obj){
 		boolean output = false;
 		try{
@@ -90,6 +95,9 @@ public class URLElement{
 		return output;
 	}
 	
+	/**
+	 * @return a string representation for the instance
+	 */
 	public String toString(){
 		StringBuilder output = new StringBuilder();
 		try{
@@ -104,5 +112,25 @@ public class URLElement{
 			output.append(e.getMessage());
 		}
 		return output.toString();
+	}
+	
+	/**
+	 * Note: this class has a natural ordering that is inconsistent with equals.
+	 * The compareTo method only takes into account the page impressions, whereas equals takes into account all fields.
+	 * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
+	 */
+	public int compareTo(Object other){
+		int output = 0;
+		if(other instanceof URLElement){
+			try{
+				URLElement otherUrl = (URLElement) other;
+				output = getImpressions() - otherUrl.getImpressions();
+			} catch(InvalidUrlException e) {
+				System.err.println("InvalidUrlException while comparing two URLElement instances: " + e);
+				throw new NullPointerException(e.getMessage());
+			}
+		}
+		else throw new ClassCastException("Cannot compare URLElement with other classes.");
+		return output;
 	}
 }
