@@ -4,6 +4,8 @@
 package urllistcompare.util;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * @author Rocco Barbini
@@ -13,18 +15,20 @@ import java.util.ArrayList;
  * URLNorm instances and the lists of URLNorm that make up the URLMap hashmap.
  *
  */
-public class LinkedList<T>{
-	private ListNode head;
+public class LinkedList<T> implements Iterator{
+	private ListNode head, current;
 	private int length;
 
 	public LinkedList() {
-		this.head = null;
-		this.length = 0;
+		head = null;
+		length = 0;
+		current = head;
 	}
 	
 	public LinkedList(T payload) {
-		this.head = new ListNode(payload, null);
-		this.length = 1;
+		head = new ListNode(payload, null);
+		length = 1;
+		current = head;
 	}
 	
 	/**
@@ -91,6 +95,26 @@ public class LinkedList<T>{
 			this.payload = payload;
 			this.next = next;
 		}
+	}
+	
+	/**
+	 * Resets the current iterator to the list head.
+	 */
+	public void resetCurrent(){
+		current = head;
+	}
+
+	@Override
+	public boolean hasNext() {
+		if(current.next == null) return false;
+		else return true;
+	}
+
+	@Override
+	public Object next() {
+		if(!hasNext()) throw new NoSuchElementException();
+		else current = current.next;
+		return current;
 	}
 
 }
