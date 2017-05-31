@@ -46,10 +46,11 @@ public class URLNorm {
 	 * Checks that both the URLElement and the current URLNorm are properly set.
 	 * 
 	 * @param u	the URLElement that needs to be added
-	 * @throws InvalidURLNormException
+	 * @throws InvalidURLNormException if at least one of the formats has not been set correctly or if the URL has the wrong format
 	 */
 	public void add(URLElement u) throws InvalidURLNormException {
-		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element withoud defining both formats.");
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element" + 
+				"without defining both formats.");
 		try{
 			if(u.getFormat() == format[0]){
 				element[0].add(u);
@@ -63,6 +64,25 @@ public class URLNorm {
 		} catch (InvalidUrlException e) {
 			System.err.println("InvalidUrlException: tried to add an empty URLElement instance to a URLNorm instance.");
 		}
+	}
+	
+	/**
+	 * Checks if the URL is completely missing (zero page impressions) in at least one of the formats.
+	 * 
+	 * @param f the URLFormat that is been checked
+	 * @return true if the format passed as an argument recorded zero impressions, false otherwise
+	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
+	 */
+	public boolean isMissing(URLFormat f) throws InvalidURLNormException {
+		boolean output = false;
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
+				"without defining both formats.");
+		if(format[0] != f && format[1] != f) throw new InvalidURLNormException("Tried to check if a format is missing" + 
+				"with a format that is not included in this URLNorm instance.");
+		if((f == format[0] && impressions[0] == 0) || (f == format[1] && impressions[1] == 0)){
+			output = true;
+		}
+		return output;
 	}
 	
 	// TODO: add functionality
