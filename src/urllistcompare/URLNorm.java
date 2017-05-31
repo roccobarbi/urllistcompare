@@ -25,22 +25,46 @@ public class URLNorm {
 	
 	private LinkedList<URLElement> element[];
 	private int impressions[];
-	private URLFormat formats[];
-	
-	// TODO
+	private URLFormat format[];
 
 	public URLNorm() {
 		element = new LinkedList[2];
 		impressions = new int[2];
-		formats = new URLFormat[2];
+		format = new URLFormat[2];
 	}
 	
 	public URLNorm(URLFormat format0, URLFormat format1) {
 		element = new LinkedList[2];
 		impressions = new int[2];
-		formats = new URLFormat[2];
-		formats[0] = format0;
-		formats[1] = format1;
+		format = new URLFormat[2];
+		format[0] = format0;
+		format[1] = format1;
 	}
+	
+	/**
+	 * Adds a URLElement instance to the relevant LinkeList and adds its page impressions count to the relevant array.
+	 * Checks that both the URLElement and the current URLNorm are properly set.
+	 * 
+	 * @param u	the URLElement that needs to be added
+	 * @throws InvalidURLNormException
+	 */
+	public void add(URLElement u) throws InvalidURLNormException {
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element withoud defining both formats.");
+		try{
+			if(u.getFormat() == format[0]){
+				element[0].add(u);
+				impressions[0] += u.getImpressions();
+			} else if (u.getFormat() == format[1]){
+				element[1].add(u);
+				impressions[1] += u.getImpressions();
+			} else {
+				System.err.println("Invalid format: tried to add to a URLNorm instance a URLElement instance with the wrong URLFormat.");
+			}
+		} catch (InvalidUrlException e) {
+			System.err.println("InvalidUrlException: tried to add an empty URLElement instance to a URLNorm instance.");
+		}
+	}
+	
+	// TODO: add functionality
 
 }
