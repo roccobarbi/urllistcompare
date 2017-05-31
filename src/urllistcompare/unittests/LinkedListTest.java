@@ -123,5 +123,25 @@ public class LinkedListTest {
 		list001.next();
 		assertTrue("second iteration of next, wrong result", list001.getCurrent().equals(testString));
 	}
+	
+	@Test
+	public void testGetFirst() {
+		String testString = "testString";
+		LinkedList <String> list001 = new LinkedList(testString);
+		list001.add("test002");
+		String secondTest = "secondTest";
+		list001.add(secondTest);
+		assertTrue("getFirst, wrong result", list001.getFirst().equals(secondTest));
+	}
+	
+	@Test
+	public void testGetLast() {
+		String testString = "testString";
+		LinkedList <String> list001 = new LinkedList(testString);
+		list001.add("test002");
+		String secondTest = "secondTest";
+		list001.add(secondTest);
+		assertTrue("getLast, wrong result", list001.getLast().equals(testString));
+	}
 
 }

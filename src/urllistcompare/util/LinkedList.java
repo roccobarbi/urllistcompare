@@ -48,6 +48,26 @@ public class LinkedList<T> implements Iterator{
 	}
 	
 	/**
+	 * Resets the iterator and returns the payload of the list head
+	 * @return the payload of the list head.
+	 */
+	public T getFirst(){
+		resetCurrent();
+		return current.payload;
+	}
+	
+	/**
+	 * Retrieves the last element and resets the iterator to the head
+	 * @return the payload of the list head.
+	 */
+	public T getLast(){
+		while(hasNext()) next();
+		T output = current.payload;
+		resetCurrent();
+		return output;
+	}
+	
+	/**
 	 * Adds a new node to the head of the list, updates the length and resets the current iterator.
 	 * This works as a stack: the last element to be added is the first to be retrieved.
 	 * @param payload
