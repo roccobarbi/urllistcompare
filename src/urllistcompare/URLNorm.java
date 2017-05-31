@@ -85,6 +85,28 @@ public class URLNorm {
 		return output;
 	}
 	
+	/**
+	 * Checks the absolute difference between the page impressions of the specified format and those of the other format.
+	 * If there are formats A and B, and format A is passed as argument, the result is A - B.
+	 * 
+	 * @param f the format to check
+	 * @return the difference of f relative to the other format
+	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
+	 */
+	public int getDifference(URLFormat f) throws InvalidURLNormException {
+		int output = 0;
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
+				"without defining both formats.");
+		if(format[0] != f && format[1] != f) throw new InvalidURLNormException("Tried to check if a format is missing" + 
+				"with a format that is not included in this URLNorm instance.");
+		if(f == format[0]){
+			output = impressions[0] - impressions[1];
+		} else {
+			output = impressions[1] - impressions[0];
+		}
+		return output;
+	}
+	
 	// TODO: add functionality
 
 }
