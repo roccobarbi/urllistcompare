@@ -4,6 +4,9 @@
 package urllistcompare;
 
 import urllistcompare.util.*;
+
+import java.util.ArrayList;
+
 import urllistcompare.exceptions.*;
 
 /**
@@ -87,7 +90,7 @@ public class URLNorm {
 	
 	/**
 	 * Checks the absolute difference between the page impressions of the specified format and those of the other format.
-	 * If there are formats A and B, and format A is passed as argument, the result is A - B.
+	 * If there are formats A and B, andad format A is passed as argument, the result is A - B.
 	 * 
 	 * @param f the format to check
 	 * @return the difference of f relative to the other format
@@ -107,6 +110,28 @@ public class URLNorm {
 		return output;
 	}
 	
+	/**
+	 * Checks the list of URLElements of a specific format.
+	 * 
+	 * @param f the format for which the list of elements needs to be extracted
+	 * @return the list of URLElements of a specific format
+	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
+	 */
+	public ArrayList<URLElement> getElements(URLFormat f) throws InvalidURLNormException{
+		int index = 0;
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
+				"without defining both formats.");
+		if(format[0] == f){
+			index = 0;
+		} else if(format[1] == f){
+			index = 1;
+		} else {
+			throw new InvalidURLNormException("Tried to check if a format is missing" + 
+					"with a format that is not included in this URLNorm instance.");
+		}
+		ArrayList<URLElement> output = element[index].toArrayList();
+		return output;
+	}
 	// TODO: add functionality
 
 }
