@@ -32,13 +32,31 @@ public class LinkedList<T> implements Iterator{
 	}
 	
 	/**
-	 * Adds a new node to the head of the list.
+	 * 
+	 * @return the number of elements in the list
+	 */
+	public int getLength(){
+		return length;
+	}
+	
+	/**
+	 * 
+	 * @return the payload of the current iterator
+	 */
+	public T getCurrent(){
+		return current.payload;
+	}
+	
+	/**
+	 * Adds a new node to the head of the list, updates the length and resets the current iterator.
+	 * This works as a stack: the last element to be added is the first to be retrieved.
 	 * @param payload
 	 */
 	public void add(T payload){
 		ListNode newNode = new ListNode(payload, head);
 		head = newNode;
 		length++;
+		resetCurrent();
 	}
 	
 	// Returns the ListNode that includes the payload passed as argument, or null.
@@ -64,7 +82,9 @@ public class LinkedList<T> implements Iterator{
 	}
 	
 	/**
-	 * Outputs the contents of the list as an ArrayList
+	 * Outputs the contents of the list as an ArrayList.
+	 * This works as a steck: the order of the arraylist is the inverse of the order in which elements were 
+	 * added to the linkedlist (FILO).
 	 * @return an ArrayList of the payloads of the list nodes, or null if the list is empty
 	 */
 	public ArrayList<T> toArrayList(){
@@ -96,7 +116,7 @@ public class LinkedList<T> implements Iterator{
 	public Object next() {
 		if(!hasNext()) throw new NoSuchElementException();
 		else current = current.next;
-		return current;
+		return current.payload;
 	}
 	
 	// TODO: complete the functionality
