@@ -28,6 +28,7 @@ public class URLNorm {
 	private LinkedList<URLElement> elements[];
 	private int impressions[];
 	private URLFormat format[];
+	private String url;
 
 	@SuppressWarnings("unchecked")
 	public URLNorm() {
@@ -44,6 +45,29 @@ public class URLNorm {
 		format[0] = format0;
 		format[1] = format1;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public URLNorm(URLFormat format0, URLFormat format1, URLElement first) {
+		elements = new LinkedList[2];
+		impressions = new int[2];
+		format = new URLFormat[2];
+		format[0] = format0;
+		format[1] = format1;
+		try{
+			add(first);
+			url = first.normalise();
+		} catch (InvalidURLNormException e){
+			System.err.println("Could not add first element: " + e.getMessage());
+		} catch (InvalidUrlException e){
+			System.err.println("Could not normalise first element: " + e.getMessage());
+		}
+	}
+	
+	/*
+	 * TODO:
+	 * Improve the constructors and the functions to ensure that the first URL is properly normalised and that
+	 * only URLs that have the right path are then added. 
+	 */
 	
 	/**
 	 * Adds a URLElement instance to the relevant LinkeList and adds its page impressions count to the relevant array.
