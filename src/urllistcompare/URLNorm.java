@@ -157,6 +157,15 @@ public class URLNorm {
 		URLElement[] output = elements[index].toArray(new URLElement[elements[index].size()]);
 		return output;
 	}
+	
+	// TODO: needs improvement
+	@Override
+	public int hashCode(){
+		if (url == null){
+			return -1;
+		}
+		return url.hashCode();
+	}
 	// TODO: add functionality
 
 }
