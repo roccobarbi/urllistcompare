@@ -3,9 +3,10 @@
  */
 package urllistcompare;
 
-import urllistcompare.util.*;
+//import urllistcompare.util.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import urllistcompare.exceptions.*;
 
@@ -26,18 +27,20 @@ import urllistcompare.exceptions.*;
  */
 public class URLNorm {
 	
-	private LinkedList<URLElement> element[];
+	private LinkedList<URLElement> elements[];
 	private int impressions[];
 	private URLFormat format[];
 
+	@SuppressWarnings("unchecked")
 	public URLNorm() {
-		element = new LinkedList[2];
+		elements = new LinkedList[2];
 		impressions = new int[2];
 		format = new URLFormat[2];
 	}
 	
+	@SuppressWarnings("unchecked")
 	public URLNorm(URLFormat format0, URLFormat format1) {
-		element = new LinkedList[2];
+		elements = new LinkedList[2];
 		impressions = new int[2];
 		format = new URLFormat[2];
 		format[0] = format0;
@@ -56,10 +59,10 @@ public class URLNorm {
 				"without defining both formats.");
 		try{
 			if(u.getFormat() == format[0]){
-				element[0].add(u);
+				elements[0].add(u);
 				impressions[0] += u.getImpressions();
 			} else if (u.getFormat() == format[1]){
-				element[1].add(u);
+				elements[1].add(u);
 				impressions[1] += u.getImpressions();
 			} else {
 				System.err.println("Invalid format: tried to add to a URLNorm instance a URLElement instance with the wrong URLFormat.");
@@ -117,7 +120,7 @@ public class URLNorm {
 	 * @return the list of URLElements of a specific format
 	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
 	 */
-	public ArrayList<URLElement> getElements(URLFormat f) throws InvalidURLNormException{
+	public URLElement[] getElements(URLFormat f) throws InvalidURLNormException{
 		int index = 0;
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
 				"without defining both formats.");
@@ -129,7 +132,7 @@ public class URLNorm {
 			throw new InvalidURLNormException("Tried to check if a format is missing" + 
 					"with a format that is not included in this URLNorm instance.");
 		}
-		ArrayList<URLElement> output = element[index].toArrayList();
+		URLElement[] output = elements[index].toArray(new URLElement[elements[index].size()]);
 		return output;
 	}
 	// TODO: add functionality
