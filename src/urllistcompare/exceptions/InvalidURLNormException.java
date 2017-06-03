@@ -11,7 +11,8 @@ package urllistcompare.exceptions;
  * (e.g. where at least a format has not been defined).
  *
  */
-public class InvalidURLNormException extends Exception{
+@SuppressWarnings("serial")
+public class InvalidURLNormException extends RuntimeException{
 
 	/**
 	 * 
