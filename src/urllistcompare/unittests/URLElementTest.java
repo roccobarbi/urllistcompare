@@ -92,5 +92,12 @@ public class URLElementTest {
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
 		assertTrue("Same path normalised as if it was different",element001.toString().equals("URL: www_domain_com.path1.path2.file_ext - Format: WTKDEF - Impressions: 1200"));
 	}
+	
+	@Test
+	public void testHashCode() {
+		URLElement element001 = new URLElement("www_domain_com.path1.path2.file01_ext", URLFormat.WTKDEF, 1200);
+		URLElement element002 = new URLElement("www_domain_com.path1.path2.file02_ext", URLFormat.WTKDEF, 1200);
+		assertFalse("Different URLElements returned the same hashcode",element001.hashCode() == element002.hashCode());
+	}
 
 }
