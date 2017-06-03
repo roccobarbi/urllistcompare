@@ -18,7 +18,7 @@ import urllistcompare.exceptions.InvalidUrlException;
  * Note: this class has a natural ordering that is inconsistent with equals.
  *
  */
-public class URLElement implements Comparable{
+public class URLElement implements Comparable<Object>{
 	private final String url;
 	private final URLFormat format;
 	private final int impressions;
@@ -40,7 +40,7 @@ public class URLElement implements Comparable{
 	 * @return the page impressions
 	 * @throws InvalidUrlException
 	 */
-	public int getImpressions() throws InvalidUrlException {
+	public int getImpressions() {
 		if(url == null) throw new InvalidUrlException("The url is null, it can't be normalised!");
 		return impressions;
 	}
@@ -50,7 +50,7 @@ public class URLElement implements Comparable{
 	 * @return the URL format
 	 * @throws InvalidUrlException
 	 */
-	public URLFormat getFormat() throws InvalidUrlException {
+	public URLFormat getFormat() {
 		if(url == null) throw new InvalidUrlException("The url is null, it can't be normalised!");
 		return format;
 	}
@@ -60,7 +60,7 @@ public class URLElement implements Comparable{
 	 * @return the URL (as is, not normalised)
 	 * @throws InvalidUrlException
 	 */
-	public String getUrl() throws InvalidUrlException {
+	public String getUrl() {
 		if(url == null) throw new InvalidUrlException("The url is null, it can't be normalised!");
 		return url;
 	}
@@ -68,8 +68,9 @@ public class URLElement implements Comparable{
 	/**
 	 * 
 	 * @return the normalised path for this URL
+	 * @throws InvalidUrlException
 	 */
-	public String normalise() throws InvalidUrlException {
+	public String normalise() {
 		if(url == null) throw new InvalidUrlException("The url is null, it can't be normalised!");
 		return format.normalisePath(url);
 	}
@@ -100,17 +101,12 @@ public class URLElement implements Comparable{
 	 */
 	public String toString(){
 		StringBuilder output = new StringBuilder();
-		try{
-			output.append("URL: ");
-			output.append(getUrl());
-			output.append(" - Format: ");
-			output.append(getFormat());
-			output.append(" - Impressions: ");
-			output.append(getImpressions());
-		} catch (InvalidUrlException e) {
-			output = new StringBuilder("Invalid URLElement: ");
-			output.append(e.getMessage());
-		}
+		output.append("URL: ");
+		output.append(getUrl());
+		output.append(" - Format: ");
+		output.append(getFormat());
+		output.append(" - Impressions: ");
+		output.append(getImpressions());
 		return output.toString();
 	}
 	
@@ -118,19 +114,26 @@ public class URLElement implements Comparable{
 	 * Note: this class has a natural ordering that is inconsistent with equals.
 	 * The compareTo method only takes into account the page impressions, whereas equals takes into account all fields.
 	 * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
+	 * @throws ClassCastException	if the object being compared is not of the type URLElement
 	 */
 	public int compareTo(Object other){
 		int output = 0;
 		if(other instanceof URLElement){
-			try{
-				URLElement otherUrl = (URLElement) other;
-				output = getImpressions() - otherUrl.getImpressions();
-			} catch(InvalidUrlException e) {
-				System.err.println("InvalidUrlException while comparing two URLElement instances: " + e);
-				throw new NullPointerException(e.getMessage());
-			}
+			URLElement otherUrl = (URLElement) other;
+			output = getImpressions() - otherUrl.getImpressions();
 		}
 		else throw new ClassCastException("Cannot compare URLElement with other classes.");
 		return output;
+	}
+	
+	/**
+	 * @return the hashcode of the url field
+	 * @throws InvalidUrlException	if the url field is empty
+	 */
+	public int hashCode(){
+		if (url == null){
+			throw new InvalidUrlException("Tried to get the hashcode of a URLElement with no url!");
+		}
+		return url.hashCode();
 	}
 }
