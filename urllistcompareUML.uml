@@ -64,9 +64,6 @@
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_OSWJMEg0EeehJ8m4Bm0jpw" value="2"/>
     </ownedAttribute>
     <ownedOperation xmi:id="_DLGSgEg1EeehJ8m4Bm0jpw" name="URLNorm"/>
-    <ownedOperation xmi:id="_Efst8Eg1EeehJ8m4Bm0jpw" name="URLNorm">
-      <ownedParameter xmi:id="_FfYCQEg1EeehJ8m4Bm0jpw" name="element01" type="_cRGKwEguEeehJ8m4Bm0jpw"/>
-    </ownedOperation>
     <ownedOperation xmi:id="_J-5hkEg1EeehJ8m4Bm0jpw" name="URLNorm">
       <ownedParameter xmi:id="_L39U8Eg1EeehJ8m4Bm0jpw" name="format01" type="_eSuEQEguEeehJ8m4Bm0jpw"/>
       <ownedParameter xmi:id="_ObdzgEg1EeehJ8m4Bm0jpw" name="format02" type="_eSuEQEguEeehJ8m4Bm0jpw"/>
