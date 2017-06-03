@@ -3,7 +3,6 @@
  */
 package urllistcompare;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import urllistcompare.exceptions.*;
@@ -194,6 +193,20 @@ public class URLNorm {
 			throw new InvalidURLNormException("Tried to get the hashCode of a URLNorm instance without a url value!");
 		}
 		return url.hashCode();
+	}
+	
+	public String toCsv(int index){
+		if(index < 0 || index > 1){
+			throw new IndexOutOfBoundsException("Tried to set format lower than 0 or greater than 1!");
+		}
+		if(format[0] == null || format[1] == null){
+			throw new InvalidURLNormException("At least one format is missing!"); 
+		}
+		StringBuilder outputB = new StringBuilder();
+		for(Object element : this.elements[index].toArray()){
+			outputB.append(((URLElement) element).getUrl() + ";" + ((URLElement) element).getImpressions() + "\n");
+		}
+		return outputB.toString();
 	}
 	// TODO: add functionality
 
