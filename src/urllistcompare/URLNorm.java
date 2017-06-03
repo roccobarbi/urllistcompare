@@ -67,6 +67,13 @@ public class URLNorm {
 		url = first.normalise();
 	}
 	
+	public String getUrl(){
+		if(url == null){
+			throw new InvalidURLNormException("url not defined!");
+		}
+		return url;
+	}
+	
 	/**
 	 * 
 	 * @param index the index of the format array that needs to be set
