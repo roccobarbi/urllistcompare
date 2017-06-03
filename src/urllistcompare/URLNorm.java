@@ -68,12 +68,6 @@ public class URLNorm {
 		url = first.normalise();
 	}
 	
-	/*
-	 * TODO:
-	 * Improve the constructors and the functions to ensure that the first URL is properly normalised and that
-	 * only URLs that have the right path are then added. 
-	 */
-	
 	/**
 	 * Adds a URLElement instance to the relevant LinkeList and adds its page impressions count to the relevant array.
 	 * Checks that both the URLElement and the current URLNorm are properly set.
@@ -81,15 +75,15 @@ public class URLNorm {
 	 * @param u	the URLElement that needs to be added
 	 * @throws InvalidURLNormException if at least one of the formats has not been set correctly or if the URL has the wrong format
 	 */
-	public void add(URLElement u) throws InvalidURLNormException {
+	public void add(URLElement u) {
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element" + 
 				"without defining both formats.");
 		try{
 			if(u.getFormat() == format[0]){
-				elements[0].add(u);
+				if(!elements[0].add(u)) System.err.println("Tried to add URLElement " + u.getUrl() + " twice!");
 				impressions[0] += u.getImpressions();
 			} else if (u.getFormat() == format[1]){
-				elements[1].add(u);
+				if(!elements[1].add(u)) System.err.println("Tried to add URLElement " + u.getUrl() + " twice!");
 				impressions[1] += u.getImpressions();
 			} else {
 				System.err.println("Invalid format: tried to add to a URLNorm instance a URLElement instance with the wrong URLFormat.");
