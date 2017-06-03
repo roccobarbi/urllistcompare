@@ -4,7 +4,7 @@
 package urllistcompare;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashSet;
 
 import urllistcompare.exceptions.*;
 
@@ -12,7 +12,7 @@ import urllistcompare.exceptions.*;
  * @author Rocco Barbini
  * @email roccobarbi@gmail.com
  * 
- * A single normalised URL, which includes 2 linked lists of URLElements (for the formats that are being
+ * A single normalised URL, which includes 2 hashsets of URLElements (for the formats that are being
  * compared).
  * This class must manage at least:
  * - the addition of new URLElement instances, which must be processed to increase the relevant page impressions count;
@@ -25,42 +25,47 @@ import urllistcompare.exceptions.*;
  */
 public class URLNorm {
 	
-	private LinkedList<URLElement> elements[];
+	private HashSet<URLElement> elements[];
 	private int impressions[];
 	private URLFormat format[];
 	private String url;
 
 	@SuppressWarnings("unchecked")
 	public URLNorm() {
-		elements = new LinkedList[2];
+		elements = new HashSet[2];
 		impressions = new int[2];
 		format = new URLFormat[2];
 	}
 	
 	@SuppressWarnings("unchecked")
-	public URLNorm(URLFormat format0, URLFormat format1) {
-		elements = new LinkedList[2];
+	public URLNorm(URLFormat format01, URLFormat format02) {
+		elements = new HashSet[2];
 		impressions = new int[2];
 		format = new URLFormat[2];
-		format[0] = format0;
-		format[1] = format1;
+		format[0] = format01;
+		format[1] = format02;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public URLNorm(URLElement element01, URLFormat format02) {
+		elements = new HashSet[2];
+		impressions = new int[2];
+		format = new URLFormat[2];
+		format[0] = element01.getFormat();
+		format[1] = format02;
+		add(element01);
+		url = element01.normalise();
 	}
 	
 	@SuppressWarnings("unchecked")
 	public URLNorm(URLFormat format0, URLFormat format1, URLElement first) {
-		elements = new LinkedList[2];
+		elements = new HashSet[2];
 		impressions = new int[2];
 		format = new URLFormat[2];
 		format[0] = format0;
 		format[1] = format1;
-		try{
-			add(first);
-			url = first.normalise();
-		} catch (InvalidURLNormException e){
-			System.err.println("Could not add first element: " + e.getMessage());
-		} catch (InvalidUrlException e){
-			System.err.println("Could not normalise first element: " + e.getMessage());
-		}
+		add(first);
+		url = first.normalise();
 	}
 	
 	/*
