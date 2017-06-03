@@ -202,6 +202,11 @@ public class URLNorm {
 		return url.hashCode();
 	}
 	
+	/**
+	 * Outputs a string in a valid csv format (semicolon-separated)
+	 * @param index the format the detail of which should be exported
+	 * @return a string witl all URLs for the specified index, semicolon-separated and with each couple terminated by \n
+	 */
 	public String toCsv(int index){
 		if(index < 0 || index > 1){
 			throw new IndexOutOfBoundsException("Tried to set format lower than 0 or greater than 1!");
@@ -214,6 +219,52 @@ public class URLNorm {
 			outputB.append(((URLElement) element).getUrl() + ";" + ((URLElement) element).getImpressions() + "\n");
 		}
 		return outputB.toString();
+	}
+	
+	/**
+	 * Outputs a string in a valid csv format (separated by sep)
+	 * @param index the format the detail of which should be exported
+	 * @param sep the separator for the columns in the csv
+	 * @return a string witl all URLs for the specified index, separated by sep and with each couple terminated by \n
+	 */
+	public String toCsv(int index, char sep){
+		if(index < 0 || index > 1){
+			throw new IndexOutOfBoundsException("Tried to set format lower than 0 or greater than 1!");
+		}
+		if(format[0] == null || format[1] == null){
+			throw new InvalidURLNormException("At least one format is missing!"); 
+		}
+		StringBuilder outputB = new StringBuilder();
+		for(Object element : this.elements[index].toArray()){
+			outputB.append(((URLElement) element).getUrl() + sep + ((URLElement) element).getImpressions() + "\n");
+		}
+		return outputB.toString();
+	}
+	
+	public String toCsv(URLFormat f){
+		int index = 0;
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("At least one format is null!");
+		if(format[0] == f){
+			index = 0;
+		} else if(format[1] == f){
+			index = 1;
+		} else {
+			throw new InvalidURLNormException("Invalid format received!");
+		}
+		return toCsv(index);
+	}
+	
+	public String toCsv(URLFormat f, char sep){
+		int index = 0;
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("At least one format is null!");
+		if(format[0] == f){
+			index = 0;
+		} else if(format[1] == f){
+			index = 1;
+		} else {
+			throw new InvalidURLNormException("Invalid format received!");
+		}
+		return toCsv(index, sep);
 	}
 	// TODO: add functionality
 
