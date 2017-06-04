@@ -136,6 +136,16 @@
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
       </ownedParameter>
     </ownedOperation>
+    <ownedOperation xmi:id="_vtreYEkiEeeVcqCPcPxPvA" name="getUrlElements">
+      <ownedParameter xmi:id="_yJpxkEkiEeeVcqCPcPxPvA" name="index">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_0vxfQEkiEeeVcqCPcPxPvA" name="elements" type="_cRGKwEguEeehJ8m4Bm0jpw" direction="return"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_6OxekEkiEeeVcqCPcPxPvA" name="getURLElements">
+      <ownedParameter xmi:id="_7VaWgEkiEeeVcqCPcPxPvA" name="format" type="_eSuEQEguEeehJ8m4Bm0jpw"/>
+      <ownedParameter xmi:id="_9axggEkiEeeVcqCPcPxPvA" name="elements" type="_cRGKwEguEeehJ8m4Bm0jpw" direction="return"/>
+    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Association" xmi:id="_QQvvkEg0EeehJ8m4Bm0jpw" name="A_uRLNorms_uRLFormats" memberEnd="_QQvvkUg0EeehJ8m4Bm0jpw _QQvvlEg0EeehJ8m4Bm0jpw" navigableOwnedEnd="_QQvvkUg0EeehJ8m4Bm0jpw _QQvvlEg0EeehJ8m4Bm0jpw">
     <ownedEnd xmi:id="_QQvvkUg0EeehJ8m4Bm0jpw" type="_EuUOMEg0EeehJ8m4Bm0jpw" association="_QQvvkEg0EeehJ8m4Bm0jpw">
