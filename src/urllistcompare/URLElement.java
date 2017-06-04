@@ -136,4 +136,11 @@ public class URLElement implements Comparable<Object>{
 		}
 		return url.hashCode();
 	}
+	
+	public int normalHashCode(){
+		if (url == null){
+			throw new InvalidUrlException("Tried to get the hashcode of a URLElement with no url!");
+		}
+		return format.normalisePath(url).hashCode();
+	}
 }
