@@ -3,6 +3,12 @@
  */
 package urllistcompare;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
+
 /**
  * @author Rocco Barbini (roccobarbi@gmail.com)
  * 
@@ -16,12 +22,41 @@ package urllistcompare;
  *
  */
 public class CSVReader {
+	// true if the reader is set
+	private boolean set;
+	// true if there are column headers
+	private boolean headers;
+	// separators: 0 if the value is not set
+	private boolean isTSep;
+	private char tSep, dSep, vSep;
+	// index of the url and impressions columns, -1 if the value is not set
+	private int urlI, impI;
+	// bom values (needed to interpret and remove the bom at the start of the file, if present)
+	private enum bom{
+		UNICODE(new String(new byte[] {(byte) 0xef, (byte) 0xbb, (byte) 0xbf}), 3);
+		private final String bomString;		
+		private final int bomLength;
+		private bom(String bomString, int bomLength){
+			this.bomString = bomString;
+			this.bomLength = bomLength;
+		}
+		public int getLength(){
+			return bomLength;
+		}
+	}
 
 	/**
 	 * 
 	 */
 	public CSVReader() {
-		// TODO Auto-generated constructor stub
+		headers = true; // default
+		isTSep = false; // default
+		tSep = 0; // default: indicates that the value is missing
+		dSep = 0; // default: indicates that the value is missing
+		vSep = 0; // default: indicates that the value is missing
+		urlI = -1; // default: indicates that the value is missing
+		impI = -1; // default: indicates that the value is missing
+		set = false;
 	}
 
 }
