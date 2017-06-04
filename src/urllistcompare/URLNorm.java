@@ -96,29 +96,26 @@ public class URLNorm {
 	 * @param u	the URLElement that needs to be added
 	 * @throws InvalidURLNormException if at least one of the formats has not been set correctly or if the URL has the wrong format
 	 * @throws RuntimeException if the URLElement is in a format that is not included in the URLNorm instance
+	 * @return true if the operation was successful
 	 */
-	public void add(URLElement u) {
+	public boolean add(URLElement u) {
+		boolean output = false;
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element" + 
 				"without defining both formats.");
-		try{
-			if(u.getFormat() == format[0]){
-				if(!elements[0].add(u)){
-					System.err.println("Tried to add URLElement " + u.getUrl() + " twice!");
-				} else {
-					impressions[0] += u.getImpressions();
-				}
-			} else if (u.getFormat() == format[1]){
-				if(!elements[1].add(u)){
-					System.err.println("Tried to add URLElement " + u.getUrl() + " twice!");
-				} else {
-					impressions[1] += u.getImpressions();
-				}
-			} else {
-				throw new RuntimeException("Tried to add a URLElement in the wrong format to a URLNorm instance!");
+		if(u.getFormat() == format[0]){
+			if(elements[0].add(u)){
+				impressions[0] += u.getImpressions();
+				output = true;
 			}
-		} catch (InvalidUrlException e) {
-			System.err.println("InvalidUrlException: tried to add an empty URLElement instance to a URLNorm instance.");
+		} else if (u.getFormat() == format[1]){
+			if(elements[1].add(u)){
+				impressions[1] += u.getImpressions();
+				output = true;
+			}
+		} else {
+			throw new RuntimeException("Tried to add a URLElement in the wrong format to a URLNorm instance!");
 		}
+		return output;
 	}
 	
 	/**
