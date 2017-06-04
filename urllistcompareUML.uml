@@ -17,6 +17,11 @@
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
       </ownedParameter>
     </ownedOperation>
+    <ownedOperation xmi:id="_XxA8oEjwEeeHa6NiHR6fYw" name="normalHashCode">
+      <ownedParameter xmi:id="_YzQcwEjwEeeHa6NiHR6fYw" name="hashCode" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedParameter>
+    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:Enumeration" xmi:id="_eSuEQEguEeehJ8m4Bm0jpw" name="URLFormat">
     <ownedAttribute xmi:id="_MoPKEEgvEeehJ8m4Bm0jpw" name="formatSample" isReadOnly="true">
@@ -152,6 +157,73 @@
     <ownedEnd xmi:id="_iLjIQEg0EeehJ8m4Bm0jpw" name="elements" visibility="private" type="_cRGKwEguEeehJ8m4Bm0jpw" association="_iLgE8Eg0EeehJ8m4Bm0jpw">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_iLjvUEg0EeehJ8m4Bm0jpw" value="2"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_iLkWYEg0EeehJ8m4Bm0jpw" value="2"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Class" xmi:id="_8jz2YEjtEeeHa6NiHR6fYw" name="URLList">
+    <ownedOperation xmi:id="_tPF5sEjuEeeHa6NiHR6fYw" name="add">
+      <ownedParameter xmi:id="_vPQaoEjuEeeHa6NiHR6fYw" name="url" type="_cRGKwEguEeehJ8m4Bm0jpw"/>
+      <ownedParameter xmi:id="_yt654EjuEeeHa6NiHR6fYw" name="done" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_FxG28EjvEeeHa6NiHR6fYw" name="getMissingCsv">
+      <ownedParameter xmi:id="_G9sl4EjvEeeHa6NiHR6fYw" name="index">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_KBZAYEjvEeeHa6NiHR6fYw" name="missing" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_U7jA0EjvEeeHa6NiHR6fYw" name="getMissingCsv">
+      <ownedParameter xmi:id="_WIVkEEjvEeeHa6NiHR6fYw" name="format" type="_eSuEQEguEeehJ8m4Bm0jpw"/>
+      <ownedParameter xmi:id="_YHKoQEjvEeeHa6NiHR6fYw" name="missing" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_kqaGYEjvEeeHa6NiHR6fYw" name="getDifferentCsv">
+      <ownedParameter xmi:id="_l-sYwEjvEeeHa6NiHR6fYw" name="baseline">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_sIV3kEjvEeeHa6NiHR6fYw" name="different" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_vles0EjvEeeHa6NiHR6fYw" name="getDifferentCsv">
+      <ownedParameter xmi:id="_wqnI4EjvEeeHa6NiHR6fYw" name="baseline" type="_eSuEQEguEeehJ8m4Bm0jpw"/>
+      <ownedParameter xmi:id="_yu7KAEjvEeeHa6NiHR6fYw" name="different" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_319VQEjvEeeHa6NiHR6fYw" name="getDifferentCsv">
+      <ownedParameter xmi:id="_5iIjMEjvEeeHa6NiHR6fYw" name="baseline">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_7-DMAEjvEeeHa6NiHR6fYw" name="threshold">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EFloat"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_-LzdAEjvEeeHa6NiHR6fYw" name="different" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_C0k-8EjwEeeHa6NiHR6fYw" name="getDifferentCsv">
+      <ownedParameter xmi:id="_D888QEjwEeeHa6NiHR6fYw" name="baseline" type="_eSuEQEguEeehJ8m4Bm0jpw"/>
+      <ownedParameter xmi:id="_F2nzoEjwEeeHa6NiHR6fYw" name="threshold">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EFloat"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_Hvs1IEjwEeeHa6NiHR6fYw" name="different" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+      </ownedParameter>
+    </ownedOperation>
+  </packagedElement>
+  <packagedElement xmi:type="uml:AssociationClass" xmi:id="_K00d4EjuEeeHa6NiHR6fYw" name="URLNorm HashSet" memberEnd="_K01sAEjuEeeHa6NiHR6fYw _K07LkUjuEeeHa6NiHR6fYw" navigableOwnedEnd="_K01sAEjuEeeHa6NiHR6fYw _K07LkUjuEeeHa6NiHR6fYw">
+    <ownedEnd xmi:id="_K01sAEjuEeeHa6NiHR6fYw" type="_8jz2YEjtEeeHa6NiHR6fYw" association="_K00d4EjuEeeHa6NiHR6fYw">
+      <name xsi:nil="true"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_K06kgEjuEeeHa6NiHR6fYw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_K07LkEjuEeeHa6NiHR6fYw" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_K07LkUjuEeeHa6NiHR6fYw" name="url" type="_EuUOMEg0EeehJ8m4Bm0jpw" association="_K00d4EjuEeeHa6NiHR6fYw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_K08ZsEjuEeeHa6NiHR6fYw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_K09AwEjuEeeHa6NiHR6fYw" value="*"/>
     </ownedEnd>
   </packagedElement>
 </uml:Model>
