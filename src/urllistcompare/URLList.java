@@ -6,18 +6,20 @@ package urllistcompare;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import urllistcompare.exceptions.InvalidURLListException;
+
 /**
  * @author WT-Rocco
  *
  */
 public class URLList implements Serializable{
 
-	private HashMap<Integer, URLNorm> url;
+	private HashMap<String, URLNorm> url;
 	private URLFormat[] format;
 	private boolean active;
 
 	public URLList() {
-		url = new HashMap<Integer, URLNorm>(1500, (float) 0.95);
+		url = new HashMap<String, URLNorm>(1500, (float) 0.95);
 		format = new URLFormat[2];
 		active = false;
 	}
@@ -61,8 +63,26 @@ public class URLList implements Serializable{
 		return output;
 	}
 	
+	/**
+	 * 
+	 * @return true if the URLList is completely configured and can be used
+	 */
+	public boolean isActive(){
+		return active;
+	}
+	
 	public boolean add(URLElement element){
 		boolean output = false;
+		if(!isActive()) throw new InvalidURLListException("URLList not active!");
+		if(url.containsKey(element.normalise())){
+			url.get(element.normalise()).add(element);
+			output = true;
+		} else {
+			URLNorm n = new URLNorm(format[0], format[1]);
+			n.add(element);
+			url.put(n.getUrl(), n);
+			output = true;
+		}
 		return output;
 	}
 
