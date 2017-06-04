@@ -71,17 +71,20 @@ public class URLList implements Serializable{
 		return active;
 	}
 	
+	/**
+	 * Adds an element to the hashmap of URLNorm instances, creating the URLNorm instance if needed.
+	 * @param element the URLElement to add
+	 * @return true if successful, false otherwise (e.g. duplicated element
+	 */
 	public boolean add(URLElement element){
 		boolean output = false;
 		if(!isActive()) throw new InvalidURLListException("URLList not active!");
 		if(url.containsKey(element.normalise())){
-			url.get(element.normalise()).add(element);
-			output = true;
+			output = url.get(element.normalise()).add(element);;
 		} else {
 			URLNorm n = new URLNorm(format[0], format[1]);
-			n.add(element);
+			output = n.add(element);;
 			url.put(n.getUrl(), n);
-			output = true;
 		}
 		return output;
 	}
