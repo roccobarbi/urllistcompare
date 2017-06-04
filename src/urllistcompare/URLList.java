@@ -10,7 +10,7 @@ import java.util.HashMap;
 import urllistcompare.exceptions.InvalidURLListException;
 
 /**
- * @author WT-Rocco
+ * @author Rocco Barbini (roccobarbi@gmail.com)
  *
  */
 public class URLList implements Serializable{

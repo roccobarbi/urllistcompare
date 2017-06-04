@@ -9,8 +9,7 @@ import urllistcompare.exceptions.*;
 import urllistcompare.util.ArraySort;
 
 /**
- * @author Rocco Barbini
- * @email roccobarbi@gmail.com
+ * @author Rocco Barbini (roccobarbi@gmail.com)
  * 
  * A single normalised URL, which includes 2 hashsets of URLElements (for the formats that are being
  * compared).
