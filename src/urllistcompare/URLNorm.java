@@ -6,6 +6,7 @@ package urllistcompare;
 import java.util.HashSet;
 
 import urllistcompare.exceptions.*;
+import urllistcompare.util.ArraySort;
 
 /**
  * @author Rocco Barbini
@@ -205,11 +206,11 @@ public class URLNorm {
 	/**
 	 * Outputs a string in a valid csv format (semicolon-separated)
 	 * @param index the format the detail of which should be exported
-	 * @return a string witl all URLs for the specified index, semicolon-separated and with each couple terminated by \n
+	 * @return a string with all URLs for the specified index, semicolon-separated and with each couple terminated by \n
 	 */
 	public String toCsv(int index){
 		if(index < 0 || index > 1){
-			throw new IndexOutOfBoundsException("Tried to set format lower than 0 or greater than 1!");
+			throw new IndexOutOfBoundsException();
 		}
 		if(format[0] == null || format[1] == null){
 			throw new InvalidURLNormException("At least one format is missing!"); 
@@ -225,11 +226,11 @@ public class URLNorm {
 	 * Outputs a string in a valid csv format (separated by sep)
 	 * @param index the format the detail of which should be exported
 	 * @param sep the separator for the columns in the csv
-	 * @return a string witl all URLs for the specified index, separated by sep and with each couple terminated by \n
+	 * @return a string with all URLs for the specified index, separated by sep and with each couple terminated by \n
 	 */
 	public String toCsv(int index, char sep){
 		if(index < 0 || index > 1){
-			throw new IndexOutOfBoundsException("Tried to set format lower than 0 or greater than 1!");
+			throw new IndexOutOfBoundsException();
 		}
 		if(format[0] == null || format[1] == null){
 			throw new InvalidURLNormException("At least one format is missing!"); 
@@ -241,6 +242,11 @@ public class URLNorm {
 		return outputB.toString();
 	}
 	
+	/**
+	 * Outputs a string in a valid csv format (semicolon-separated)
+	 * @param f the format the detail of which should be exported
+	 * @return a string with all URLs for the specified index, semicolon-separated and with each couple terminated by \n
+	 */
 	public String toCsv(URLFormat f){
 		int index = 0;
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("At least one format is null!");
@@ -254,6 +260,12 @@ public class URLNorm {
 		return toCsv(index);
 	}
 	
+	/**
+	 * Outputs a string in a valid csv format (separated by sep)
+	 * @param f the format the detail of which should be exported
+	 * @param sep the separator for the columns in the csv
+	 * @return a string with all URLs for the specified index, separated by sep and with each couple terminated by \n
+	 */
 	public String toCsv(URLFormat f, char sep){
 		int index = 0;
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("At least one format is null!");
@@ -266,6 +278,37 @@ public class URLNorm {
 		}
 		return toCsv(index, sep);
 	}
-	// TODO: add functionality
+	
+	/**
+	 * 
+	 * @param index the index of the format for which the elements should be exported
+	 * @return a sorted (desc) array of URLElements in the specified format
+	 */
+	public URLElement[] getUrlElements(int index){
+		URLElement output[] = null;
+		if(index < 0 || index > format.length) throw new IndexOutOfBoundsException();
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("At least one format is null!");
+		output = (URLElement[]) elements[index].toArray();
+		output = ArraySort.insertionSortDesc(output);
+		return output;
+	}
+	
+	/**
+	 * 
+	 * @param f the format for which the elements should be exported
+	 * @return a sorted (desc) array of URLElements in the specified format
+	 */
+	public URLElement[] getUrlElements(URLFormat f){
+		int index = 0;
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("At least one format is null!");
+		if(format[0] == f){
+			index = 0;
+		} else if(format[1] == f){
+			index = 1;
+		} else {
+			throw new InvalidURLNormException("Invalid format received!");
+		}
+		return getUrlElements(index);
+	}
 
 }
