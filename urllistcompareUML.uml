@@ -226,4 +226,15 @@
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_K09AwEjuEeeHa6NiHR6fYw" value="*"/>
     </ownedEnd>
   </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_pW2gAEjyEeeHa6NiHR6fYw" name="A_uRLList_format" memberEnd="_pW2gAUjyEeeHa6NiHR6fYw _pW2gBEjyEeeHa6NiHR6fYw" navigableOwnedEnd="_pW2gAUjyEeeHa6NiHR6fYw _pW2gBEjyEeeHa6NiHR6fYw">
+    <ownedEnd xmi:id="_pW2gAUjyEeeHa6NiHR6fYw" type="_8jz2YEjtEeeHa6NiHR6fYw" association="_pW2gAEjyEeeHa6NiHR6fYw">
+      <name xsi:nil="true"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_pW2gAkjyEeeHa6NiHR6fYw"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_pW2gA0jyEeeHa6NiHR6fYw" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_pW2gBEjyEeeHa6NiHR6fYw" name="format" type="_eSuEQEguEeehJ8m4Bm0jpw" association="_pW2gAEjyEeeHa6NiHR6fYw">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_pW2gBUjyEeeHa6NiHR6fYw" value="2"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_pW2gBkjyEeeHa6NiHR6fYw" value="2"/>
+    </ownedEnd>
+  </packagedElement>
 </uml:Model>
