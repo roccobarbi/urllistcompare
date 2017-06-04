@@ -258,6 +258,14 @@
               <styles xmi:type="notation:FontStyle" xmi:id="_KOLCsUjwEeeHa6NiHR6fYw" fontName="Segoe UI" fontHeight="8"/>
               <layoutConstraint xmi:type="notation:Location" xmi:id="_KOLCskjwEeeHa6NiHR6fYw"/>
             </children>
+            <children xmi:type="notation:Node" xmi:id="_HjobUEktEeeVcqCPcPxPvA" type="3010" element="_Hipj4EktEeeVcqCPcPxPvA">
+              <styles xmi:type="notation:FontStyle" xmi:id="_HjobUUktEeeVcqCPcPxPvA" fontName="Segoe UI" fontHeight="8"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_HjobUkktEeeVcqCPcPxPvA"/>
+            </children>
+            <children xmi:type="notation:Node" xmi:id="_HjppcEktEeeVcqCPcPxPvA" type="3010" element="_HirZEEktEeeVcqCPcPxPvA">
+              <styles xmi:type="notation:FontStyle" xmi:id="_HjppcUktEeeVcqCPcPxPvA" fontName="Segoe UI" fontHeight="8"/>
+              <layoutConstraint xmi:type="notation:Location" xmi:id="_HjppckktEeeVcqCPcPxPvA"/>
+            </children>
             <styles xmi:type="notation:SortingStyle" xmi:id="_8nJeQUjtEeeHa6NiHR6fYw"/>
             <styles xmi:type="notation:FilteringStyle" xmi:id="_8nJeQkjtEeeHa6NiHR6fYw"/>
           </children>
@@ -867,6 +875,26 @@
         <semanticElements xmi:type="uml:Parameter" href="urllistcompareUML.uml#_F2nzoEjwEeeHa6NiHR6fYw"/>
         <semanticElements xmi:type="uml:Parameter" href="urllistcompareUML.uml#_D888QEjwEeeHa6NiHR6fYw"/>
         <ownedStyle xmi:type="diagram:Square" xmi:id="_KNg7YEjwEeeHa6NiHR6fYw" labelAlignment="LEFT">
+          <description xmi:type="style:SquareDescription" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Class%20Diagram']/@defaultLayer/@containerMappings[name='CD_ReusedMappingForFeatures']/@subNodeMappings[name='CD_Operation']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Class%20Diagram']/@defaultLayer/@containerMappings[name='CD_ReusedMappingForFeatures']/@subNodeMappings[name='CD_Operation']"/>
+      </ownedElements>
+      <ownedElements xmi:type="diagram:DNodeListElement" xmi:id="_Hipj4EktEeeVcqCPcPxPvA" name="getMissingElements(f : URLFormat) : URLElement[1]">
+        <target xmi:type="uml:Operation" href="urllistcompareUML.uml#_0dZxUEksEeeVcqCPcPxPvA"/>
+        <semanticElements xmi:type="uml:Operation" href="urllistcompareUML.uml#_0dZxUEksEeeVcqCPcPxPvA"/>
+        <semanticElements xmi:type="uml:Parameter" href="urllistcompareUML.uml#_5jbP8EksEeeVcqCPcPxPvA"/>
+        <semanticElements xmi:type="uml:Parameter" href="urllistcompareUML.uml#_2hAn0EksEeeVcqCPcPxPvA"/>
+        <ownedStyle xmi:type="diagram:Square" xmi:id="_HiqyAEktEeeVcqCPcPxPvA" labelAlignment="LEFT">
+          <description xmi:type="style:SquareDescription" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Class%20Diagram']/@defaultLayer/@containerMappings[name='CD_ReusedMappingForFeatures']/@subNodeMappings[name='CD_Operation']/@style"/>
+        </ownedStyle>
+        <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Class%20Diagram']/@defaultLayer/@containerMappings[name='CD_ReusedMappingForFeatures']/@subNodeMappings[name='CD_Operation']"/>
+      </ownedElements>
+      <ownedElements xmi:type="diagram:DNodeListElement" xmi:id="_HirZEEktEeeVcqCPcPxPvA" name="getMissingElements(index : Integer) : URLElement[1]">
+        <target xmi:type="uml:Operation" href="urllistcompareUML.uml#_BaD1AEktEeeVcqCPcPxPvA"/>
+        <semanticElements xmi:type="uml:Operation" href="urllistcompareUML.uml#_BaD1AEktEeeVcqCPcPxPvA"/>
+        <semanticElements xmi:type="uml:Parameter" href="urllistcompareUML.uml#_Ev3TMEktEeeVcqCPcPxPvA"/>
+        <semanticElements xmi:type="uml:Parameter" href="urllistcompareUML.uml#_Cl59EEktEeeVcqCPcPxPvA"/>
+        <ownedStyle xmi:type="diagram:Square" xmi:id="_HisAIEktEeeVcqCPcPxPvA" labelAlignment="LEFT">
           <description xmi:type="style:SquareDescription" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Class%20Diagram']/@defaultLayer/@containerMappings[name='CD_ReusedMappingForFeatures']/@subNodeMappings[name='CD_Operation']/@style"/>
         </ownedStyle>
         <actualMapping xmi:type="description_1:NodeMapping" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Class%20Diagram']/@defaultLayer/@containerMappings[name='CD_ReusedMappingForFeatures']/@subNodeMappings[name='CD_Operation']"/>

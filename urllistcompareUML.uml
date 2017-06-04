@@ -224,6 +224,16 @@
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
       </ownedParameter>
     </ownedOperation>
+    <ownedOperation xmi:id="_0dZxUEksEeeVcqCPcPxPvA" name="getMissingElements">
+      <ownedParameter xmi:id="_2hAn0EksEeeVcqCPcPxPvA" name="f" type="_eSuEQEguEeehJ8m4Bm0jpw"/>
+      <ownedParameter xmi:id="_5jbP8EksEeeVcqCPcPxPvA" name="missing" type="_cRGKwEguEeehJ8m4Bm0jpw" direction="return"/>
+    </ownedOperation>
+    <ownedOperation xmi:id="_BaD1AEktEeeVcqCPcPxPvA" name="getMissingElements">
+      <ownedParameter xmi:id="_Cl59EEktEeeVcqCPcPxPvA" name="index">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+      </ownedParameter>
+      <ownedParameter xmi:id="_Ev3TMEktEeeVcqCPcPxPvA" name="missing" type="_cRGKwEguEeehJ8m4Bm0jpw" direction="return"/>
+    </ownedOperation>
   </packagedElement>
   <packagedElement xmi:type="uml:AssociationClass" xmi:id="_K00d4EjuEeeHa6NiHR6fYw" name="URLNorm HashSet" memberEnd="_K01sAEjuEeeHa6NiHR6fYw _K07LkUjuEeeHa6NiHR6fYw" navigableOwnedEnd="_K01sAEjuEeeHa6NiHR6fYw _K07LkUjuEeeHa6NiHR6fYw">
     <ownedEnd xmi:id="_K01sAEjuEeeHa6NiHR6fYw" type="_8jz2YEjtEeeHa6NiHR6fYw" association="_K00d4EjuEeeHa6NiHR6fYw">
