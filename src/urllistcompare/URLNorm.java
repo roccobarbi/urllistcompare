@@ -125,12 +125,26 @@ public class URLNorm {
 	 * @return true if the format passed as an argument recorded zero impressions, false otherwise
 	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
 	 */
-	public boolean isMissing(URLFormat f) throws InvalidURLNormException {
+	public boolean isMissing(URLFormat f){
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
 				"without defining both formats.");
 		if(format[0] != f && format[1] != f) throw new InvalidURLNormException("Tried to check if a format is missing" + 
 				"with a format that is not included in this URLNorm instance.");
 		return ((f == format[0] && impressions[0] == 0) || (f == format[1] && impressions[1] == 0));
+	}
+	
+	/**
+	 * Checks if the URL is completely missing (zero page impressions) in at least one of the formats.
+	 * 
+	 * @param index the index of the format that is been checked
+	 * @return true if the format passed as an argument recorded zero impressions, false otherwise
+	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
+	 */
+	public boolean isMissing(int index){
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
+				"without defining both formats.");
+		if(index < 0 || index >= format.length) throw new IndexOutOfBoundsException();
+		return (impressions[index] == 0);
 	}
 	
 	/**
