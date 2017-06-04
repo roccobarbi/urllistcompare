@@ -4,6 +4,7 @@
 package urllistcompare;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import urllistcompare.exceptions.InvalidURLListException;
@@ -89,4 +90,17 @@ public class URLList implements Serializable{
 		return output;
 	}
 
+	public URLElement[] getMissingElements(int index){
+		if(index < 0 || index >= this.format.length) throw new IndexOutOfBoundsException();
+		if(!isActive()) throw new InvalidURLListException("URLList not active!");
+		ArrayList<URLElement> output = new ArrayList<URLElement>(100);
+		for(String k : url.keySet()){
+			if(url.get(k).isMissing(index)){
+				for(URLElement e : url.get(k).getUrlElements(index)){
+					output.add(e);
+				}
+			}
+		}
+		return (URLElement[]) output.toArray();
+	}
 }
