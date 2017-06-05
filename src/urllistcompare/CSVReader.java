@@ -57,6 +57,47 @@ public class CSVReader {
 	}
 	
 	/**
+	 * Full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = 0; // default: indicates that the value is missing
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		set = true;
+	}
+	
+	/**
+	 * Full constructor that can be used when isTSep = true.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 * @param tSep
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = tSep;
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		set = true;
+	}
+	
+	/**
 	 * 
 	 * @return true if the CSVReader instance is set up and can be used, false otherwise
 	 */
