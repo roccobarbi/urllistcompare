@@ -56,10 +56,18 @@ public class CSVReader {
 		set = false;
 	}
 	
+	/**
+	 * 
+	 * @return true if the CSVReader instance is set up and can be used, false otherwise
+	 */
 	public boolean isSet(){
 		return set;
 	}
 	
+	/*
+	 * Checks and updates the set status of the CSVReader instance.
+	 * It returns true if the CSVReader instance is set up and can be used, false otherwise
+	 */
 	private boolean checkSet(){
 		set = ((!isTSep || tSep != 0) && dSep != 0 && vSep != 0) && urlI > -1 && impI > -1 && urlI != impI;
 		return set;
