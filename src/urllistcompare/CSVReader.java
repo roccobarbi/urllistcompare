@@ -34,14 +34,11 @@ public class CSVReader {
 	// bom values (needed to interpret and remove the bom at the start of the file, if present)
 	private enum bom{
 		UNICODE(new String(new byte[] {(byte) 0xef, (byte) 0xbb, (byte) 0xbf}), 3);
-		private final String bomString;		
-		private final int bomLength;
+		public final String bomString;		
+		public final int bomLength;
 		private bom(String bomString, int bomLength){
 			this.bomString = bomString;
 			this.bomLength = bomLength;
-		}
-		public int getLength(){
-			return bomLength;
 		}
 	}
 
