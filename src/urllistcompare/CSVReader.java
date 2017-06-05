@@ -46,17 +46,26 @@ public class CSVReader {
 	}
 
 	/**
-	 * 
+	 * Default constructor, the CSVReader instance is not set and can't be used unless all variables are set correctly.
 	 */
 	public CSVReader() {
 		headers = true; // default
-		isTSep = false; // default
+		isTSep = true; // default, with tSep = 0 it implies that the value is missing
 		tSep = 0; // default: indicates that the value is missing
 		dSep = 0; // default: indicates that the value is missing
 		vSep = 0; // default: indicates that the value is missing
 		urlI = -1; // default: indicates that the value is missing
 		impI = -1; // default: indicates that the value is missing
 		set = false;
+	}
+	
+	public boolean isSet(){
+		return set;
+	}
+	
+	private boolean checkSet(){
+		set = ((!isTSep || tSep != 0) && dSep != 0 && vSep != 0) && urlI > -1 && impI > -1 && urlI != impI;
+		return set;
 	}
 
 }
