@@ -46,6 +46,8 @@ public class CSVReader {
 	private File source;
 	// URL Format
 	private URLFormat format;
+	// the destination
+	private URLList destination;
 
 	/**
 	 * Default constructor, the CSVReader instance is not set and can't be used unless all variables are set correctly.
@@ -60,6 +62,7 @@ public class CSVReader {
 		impI = -1; // default: indicates that the value is missing
 		source = null;
 		this.format = null;
+		destination = null;
 		set = false;
 	}
 	
@@ -82,6 +85,7 @@ public class CSVReader {
 		this.impI = impI;
 		source = null;
 		this.format = null;
+		destination = null;
 		set = false;
 	}
 	
@@ -105,6 +109,7 @@ public class CSVReader {
 		this.impI = impI;
 		source = null;
 		this.format = null;
+		destination = null;
 		set = false;
 	}
 	
@@ -127,7 +132,8 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		this.format = null;
-		set = setFile(filename);
+		destination = null;
+		set = false;
 	}
 	
 	/**
@@ -150,7 +156,8 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		this.format = null;
-		set = setFile(filename);
+		destination = null;
+		set = false;
 	}
 	
 	/**
@@ -172,7 +179,8 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		this.format = null;
-		set = setFile(file);
+		destination = null;
+		set = false;
 	}
 	
 	/**
@@ -195,7 +203,8 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		this.format = null;
-		set = setFile(file);
+		destination = null;
+		set = false;
 	}
 	
 	/**
@@ -218,6 +227,7 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		this.format = format;
+		destination = null;
 		set = setFile(filename);
 	}
 	
@@ -242,6 +252,7 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		this.format = format;
+		destination = null;
 		set = setFile(filename);
 	}
 	
@@ -265,6 +276,7 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		this.format = format;
+		destination = null;
 		set = setFile(file);
 	}
 	
@@ -289,6 +301,7 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		this.format = format;
+		destination = null;
 		set = setFile(file);
 	}
 	
@@ -307,7 +320,7 @@ public class CSVReader {
 	 * It returns true if the CSVReader instance is set up and can be used, false otherwise
 	 */
 	private boolean checkSet(){
-		set = ((!isTSep || tSep != 0) && dSep != 0 && vSep != 0) && urlI > -1 && impI > -1 && urlI != impI;
+		set = ((!isTSep || tSep != 0) && dSep != 0 && vSep != 0) && urlI > -1 && impI > -1 && urlI != impI && format != null;
 		set = set && source != null && source.exists() && source.canRead();
 		return set;
 	}
