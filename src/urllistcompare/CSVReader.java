@@ -4,6 +4,7 @@
 package urllistcompare;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,6 +42,8 @@ public class CSVReader {
 			this.bomLength = bomLength;
 		}
 	}
+	// File to be read
+	private File source;
 
 	/**
 	 * Default constructor, the CSVReader instance is not set and can't be used unless all variables are set correctly.
@@ -53,11 +56,12 @@ public class CSVReader {
 		vSep = 0; // default: indicates that the value is missing
 		urlI = -1; // default: indicates that the value is missing
 		impI = -1; // default: indicates that the value is missing
+		source = null;
 		set = false;
 	}
 	
 	/**
-	 * Full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * Almost full constructor that can be used when isTSep = false, no value needs to be specified.
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -73,11 +77,12 @@ public class CSVReader {
 		this.vSep = vSep;
 		this.urlI = urlI;
 		this.impI = impI;
-		set = true;
+		source = null;
+		set = false;
 	}
 	
 	/**
-	 * Full constructor that can be used when isTSep = true.
+	 * Almost full constructor that can be used when isTSep = true.
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -94,7 +99,49 @@ public class CSVReader {
 		this.vSep = vSep;
 		this.urlI = urlI;
 		this.impI = impI;
-		set = true;
+		source = null;
+		set = false;
+	}
+	
+	/**
+	 * Full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, String filename) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = 0; // default: indicates that the value is missing
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		set = setFile(filename);
+	}
+	
+	/**
+	 * Full constructor that can be used when isTSep = true.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 * @param tSep
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, String filename) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = tSep;
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		set = setFile(filename);
 	}
 	
 	/**
@@ -111,7 +158,29 @@ public class CSVReader {
 	 */
 	private boolean checkSet(){
 		set = ((!isTSep || tSep != 0) && dSep != 0 && vSep != 0) && urlI > -1 && impI > -1 && urlI != impI;
+		set = set && source != null && source.exists() && source.canRead();
 		return set;
+	}
+	
+	/**
+	 * 
+	 * @param filename the name of the file that needs to be read
+	 * @return true if the file exists and can be read
+	 */
+	public boolean setFile(String filename){
+		source = new File(filename);
+		return source.exists() && source.canRead();
+	}
+	
+	/**
+	 * 
+	 * @param filename the name of the file that needs to be read
+	 * @param path the path where the file can be found
+	 * @return true if the file exists and can be read
+	 */
+	public boolean setFile(String path, String filename){
+		source = new File(path, filename);
+		return source.exists() && source.canRead();
 	}
 
 }
