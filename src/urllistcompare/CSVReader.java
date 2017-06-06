@@ -320,7 +320,8 @@ public class CSVReader {
 	 * It returns true if the CSVReader instance is set up and can be used, false otherwise
 	 */
 	private boolean checkSet(){
-		set = ((!isTSep || tSep != 0) && dSep != 0 && vSep != 0) && urlI > -1 && impI > -1 && urlI != impI && format != null;
+		set = ((!isTSep || tSep != 0) && dSep != 0 && vSep != 0) && urlI > -1 && impI > -1 && urlI != impI;
+		set = set && format != null && destination != null;
 		set = set && source != null && source.exists() && source.canRead();
 		return set;
 	}
@@ -355,6 +356,66 @@ public class CSVReader {
 	public boolean setFile(File file){
 		source = file;
 		return source.exists() && source.canRead();
+	}
+	
+	/**
+	 * 
+	 * @param destination the destination URLList where the file should be written
+	 */
+	public void setDestination(URLList destination){
+		this.destination = destination;
+	}
+	
+	public boolean read(){
+		boolean output = false;
+		BufferedReader inputStream;
+		int impressions = 0;
+		String impString;
+		StringBuilder impStringB;
+		String page;
+		URLElement element;
+		int k = 0;
+		// First check if everything is fine and set the BufferedReader object
+		checkSet();
+		if(isSet()){
+			try {
+				inputStream = new BufferedReader(new FileReader(source)); 
+			} catch (FileNotFoundException e) {
+				System.err.println("Problema nell'apertura del file.");
+				return false;
+			}
+			try{
+				String row = inputStream.readLine();
+				// Find and delete the bom, if present
+				for(bom e : bom.values()){
+					if(row.startsWith(e.bomString)){
+						row = row.substring(e.bomLength);
+						break;
+					}
+				}
+				while(row != null){
+					// If there are no heades, parse the first line
+					if(k > 0 || !headers){
+						page = row.split(Character.toString(vSep))[urlI];
+						impString = row.split(Character.toString(vSep))[impI];;
+						impStringB = new StringBuilder();
+						for(String s : impString.split(Character.toString(tSep))) {
+							impStringB.append(s);
+						}
+						impString = impStringB.toString();
+						if(dSep != '.') impString.replace(dSep, '.');
+						impressions = Integer.parseInt(impString);
+						element = new URLElement(page, format, impressions);
+						destination.add(element);
+					}
+					k++;
+				}
+				inputStream.close();
+			} catch (IOException e) {
+				System.out.println("Errore nella lettura da " +  source);
+			}
+		}
+		return output;
 	}
 
 }
