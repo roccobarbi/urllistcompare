@@ -44,6 +44,8 @@ public class CSVReader {
 	}
 	// File to be read
 	private File source;
+	// URL Format
+	private URLFormat format;
 
 	/**
 	 * Default constructor, the CSVReader instance is not set and can't be used unless all variables are set correctly.
@@ -57,6 +59,7 @@ public class CSVReader {
 		urlI = -1; // default: indicates that the value is missing
 		impI = -1; // default: indicates that the value is missing
 		source = null;
+		this.format = null;
 		set = false;
 	}
 	
@@ -78,6 +81,7 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		source = null;
+		this.format = null;
 		set = false;
 	}
 	
@@ -100,7 +104,98 @@ public class CSVReader {
 		this.urlI = urlI;
 		this.impI = impI;
 		source = null;
+		this.format = null;
 		set = false;
+	}
+	
+	/**
+	 * Almost full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 * @param filename
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, String filename) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = 0; // default: indicates that the value is missing
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		this.format = null;
+		set = setFile(filename);
+	}
+	
+	/**
+	 * Almost full constructor that can be used when isTSep = true.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 * @param tSep
+	 * @param filename
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, String filename) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = tSep;
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		this.format = null;
+		set = setFile(filename);
+	}
+	
+	/**
+	 * Almost full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 * @param filename
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, File file) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = 0; // default: indicates that the value is missing
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		this.format = null;
+		set = setFile(file);
+	}
+	
+	/**
+	 * Almost full constructor that can be used when isTSep = true.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 * @param tSep
+	 * @param filename
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, File file) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = tSep;
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		this.format = null;
+		set = setFile(file);
 	}
 	
 	/**
@@ -111,8 +206,10 @@ public class CSVReader {
 	 * @param vSep
 	 * @param dSep
 	 * @param isTSep
+	 * @param filename
+	 * @param format
 	 */
-	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, String filename) {
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, String filename, URLFormat format) {
 		this.headers = headers;
 		this.isTSep = isTSep;
 		this.tSep = 0; // default: indicates that the value is missing
@@ -120,6 +217,7 @@ public class CSVReader {
 		this.vSep = vSep;
 		this.urlI = urlI;
 		this.impI = impI;
+		this.format = format;
 		set = setFile(filename);
 	}
 	
@@ -132,8 +230,10 @@ public class CSVReader {
 	 * @param dSep
 	 * @param isTSep
 	 * @param tSep
+	 * @param filename
+	 * @param format
 	 */
-	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, String filename) {
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, String filename, URLFormat format) {
 		this.headers = headers;
 		this.isTSep = isTSep;
 		this.tSep = tSep;
@@ -141,8 +241,58 @@ public class CSVReader {
 		this.vSep = vSep;
 		this.urlI = urlI;
 		this.impI = impI;
+		this.format = format;
 		set = setFile(filename);
 	}
+	
+	/**
+	 * Full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 * @param filename
+	 * @param format
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, File file, URLFormat format) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = 0; // default: indicates that the value is missing
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		this.format = format;
+		set = setFile(file);
+	}
+	
+	/**
+	 * Full constructor that can be used when isTSep = true.
+	 * @param headers
+	 * @param urlI
+	 * @param impI
+	 * @param vSep
+	 * @param dSep
+	 * @param isTSep
+	 * @param tSep
+	 * @param filename
+	 * @param format
+	 */
+	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, File file, URLFormat format) {
+		this.headers = headers;
+		this.isTSep = isTSep;
+		this.tSep = tSep;
+		this.dSep = dSep;
+		this.vSep = vSep;
+		this.urlI = urlI;
+		this.impI = impI;
+		this.format = format;
+		set = setFile(file);
+	}
+	
+	
 	
 	/**
 	 * 
@@ -180,6 +330,17 @@ public class CSVReader {
 	 */
 	public boolean setFile(String path, String filename){
 		source = new File(path, filename);
+		return source.exists() && source.canRead();
+	}
+	
+	/**
+	 * 
+	 * @param file the file that needs to be read
+	 * @param path the path where the file can be found
+	 * @return true if the file exists and can be read
+	 */
+	public boolean setFile(File file){
+		source = file;
 		return source.exists() && source.canRead();
 	}
 
