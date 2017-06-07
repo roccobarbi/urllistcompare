@@ -323,9 +323,14 @@
     </ownedEnd>
   </packagedElement>
   <packagedElement xmi:type="uml:Class" xmi:id="_tF8VcEr2EeePlKb1G4fEZg" name="readManager">
-    <ownedOperation xmi:id="_IivBwEr3EeePlKb1G4fEZg" name="defineReader">
-      <ownedParameter xmi:id="_Jh1HQEr3EeePlKb1G4fEZg" name="index">
-        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+    <ownedOperation xmi:id="_5NyQ8Eu6EeeMsI4OrF_rbA" name="userInput">
+      <ownedParameter xmi:id="_6k6b8Eu6EeeMsI4OrF_rbA" name="done" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
+      </ownedParameter>
+    </ownedOperation>
+    <ownedOperation xmi:id="_NWOl4Eu7EeeMsI4OrF_rbA" name="read">
+      <ownedParameter xmi:id="_OWP4cEu7EeeMsI4OrF_rbA" name="done" direction="return">
+        <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
       </ownedParameter>
     </ownedOperation>
   </packagedElement>
@@ -339,6 +344,17 @@
     <ownedEnd xmi:id="_xlg4FEr2EeePlKb1G4fEZg" name="file" type="_7p3OsEryEeePlKb1G4fEZg" association="_xlg4EEr2EeePlKb1G4fEZg">
       <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_xlg4FUr2EeePlKb1G4fEZg" value="2"/>
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_xlg4Fkr2EeePlKb1G4fEZg" value="2"/>
+    </ownedEnd>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Association" xmi:id="_cZ7rEEu6EeeMsI4OrF_rbA" name="readManager_URLList" memberEnd="_cZ7rEUu6EeeMsI4OrF_rbA _cZ7rFEu6EeeMsI4OrF_rbA" navigableOwnedEnd="_cZ7rFEu6EeeMsI4OrF_rbA">
+    <ownedEnd xmi:id="_cZ7rEUu6EeeMsI4OrF_rbA" type="_tF8VcEr2EeePlKb1G4fEZg" association="_cZ7rEEu6EeeMsI4OrF_rbA">
+      <name xsi:nil="true"/>
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cZ7rEku6EeeMsI4OrF_rbA"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cZ7rE0u6EeeMsI4OrF_rbA" value="*"/>
+    </ownedEnd>
+    <ownedEnd xmi:id="_cZ7rFEu6EeeMsI4OrF_rbA" name="uRLList" type="_8jz2YEjtEeeHa6NiHR6fYw" association="_cZ7rEEu6EeeMsI4OrF_rbA">
+      <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_cZ7rFUu6EeeMsI4OrF_rbA" value="1"/>
+      <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_cZ7rFku6EeeMsI4OrF_rbA" value="1"/>
     </ownedEnd>
   </packagedElement>
 </uml:Model>
