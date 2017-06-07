@@ -174,7 +174,7 @@ public enum URLFormat {
 			System.out.println("Select the right format from the available ones:");
 			printFormatsList();
 			System.out.println("x : abort and exit");
-			System.out.print(">: ");
+			System.out.print(prompt);
 			input = keyboard.nextLine().toLowerCase();
 			if(input.length() > 0){ // Otherwise keep loopint
 				selector = input.charAt(0);
