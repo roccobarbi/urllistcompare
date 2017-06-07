@@ -366,6 +366,10 @@ public class CSVReader {
 		this.destination = destination;
 	}
 	
+	/**
+	 * Read the source file's contents into the destination URLList
+	 * @return true if successful, false otherwise
+	 */
 	public boolean read(){
 		boolean output = false;
 		BufferedReader inputStream;
@@ -381,7 +385,7 @@ public class CSVReader {
 			try {
 				inputStream = new BufferedReader(new FileReader(source)); 
 			} catch (FileNotFoundException e) {
-				System.err.println("Problema nell'apertura del file.");
+				System.err.println("Problema nell'apertura del file " + source.getName());
 				return false;
 			}
 			try{
@@ -394,7 +398,7 @@ public class CSVReader {
 					}
 				}
 				while(row != null){
-					// If there are no heades, parse the first line
+					// If there are no headers, parse the first line
 					if(k > 0 || !headers){
 						page = row.split(Character.toString(vSep))[urlI];
 						impString = row.split(Character.toString(vSep))[impI];;
@@ -414,6 +418,7 @@ public class CSVReader {
 			} catch (IOException e) {
 				System.out.println("Errore nella lettura da " +  source);
 			}
+			output = true;
 		}
 		return output;
 	}
