@@ -1219,7 +1219,7 @@
       </ownedStyle>
       <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/plugin/org.obeonetwork.dsl.uml2.design/description/uml2.odesign#//@ownedViewpoints[name='Design']/@ownedRepresentations[name='Class%20Diagram']/@defaultLayer/@edgeMappings[name='CD_Association']"/>
     </ownedDiagramElements>
-    <ownedDiagramElements xmi:type="diagram:DNodeList" xmi:id="_tF8VcUr2EeePlKb1G4fEZg" name="readManager" tooltipText="NewModel::readManager" outgoingEdges="_xm2U0Er2EeePlKb1G4fEZg _ceCH8Eu6EeeMsI4OrF_rbA" width="12" height="10">
+    <ownedDiagramElements xmi:type="diagram:DNodeList" xmi:id="_tF8VcUr2EeePlKb1G4fEZg" name="ReadManager" tooltipText="NewModel::ReadManager" outgoingEdges="_xm2U0Er2EeePlKb1G4fEZg _ceCH8Eu6EeeMsI4OrF_rbA" width="12" height="10">
       <target xmi:type="uml:Class" href="urllistcompareUML.uml#_tF8VcEr2EeePlKb1G4fEZg"/>
       <semanticElements xmi:type="uml:Class" href="urllistcompareUML.uml#_tF8VcEr2EeePlKb1G4fEZg"/>
       <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>

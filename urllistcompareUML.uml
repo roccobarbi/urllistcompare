@@ -322,7 +322,7 @@
       <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_yGUmdkrzEeePlKb1G4fEZg" value="1"/>
     </ownedEnd>
   </packagedElement>
-  <packagedElement xmi:type="uml:Class" xmi:id="_tF8VcEr2EeePlKb1G4fEZg" name="readManager">
+  <packagedElement xmi:type="uml:Class" xmi:id="_tF8VcEr2EeePlKb1G4fEZg" name="ReadManager">
     <ownedOperation xmi:id="_5NyQ8Eu6EeeMsI4OrF_rbA" name="userInput">
       <ownedParameter xmi:id="_6k6b8Eu6EeeMsI4OrF_rbA" name="done" direction="return">
         <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean"/>
