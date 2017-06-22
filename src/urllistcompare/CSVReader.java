@@ -401,7 +401,7 @@ public class CSVReader {
 					// If there are no headers, parse the first line
 					if(k > 0 || !headers){
 						page = row.split(Character.toString(vSep))[urlI];
-						impString = row.split(Character.toString(vSep))[impI];;
+						impString = row.split(Character.toString(vSep))[impI];
 						impStringB = new StringBuilder();
 						for(String s : impString.split(Character.toString(tSep))) {
 							impStringB.append(s);
