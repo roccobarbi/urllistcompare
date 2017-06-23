@@ -3,11 +3,10 @@
  */
 package urllistcompare;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.EOFException;
 import java.util.Scanner;
 
 /**
@@ -372,7 +371,7 @@ public class CSVReader {
 	 */
 	public boolean read(){
 		boolean output = false;
-		BufferedReader inputStream;
+		Scanner inputStream;
 		int impressions = 0;
 		String impString;
 		StringBuilder impStringB;
@@ -383,22 +382,28 @@ public class CSVReader {
 		checkSet();
 		if(isSet()){
 			try {
-				inputStream = new BufferedReader(new FileReader(source)); 
+				inputStream = new Scanner(source); 
 			} catch (FileNotFoundException e) {
 				System.err.println("Problema nell'apertura del file " + source.getName());
 				return false;
 			}
 			try{
-				String row = inputStream.readLine();
-				// Find and delete the bom, if present
-				for(bom e : bom.values()){
-					if(row.startsWith(e.bomString)){
-						row = row.substring(e.bomLength);
-						break;
+				String row;
+				while(true){
+					if(!inputStream.hasNextLine())
+						throw new EOFException("End of file reached!");
+					row = inputStream.nextLine();
+					if(k == 0){ // First line
+						// Find and delete the bom, if present
+						for(bom e : bom.values()){
+							if(row.startsWith(e.bomString)){
+								row = row.substring(e.bomLength);
+								break;
+							}
+						}
 					}
-				}
-				while(row != null){
 					// If there are no headers, parse the first line
+					// All other lines are parsed
 					if(k > 0 || !headers){
 						page = row.split(Character.toString(vSep))[urlI];
 						impString = row.split(Character.toString(vSep))[impI];
@@ -414,9 +419,12 @@ public class CSVReader {
 					}
 					k++;
 				}
-				inputStream.close();
+			} catch(EOFException e){
+				System.out.println(source + " letto correttamente!");
 			} catch (IOException e) {
-				System.out.println("Errore nella lettura da " +  source);
+				System.out.println("Errore nella lettura da " + source);
+			} finally {
+				inputStream.close();
 			}
 			output = true;
 		}
