@@ -74,6 +74,16 @@ public class URLNorm {
 		return url;
 	}
 	
+	public URLFormat[] getFormats(){
+		if(format[0] == null){
+			throw new InvalidURLNormException("The first format is null!");
+		}
+		if(format[0] == null){
+			throw new InvalidURLNormException("The second format is null!");
+		}
+		return format;
+	}
+	
 	/**
 	 * 
 	 * @param index the index of the format array that needs to be set
