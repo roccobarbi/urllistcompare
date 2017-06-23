@@ -32,6 +32,8 @@ public class URLNorm {
 	@SuppressWarnings("unchecked")
 	public URLNorm() {
 		elements = new HashSet[2];
+		elements[0] = new HashSet<URLElement>();
+		elements[1] = new HashSet<URLElement>();
 		impressions = new int[2];
 		format = new URLFormat[2];
 	}
@@ -39,6 +41,8 @@ public class URLNorm {
 	@SuppressWarnings("unchecked")
 	public URLNorm(URLFormat format01, URLFormat format02) {
 		elements = new HashSet[2];
+		elements[0] = new HashSet<URLElement>();
+		elements[1] = new HashSet<URLElement>();
 		impressions = new int[2];
 		format = new URLFormat[2];
 		format[0] = format01;
@@ -48,6 +52,8 @@ public class URLNorm {
 	@SuppressWarnings("unchecked")
 	public URLNorm(URLElement element01, URLFormat format02) {
 		elements = new HashSet[2];
+		elements[0] = new HashSet<URLElement>();
+		elements[1] = new HashSet<URLElement>();
 		impressions = new int[2];
 		format = new URLFormat[2];
 		format[0] = element01.getFormat();
@@ -59,6 +65,8 @@ public class URLNorm {
 	@SuppressWarnings("unchecked")
 	public URLNorm(URLFormat format0, URLFormat format1, URLElement first) {
 		elements = new HashSet[2];
+		elements[0] = new HashSet<URLElement>();
+		elements[1] = new HashSet<URLElement>();
 		impressions = new int[2];
 		format = new URLFormat[2];
 		format[0] = format0;
@@ -82,6 +90,16 @@ public class URLNorm {
 			throw new InvalidURLNormException("The second format is null!");
 		}
 		return format;
+	}
+	
+	public int[] getImpressions(){
+		if(format[0] == null){
+			throw new InvalidURLNormException("The first format is null!");
+		}
+		if(format[0] == null){
+			throw new InvalidURLNormException("The second format is null!");
+		}
+		return impressions;
 	}
 	
 	/**
@@ -109,7 +127,7 @@ public class URLNorm {
 	 */
 	public boolean add(URLElement u) {
 		boolean output = false;
-		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element" + 
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element " + 
 				"without defining both formats.");
 		if(u.getFormat() == format[0]){
 			if(elements[0].add(u)){
