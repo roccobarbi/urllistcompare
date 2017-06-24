@@ -126,6 +126,8 @@ public class URLNorm {
 	 * @return true if the operation was successful
 	 */
 	public boolean add(URLElement u) {
+		// TODO: verificare anche che la URL normalizzata sia corretta
+		// TODO: se la URL normalizzata non è definita, definirla
 		boolean output = false;
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element " + 
 				"without defining both formats.");

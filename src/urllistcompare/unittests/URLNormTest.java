@@ -115,7 +115,22 @@ public class URLNormTest extends TestCase {
 	}
 
 	public void testGetUrl() {
-		fail("Not yet implemented");
+		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM);
+		String theUrl;
+		try{
+			url001.getUrl();
+			fail("Did not throw an exception when one was needed!");
+		} catch(InvalidURLNormException e){
+			assertTrue("The URL is not null!", e.getMessage() == "url not defined!");
+		}
+		url001.add(element001);
+		try{
+			theUrl = url001.getUrl();
+			assertTrue("The URL is not correct!", theUrl.equals("/path1/path2/file.ext"));
+		} catch(InvalidURLNormException e){
+			fail("The URL is null!");
+		}
 	}
 
 	public void testSetFormat() {
