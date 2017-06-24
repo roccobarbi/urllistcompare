@@ -7,7 +7,9 @@ import urllistcompare.exceptions.InvalidURLNormException;
 public class URLNormTest extends TestCase {
 
 	public void testHashCode() {
-		fail("Not yet implemented");
+		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		assertTrue("Wrong hash code", url001.hashCode() == "/path1/path2/file.ext".hashCode());
 	}
 
 	public void testURLNorm() {
@@ -134,7 +136,11 @@ public class URLNormTest extends TestCase {
 	}
 
 	public void testSetFormat() {
-		fail("Not yet implemented");
+		URLNorm url001 = new URLNorm();
+		assertTrue("The format was not set", url001.setFormat(0, URLFormat.WTKDEF));
+		assertTrue("The format was not set", url001.setFormat(1, URLFormat.GOOG));
+		assertFalse("The format was set twice", url001.setFormat(0, URLFormat.NOPROTNORM));
+		assertFalse("The format was set twice", url001.setFormat(0, URLFormat.URLNORM));
 	}
 
 	public void testAdd() {

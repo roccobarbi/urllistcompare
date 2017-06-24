@@ -103,7 +103,7 @@ public class URLNorm {
 	}
 	
 	/**
-	 * 
+	 * If the format is null, it sets it as indicated by the argument. Otherwise the format becomes read-only.
 	 * @param index the index of the format array that needs to be set
 	 * @param format the new format
 	 * @return true in case of success
@@ -112,25 +112,34 @@ public class URLNorm {
 		if(index < 0 || index > 1){
 			throw new IndexOutOfBoundsException("Tried to set format lower than 0 or greater than 1!");
 		}
-		this.format[index] = format;
-		return true;
+		if(this.format[index] == null){
+			this.format[index] = format;
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	/**
 	 * Adds a URLElement instance to the relevant LinkeList and adds its page impressions count to the relevant array.
 	 * Checks that both the URLElement and the current URLNorm are properly set.
+	 * If the normalised url is still null, it sets it to the normalised url of the new element.
+	 * 
+	 * Precondition: both formats must be set
 	 * 
 	 * @param u	the URLElement that needs to be added
 	 * @throws InvalidURLNormException if at least one of the formats has not been set correctly or if the URL has the wrong format
+	 * @throws InvalidURLNormException if the URL is not null, but it is different from the normalised url from the new element.
 	 * @throws RuntimeException if the URLElement is in a format that is not included in the URLNorm instance
 	 * @return true if the operation was successful
 	 */
 	public boolean add(URLElement u) {
-		// TODO: verificare anche che la URL normalizzata sia corretta
-		// TODO: se la URL normalizzata non è definita, definirla
 		boolean output = false;
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element " + 
 				"without defining both formats.");
+		if(url == null) {
+			url = u.normalise();
+		} else if(u.normalise() != url) throw new InvalidURLNormException("Wrong URL!");
 		if(u.getFormat() == format[0]){
 			if(elements[0].add(u)){
 				impressions[0] += u.getImpressions();
