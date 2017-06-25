@@ -99,5 +99,15 @@ public class URLElementTest {
 		URLElement element002 = new URLElement("www_domain_com.path1.path2.file02_ext", URLFormat.WTKDEF, 1200);
 		assertFalse("Different URLElements returned the same hashcode",element001.hashCode() == element002.hashCode());
 	}
+	
+	@Test
+	public void testCompareTo() {
+		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		URLElement element002 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 100);
+		URLElement element003 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 3000);
+		assertTrue("Wrong comparison, should have been 1100, it was: " + element001.compareTo(element002), element001.compareTo(element002) == 1100);
+		assertTrue("Wrong comparison, should have been -1100, it was: " + element002.compareTo(element001), element002.compareTo(element001) == -1100);
+		assertTrue("Wrong comparison, should have been 1100, it was: " + element001.compareTo(element003), element001.compareTo(element003) == -1800);
+	}
 
 }
