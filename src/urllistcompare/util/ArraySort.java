@@ -15,7 +15,7 @@ public final class ArraySort {
 		if(a.length > 1){
 			for(i = 1; i < a.length; i++){
 				k = i;
-				while(k > 0 && a[k].compareTo(a[k - 1]) <= 0){
+				while(k > 0 && a[k].compareTo(a[k - 1]) < 0){
 					temp = a[k];
 					a[k] = a[k-1];
 					a[k-1] = temp;
@@ -31,7 +31,7 @@ public final class ArraySort {
 		if(a.length > 1){
 			for(i = 1; i < a.length; i++){
 				k = i;
-				while(k > 0 && a[k].compareTo(a[k - 1]) >= 0){
+				while(k > 0 && a[k].compareTo(a[k - 1]) > 0){
 					temp = a[k];
 					a[k] = a[k-1];
 					a[k-1] = temp;
