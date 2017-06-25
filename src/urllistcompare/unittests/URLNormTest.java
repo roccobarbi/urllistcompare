@@ -284,7 +284,7 @@ public class URLNormTest extends TestCase {
 		assertTrue("The output does not include the right elements, rightly ordered.", output[0].equals(element001));
 		assertTrue("The output does not include the right elements, rightly ordered.", output[1].equals(element002));
 		URLElement element003 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 3000);
-		url001.add(element002);
+		url001.add(element003);
 		output = url001.getUrlElements(0);
 		assertTrue("The output does not include the right elements, rightly ordered. 0 = " + output[0], output[0].equals(element003));
 		assertTrue("The output does not include the right elements, rightly ordered. 1 = " + output[1], output[1].equals(element001));
@@ -292,7 +292,35 @@ public class URLNormTest extends TestCase {
 	}
 
 	public void testGetUrlElementsURLFormat() {
-		fail("Not yet implemented");
+		URLNorm url001 = new URLNorm();
+		try{
+			url001.getUrlElements(URLFormat.WTKDEF);
+			fail("Did not throw an exception when one was needed!");
+		} catch(InvalidURLNormException e){
+			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to extract the elements without defining both formats."));
+		}
+		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		try{
+			url001.getUrlElements(URLFormat.GOOG);
+			fail("Did not throw an exception when one was needed!");
+		} catch(InvalidURLNormException e){
+			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to check if a format is missing with a format that is not included in this URLNorm instance."));
+		}
+		URLElement[] output = url001.getUrlElements(URLFormat.WTKDEF);
+		assertTrue("Wrong length of the output: " + output.length, output.length == 1);
+		URLElement element002 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 100);
+		url001.add(element002);
+		output = url001.getUrlElements(URLFormat.WTKDEF);
+		assertTrue("Wrong length of the output: " + output.length, output.length == 2);
+		assertTrue("The output does not include the right elements, rightly ordered.", output[0].equals(element001));
+		assertTrue("The output does not include the right elements, rightly ordered.", output[1].equals(element002));
+		URLElement element003 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 3000);
+		url001.add(element003);
+		output = url001.getUrlElements(URLFormat.WTKDEF);
+		assertTrue("The output does not include the right elements, rightly ordered. 0 = " + output[0], output[0].equals(element003));
+		assertTrue("The output does not include the right elements, rightly ordered. 1 = " + output[1], output[1].equals(element001));
+		assertTrue("The output does not include the right elements, rightly ordered. 2 = " + output[2], output[2].equals(element002));
 	}
 
 }
