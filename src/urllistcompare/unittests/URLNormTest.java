@@ -253,10 +253,6 @@ public class URLNormTest extends TestCase {
 		assertTrue("Wrong difference: " + url001.getDifference(URLFormat.URLNORM), url001.getDifference(URLFormat.URLNORM) == 300);
 	}
 
-	public void testGetElements() {
-		fail("Not yet implemented");
-	}
-
 	public void testGetUrlElementsInt() {
 		URLNorm url001 = new URLNorm();
 		try{

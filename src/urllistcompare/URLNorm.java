@@ -222,29 +222,6 @@ public class URLNorm {
 	}
 	
 	/**
-	 * Checks the list of URLElements of a specific format.
-	 * 
-	 * @param f the format for which the list of elements needs to be extracted
-	 * @return the list of URLElements of a specific format
-	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
-	 */
-	public URLElement[] getElements(URLFormat f) throws InvalidURLNormException{
-		int index = 0;
-		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
-				"without defining both formats.");
-		if(format[0] == f){
-			index = 0;
-		} else if(format[1] == f){
-			index = 1;
-		} else {
-			throw new InvalidURLNormException("Tried to check if a format is missing" + 
-					"with a format that is not included in this URLNorm instance.");
-		}
-		URLElement[] output = elements[index].toArray(new URLElement[elements[index].size()]);
-		return output;
-	}
-	
-	/**
 	 * 
 	 * @param index the index of the format for which the elements should be exported
 	 * @return a sorted (desc) array of URLElements for the specified index
