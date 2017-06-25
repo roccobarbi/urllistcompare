@@ -19,6 +19,7 @@ public final class ArraySort {
 					temp = a[k];
 					a[k] = a[k-1];
 					a[k-1] = temp;
+					k--;
 				}
 			}
 		}
@@ -35,6 +36,7 @@ public final class ArraySort {
 					temp = a[k];
 					a[k] = a[k-1];
 					a[k-1] = temp;
+					k--;
 				}
 			}
 		}
