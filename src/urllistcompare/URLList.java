@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import urllistcompare.exceptions.InvalidURLListException;
+import urllistcompare.exceptions.InvalidURLNormException;
 
 /**
  * @author Rocco Barbini (roccobarbi@gmail.com)
@@ -102,5 +103,20 @@ public class URLList implements Serializable{
 			}
 		}
 		return (URLElement[]) output.toArray();
+	}
+	
+	public URLElement[] getMissingElements(URLFormat f){
+		int index = 0;
+		if(format[0] == null || format[1] == null) throw new InvalidURLListException("Tried to extract the missing elements" + 
+				" without defining both formats.");
+		if(format[0] == f){
+			index = 0;
+		} else if(format[1] == f){
+			index = 1;
+		} else {
+			throw new InvalidURLListException("Tried to check if a format is missing" + 
+					" with a format that is not included in this URLNorm instance.");
+		}
+		return getMissingElements(index);
 	}
 }
