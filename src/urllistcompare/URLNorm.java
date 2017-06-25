@@ -103,6 +103,42 @@ public class URLNorm {
 	}
 	
 	/**
+	 * Checks the absolute difference between the page impressions of format 0 and 1.
+	 * The result is [0] - [1]
+	 * 
+	 * @param f the format to check
+	 * @return the difference of f relative to the other format
+	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
+	 */
+	public int getDifference(){
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check the difference between the formats" + 
+				" without defining both formats.");
+		return impressions[0] - impressions[1];
+	}
+	
+	/**
+	 * Checks the absolute difference between the page impressions of the specified format and those of the other format.
+	 * If there are formats A and B, and format A is passed as argument, the result is A - B.
+	 * 
+	 * @param f the format to check
+	 * @return the difference of f relative to the other format
+	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
+	 */
+	public int getDifference(URLFormat f){
+		int output = 0;
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check the difference between the formats" + 
+				" without defining both formats.");
+		if(format[0] != f && format[1] != f) throw new InvalidURLNormException("Tried to check if a format is missing" + 
+				"with a format that is not included in this URLNorm instance.");
+		if(f == format[0]){
+			output = impressions[0] - impressions[1];
+		} else {
+			output = impressions[1] - impressions[0];
+		}
+		return output;
+	}
+	
+	/**
 	 * If the format is null, it sets it as indicated by the argument. Otherwise the format becomes read-only.
 	 * @param index the index of the format array that needs to be set
 	 * @param format the new format
@@ -139,7 +175,7 @@ public class URLNorm {
 				"without defining both formats.");
 		if(url == null) {
 			url = u.normalise();
-		} else if(u.normalise() != url) throw new InvalidURLNormException("Wrong URL!");
+		} else if(!u.normalise().equals(url)) throw new InvalidURLNormException("Wrong URL!");
 		if(u.getFormat() == format[0]){
 			if(elements[0].add(u)){
 				impressions[0] += u.getImpressions();
@@ -165,9 +201,9 @@ public class URLNorm {
 	 */
 	public boolean isMissing(URLFormat f){
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
-				"without defining both formats.");
+				" without defining both formats.");
 		if(format[0] != f && format[1] != f) throw new InvalidURLNormException("Tried to check if a format is missing" + 
-				"with a format that is not included in this URLNorm instance.");
+				" with a format that is not included in this URLNorm instance.");
 		return ((f == format[0] && impressions[0] == 0) || (f == format[1] && impressions[1] == 0));
 	}
 	
@@ -180,45 +216,9 @@ public class URLNorm {
 	 */
 	public boolean isMissing(int index){
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
-				"without defining both formats.");
-		if(index < 0 || index >= format.length) throw new IndexOutOfBoundsException();
+				" without defining both formats.");
+		if(index < 0 || index >= format.length) throw new IndexOutOfBoundsException("There are only 2 formats in a URLNorm object: the index can only be 0 or 1!");
 		return (impressions[index] == 0);
-	}
-	
-	/**
-	 * Checks the absolute difference between the page impressions of format 0 and 1.
-	 * The result is [0] - [1]
-	 * 
-	 * @param f the format to check
-	 * @return the difference of f relative to the other format
-	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
-	 */
-	public int getDifference(){
-		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check if a format is missing" + 
-				"without defining both formats.");
-		return impressions[0] - impressions[1];
-	}
-	
-	/**
-	 * Checks the absolute difference between the page impressions of the specified format and those of the other format.
-	 * If there are formats A and B, and format A is passed as argument, the result is A - B.
-	 * 
-	 * @param f the format to check
-	 * @return the difference of f relative to the other format
-	 * @throws InvalidURLNormException	if at least one of the formats has not been set correctly or the wrong URLFormat is passed as an argument
-	 */
-	public int getDifference(URLFormat f){
-		int output = 0;
-		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to check the difference between the formats" + 
-				"without defining both formats.");
-		if(format[0] != f && format[1] != f) throw new InvalidURLNormException("Tried to check if a format is missing" + 
-				"with a format that is not included in this URLNorm instance.");
-		if(f == format[0]){
-			output = impressions[0] - impressions[1];
-		} else {
-			output = impressions[1] - impressions[0];
-		}
-		return output;
 	}
 	
 	/**
@@ -244,6 +244,45 @@ public class URLNorm {
 		return output;
 	}
 	
+	/**
+	 * 
+	 * @param index the index of the format for which the elements should be exported
+	 * @return a sorted (desc) array of URLElements for the specified index
+	 */
+	public URLElement[] getUrlElements(int index){
+		URLElement output[] = null;
+		if(index < 0 || index >= format.length) throw new IndexOutOfBoundsException("There are only 2 formats in a URLNorm object: the index can only be 0 or 1!");
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to extract the elements" + 
+				" without defining both formats.");
+		output = elements[index].toArray(new URLElement[elements[index].size()]);
+		output = ArraySort.insertionSortDesc(output);
+		return output;
+	}
+	
+	/**
+	 * 
+	 * @param f the format for which the elements should be exported
+	 * @return a sorted (desc) array of URLElements in the specified format
+	 */
+	public URLElement[] getUrlElements(URLFormat f){
+		int index = 0;
+		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to extract the elements" + 
+				" without defining both formats.");
+		if(format[0] == f){
+			index = 0;
+		} else if(format[1] == f){
+			index = 1;
+		} else {
+			throw new InvalidURLNormException("Tried to check if a format is missing" + 
+					" with a format that is not included in this URLNorm instance.");
+		}
+		return getUrlElements(index);
+	}
+
+	/**
+	 * Returns the hashCode of the normalised URL (using the standard String.hashCode method).
+	 * @return the hashCode
+	 */
 	@Override
 	public int hashCode(){
 		if (url == null){
@@ -327,37 +366,4 @@ public class URLNorm {
 		}
 		return toCsv(index, sep);
 	}
-	
-	/**
-	 * 
-	 * @param index the index of the format for which the elements should be exported
-	 * @return a sorted (desc) array of URLElements in the specified format
-	 */
-	public URLElement[] getUrlElements(int index){
-		URLElement output[] = null;
-		if(index < 0 || index > format.length) throw new IndexOutOfBoundsException();
-		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("At least one format is null!");
-		output = (URLElement[]) elements[index].toArray();
-		output = ArraySort.insertionSortDesc(output);
-		return output;
-	}
-	
-	/**
-	 * 
-	 * @param f the format for which the elements should be exported
-	 * @return a sorted (desc) array of URLElements in the specified format
-	 */
-	public URLElement[] getUrlElements(URLFormat f){
-		int index = 0;
-		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("At least one format is null!");
-		if(format[0] == f){
-			index = 0;
-		} else if(format[1] == f){
-			index = 1;
-		} else {
-			throw new InvalidURLNormException("Invalid format received!");
-		}
-		return getUrlElements(index);
-	}
-
 }
