@@ -92,7 +92,7 @@ public class URLList implements Serializable{
 	}
 
 	public URLElement[] getMissingElements(int index){
-		if(index < 0 || index >= this.format.length) throw new IndexOutOfBoundsException();
+		if(index < 0 || index >= format.length) throw new IndexOutOfBoundsException();
 		if(!isActive()) throw new InvalidURLListException("URLList not active!");
 		ArrayList<URLElement> output = new ArrayList<URLElement>(100);
 		for(String k : url.keySet()){
