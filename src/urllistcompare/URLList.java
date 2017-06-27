@@ -81,6 +81,8 @@ public class URLList implements Serializable{
 	public boolean add(URLElement element){
 		boolean output = false;
 		if(!isActive()) throw new InvalidURLListException("URLList not active!");
+		if(element.getFormat() != format[0] && element.getFormat() != format[1])
+			throw new RuntimeException("Tried to add a URLElement in the wrong format to a URLList instance!");
 		if(url.containsKey(element.normalise())){
 			output = url.get(element.normalise()).add(element);;
 		} else {
@@ -102,7 +104,7 @@ public class URLList implements Serializable{
 				}
 			}
 		}
-		return (URLElement[]) output.toArray();
+		return output.toArray(new URLElement[10]);
 	}
 	
 	public URLElement[] getMissingElements(URLFormat f){
