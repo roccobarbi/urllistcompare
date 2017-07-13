@@ -357,4 +357,23 @@ public class URLNorm {
 		}
 		return toCsv(index, sep);
 	}
+	
+	/**
+	 * @override
+	 * @return a String describing the URLNorm element
+	 */
+	public String toString(){
+		StringBuilder builder = new StringBuilder();
+		builder.append("URLNORM: " + url + "\n");
+		builder.append("format[0]: " + format[0] + (isMissing(0) ? " missing " : " not missing ") + "\n");
+		builder.append("format[1]: " + format[1] + (isMissing(1) ? " missing " : " not missing ") + "\n");
+		for(int i = 0; i < format.length; i++){
+			builder.append("FORMAT " + i + "\n");
+			for(URLElement e : getUrlElements(i)){
+				builder.append("\t" + e);
+			}
+			builder.append("\n");
+		}
+		return builder.toString();
+	}
 }
