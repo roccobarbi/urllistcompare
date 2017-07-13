@@ -6,6 +6,7 @@ package urllistcompare;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import urllistcompare.exceptions.InvalidURLListException;
 import urllistcompare.exceptions.InvalidURLNormException;
@@ -61,6 +62,27 @@ public class URLList implements Serializable{
 		active = true;
 		for(URLFormat f : this.format){
 			if(f == null) active = false;
+		}
+		return output;
+	}
+	
+	/**
+	 * 
+	 * @return the keys to the HashMap that contains the URLNorm instances
+	 */
+	public Set<String> keySet(){
+		return url.keySet();
+	}
+	
+	/**
+	 * 
+	 * @param key the normalised url that needs to be found
+	 * @return a deep copy of the URLNorm, or null if not present
+	 */
+	public URLNorm getUrlNorm(String key){
+		URLNorm output = null;
+		if(url.keySet().contains(key)){
+			output = new URLNorm(url.get(key));
 		}
 		return output;
 	}
