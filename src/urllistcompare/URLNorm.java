@@ -75,6 +75,20 @@ public class URLNorm {
 		url = first.normalise();
 	}
 	
+	@SuppressWarnings("unchecked")
+	public URLNorm(URLNorm original) {
+		elements = new HashSet[2];
+		elements[0] = new HashSet<URLElement>();
+		elements[1] = new HashSet<URLElement>();
+		impressions = new int[2];
+		format = new URLFormat[2];
+		format[0] = original.getFormats()[0];
+		format[1] = original.getFormats()[1];
+		url = original.getUrl();
+		for(URLElement e : original.getUrlElements(0)) add(e);
+		for(URLElement e : original.getUrlElements(1)) add(e);
+	}
+	
 	public String getUrl(){
 		if(url == null){
 			throw new InvalidURLNormException("url not defined!");
