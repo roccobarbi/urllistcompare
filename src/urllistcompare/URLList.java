@@ -121,12 +121,15 @@ public class URLList implements Serializable{
 		ArrayList<URLElement> output = new ArrayList<URLElement>(100);
 		for(String k : url.keySet()){
 			if(url.get(k).isMissing(index)){
-				for(URLElement e : url.get(k).getUrlElements(index)){
+				for(URLElement e : url.get(k).getUrlElements(Math.abs(index - 1))){
 					output.add(e);
 				}
 			}
 		}
-		return output.toArray(new URLElement[10]);
+		if(output.isEmpty())
+			return new URLElement[0];
+		else
+			return output.toArray(new URLElement[1]);
 	}
 	
 	public URLElement[] getMissingElements(URLFormat f){
