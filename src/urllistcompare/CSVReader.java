@@ -349,7 +349,6 @@ public class CSVReader {
 	/**
 	 * 
 	 * @param file the file that needs to be read
-	 * @param path the path where the file can be found
 	 * @return true if the file exists and can be read
 	 */
 	public boolean setFile(File file){
