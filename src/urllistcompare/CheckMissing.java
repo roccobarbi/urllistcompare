@@ -166,14 +166,38 @@ public class CheckMissing {
 	
 	private static char[] promptDSep(){
 		char[] dSep = new char[CARDINALITY];
+		Scanner keyboard = new Scanner(System.in);
+		String input = "";
 		// Loop until the user provides good decimal separators or decides to abort
+		for(int i = 0; i < CARDINALITY; i++){
+			System.out.println("Please enter the decimal separator for the file " + theFile[i].getName());
+			System.out.println(">:");
+			input = keyboard.nextLine();
+			dSep[i] = input.charAt(0);
+		}
 		return dSep;
 	}
 	
 	private static char[] promptTSep(){
 		char[] tSep = new char[CARDINALITY];
+		Scanner keyboard = new Scanner(System.in);
+		String input = "";
 		// Check if there are thosand separators
 		// If so, make the corresponding fields true and loop until the user provides good thousand separators or decides to abort
+		for(int i = 0; i < CARDINALITY; i++){
+			System.out.println("Is there a thousand separator for the file " + theFile[i].getName() + "? [s|n]");
+			System.out.println(">:");
+			input = keyboard.nextLine();
+			if(input.charAt(0) == 's'){
+				isTSep[i] = true;
+				System.out.println("What is the thousand separator for the file " + theFile[i].getName() + "?");
+				System.out.println(">:");
+				input = keyboard.nextLine();
+				tSep[i] = input.charAt(0);
+			} else {
+				isTSep[i] = false;
+			}
+		}
 		return tSep;
 	}
 	
