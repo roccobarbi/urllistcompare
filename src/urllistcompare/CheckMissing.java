@@ -203,7 +203,15 @@ public class CheckMissing {
 	
 	private static char[] promptVSep(){
 		char[] vSep = new char[CARDINALITY];
+		Scanner keyboard = new Scanner(System.in);
+		String input = "";
 		// For each file, check the value separator for the csv
+		for(int i = 0; i < CARDINALITY; i++){
+			System.out.println("Please enter the value separator for the file " + theFile[i].getName());
+			System.out.println(">:");
+			input = keyboard.nextLine();
+			vSep[i] = input.charAt(0);
+		}
 		return vSep;
 	}
 	
