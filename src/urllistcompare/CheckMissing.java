@@ -6,6 +6,7 @@ package urllistcompare;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import urllistcompare.unittests.URLFormatTest;
 
@@ -101,12 +102,54 @@ public class CheckMissing {
 	private static boolean checkArguments(String[] args){
 		boolean output = false; // True if the arguments contain two files that are readable
 		// Check the quality of the arguments and save them to file1 and file2
+		if(args.length > 0){
+			theFile[0] = new File(args[0]);
+			if(!theFile[0].exists() || !theFile[0].canRead()){
+				System.out.println("File: " + args[0] + " doesn't exist or can't be read.");
+				theFile[0] = null; // Use it only if it works
+			}
+		}
+		if(args.length > 1){
+			theFile[1] = new File(args[1]);
+			if(!theFile[1].exists() || !theFile[1].canRead()){
+				System.out.println("File: " + args[1] + " doesn't exist or can't be read.");
+				theFile[1] = null; // Use it only if it works
+			}
+		}
+		if(theFile[0] != null && theFile[1] != null) output = true;
 		return output;
 	}
 	
 	private static boolean promptFileNames(){
 		boolean output = false; // True if the user provides good filenames
-		// Loop until the user provides good file names or decides to abort
+		Scanner keyboard = new Scanner(System.in);
+		String input = "";
+		while(!output){
+			for(int i = 0; i < CARDINALITY; i++){
+				if(theFile[i] == null){
+					System.out.println("Please enter file " + (i + 1));
+					System.out.println("or just hit enter to abort");
+					System.out.print(">: ");
+					input = keyboard.nextLine();
+					if(input.length() == 0){
+						System.out.println("Empty line detected, aborting execution.");
+						System.exit(0);
+					}
+					theFile[i] = new File(input);
+					if(!theFile[i].exists() || !theFile[i].canRead()){
+						System.out.println("File: " + (i + 1) + " doesn't exist or can't be read.");
+						theFile[i] = null; // Use it only if it works
+					}
+				}
+			}
+			output = true;
+			for(int i = 0; i < CARDINALITY; i++){ // are the files good?
+				if(theFile[i] == null){ // apparently not
+					output = false;
+					break;
+				}
+			}
+		}
 		return output;
 	}
 	
