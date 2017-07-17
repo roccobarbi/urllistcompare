@@ -156,6 +156,11 @@ public class CheckMissing {
 	private static URLFormat[] promptFormat(){
 		URLFormat[] formats = new URLFormat[CARDINALITY];
 		// Loop until the user provides good formats or decides to abort
+		for(int i = 0; i < CARDINALITY; i++){
+			System.out.println();
+			System.out.println("Inserisci il formato per il file " + theFile[0].getName());
+			format[i] = URLFormat.inputFormat(">: ");
+		}
 		return formats;
 	}
 	
