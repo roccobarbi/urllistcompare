@@ -159,7 +159,7 @@ public class CheckMissing {
 		// Loop until the user provides good formats or decides to abort
 		for(int i = 0; i < CARDINALITY; i++){
 			System.out.println();
-			System.out.println("Inserisci il formato per il file " + theFile[0].getName());
+			System.out.println("Inserisci il formato per il file " + theFile[i].getName());
 			format[i] = URLFormat.inputFormat(">: ");
 		}
 		return formats;
@@ -265,15 +265,34 @@ public class CheckMissing {
 		}
 	}
 	
+	// Ask the user for each file if it contains headers
 	private static boolean[] promptHeaders(){
 		boolean[] headers = new boolean[CARDINALITY];
-		// Ask the user for each file if it contains headers
+		Scanner keyboard = new Scanner(System.in);
+		String input = "";
+		for(int i = 0; i < CARDINALITY; i++){
+			System.out.println("Is there a header line in the file " + theFile[i].getName() + "? [y|n]");
+			System.out.println(">:");
+			input = keyboard.nextLine();
+			if(input.charAt(0) == 'y'){
+				headers[i] = true;
+			} else {
+				headers[i] = false;
+			}
+		}
 		return headers;
 	}
 	
 	// Print an impression count to screen
 	private static void printOnScreen(){
-		// TODO
+		for(int i = 0; i < CARDINALITY; i++){
+			System.out.println();
+			System.out.println(elements[i].size() + " elements are missing from " + theFile[i]);
+			System.out.println("Top 5: ");
+			for(int k = 0; k < 5 && k < elements[i].size(); k++){
+				System.out.println(elements[i].get(k));
+			}
+		}
 	}
 	
 	// Save the output to appropriate files
