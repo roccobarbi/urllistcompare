@@ -4,6 +4,7 @@
 package urllistcompare;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -201,11 +202,11 @@ public class CheckMissing {
 		return tSep;
 	}
 	
+	// For each file, check the value separator for the csv
 	private static char[] promptVSep(){
 		char[] vSep = new char[CARDINALITY];
 		Scanner keyboard = new Scanner(System.in);
 		String input = "";
-		// For each file, check the value separator for the csv
 		for(int i = 0; i < CARDINALITY; i++){
 			System.out.println("Please enter the value separator for the file " + theFile[i].getName());
 			System.out.println(">:");
@@ -215,8 +216,53 @@ public class CheckMissing {
 		return vSep;
 	}
 	
+	// For each file, show the first few lines and prompt the user for the index number of the URL and impressions columns
 	private static void promptIndexes(){
-		// For each file, show the first few lines and prompt the user for the index number of the URL and impressions columns
+		Scanner keyboard = new Scanner(System.in);
+		Scanner reader = null;
+		String splitHeader[] = null, input = null;;
+		int k = 0;
+		boolean askAgain = true;
+		for(int i = 0; i < CARDINALITY; i++){
+			try{
+				reader = new Scanner(theFile[i]);
+			} catch (IOException e) {
+				System.out.println("Can't read from file " + theFile[i].getName() + ": " + e.getMessage());
+				System.out.println("Aborting execution");
+				System.exit(1);
+			}
+			System.out.println("Headers for file " + theFile[i] + ":");
+			k = 0;
+			while(reader.hasNextLine() && k < 3){
+				splitHeader = reader.nextLine().split(Character.toString(vSep[i]));
+				for(int j = 0; j < splitHeader.length; j++){
+					System.out.print(splitHeader[j] + "\t");
+				}
+				System.out.println();
+				k++;
+			}
+			reader.close();
+			askAgain = true;
+			while(askAgain){
+				System.out.println("Enter the index for the column where the URL is stored, between 0 and " + (splitHeader.length - 1) + ".");
+				System.out.print(">: ");
+				input = keyboard.nextLine();
+				if(Integer.parseInt(input) >= 0 && Integer.parseInt(input) < splitHeader.length){
+					urlI[i] = Integer.parseInt(input);
+					askAgain = false;
+				}
+			}
+			askAgain = true;
+			while(askAgain){
+				System.out.println("Enter the index for the column where the impressions are stored, between 0 and " + (splitHeader.length - 1) + ".");
+				System.out.print(">: ");
+				input = keyboard.nextLine();
+				if(Integer.parseInt(input) >= 0 && Integer.parseInt(input) < splitHeader.length && Integer.parseInt(input) != urlI[i]){
+					impI[i] = Integer.parseInt(input);
+					askAgain = false;
+				}
+			}
+		}
 	}
 	
 	private static boolean[] promptHeaders(){
