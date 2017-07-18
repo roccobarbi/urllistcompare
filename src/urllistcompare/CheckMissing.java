@@ -186,10 +186,10 @@ public class CheckMissing {
 		// Check if there are thosand separators
 		// If so, make the corresponding fields true and loop until the user provides good thousand separators or decides to abort
 		for(int i = 0; i < CARDINALITY; i++){
-			System.out.println("Is there a thousand separator for the file " + theFile[i].getName() + "? [s|n]");
+			System.out.println("Is there a thousand separator for the file " + theFile[i].getName() + "? [y|n]");
 			System.out.println(">:");
 			input = keyboard.nextLine();
-			if(input.charAt(0) == 's'){
+			if(input.charAt(0) == 'y'){
 				isTSep[i] = true;
 				System.out.println("What is the thousand separator for the file " + theFile[i].getName() + "?");
 				System.out.println(">:");
