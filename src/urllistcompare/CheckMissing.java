@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
+import java.util.GregorianCalendar;
 
 import urllistcompare.unittests.URLFormatTest;
 import urllistcompare.util.ArraySort;
@@ -320,7 +321,30 @@ public class CheckMissing {
 	// Save the output to appropriate files
 	private static void saveResults(){
 		PrintWriter outputStream = null;
-		// TODO
+		GregorianCalendar currentTime = new GregorianCalendar();
+		String fileName = "CheckMissing-" + currentTime.getTimeInMillis() + ".txt";
+		try{
+			outputStream = new PrintWriter(fileName);
+		} catch (IOException e) {
+			System.out.println("Could not open file " + fileName + ": " + e.getMessage());
+			System.out.println("Aborting execution.");
+			System.exit(1);
+		}
+		for(int i = 0; i < CARDINALITY; i++){
+			outputStream.println("File 1: " + theFile[i]);
+			outputStream.println("Format: " + format[i].getFormatSample());
+			outputStream.println(elements[i].size() + " elements are missing for a total of " + impressions[i] + " page impressions.");
+			outputStream.println();
+			if(elements[i].size() > 0){
+				outputStream.println("url;impressions");
+				for(int k = 0; k < elements[i].size(); k++){
+					outputStream.println(elements[i].get(k).getUrl() + ";" + elements[i].get(k).getImpressions());
+				}
+			}
+			outputStream.println();
+			outputStream.println();
+		}
+		outputStream.close();
 	}
 
 }
