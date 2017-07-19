@@ -378,7 +378,7 @@ public class CSVReader {
 		URLElement element;
 		int k = 0;
 		// First check if everything is fine and set the BufferedReader object
-		checkSet();
+		set = checkSet();
 		if(isSet()){
 			try {
 				inputStream = new Scanner(source); 
