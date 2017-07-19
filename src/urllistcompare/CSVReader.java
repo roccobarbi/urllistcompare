@@ -419,7 +419,7 @@ public class CSVReader {
 					k++;
 				}
 			} catch(EOFException e){
-				System.out.println(source + " letto correttamente!");
+				System.out.println("File " + source + " letto correttamente!");
 			} catch (IOException e) {
 				System.out.println("Errore nella lettura da " + source);
 			} finally {

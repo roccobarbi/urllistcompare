@@ -5,11 +5,14 @@ package urllistcompare;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 import urllistcompare.unittests.URLFormatTest;
+import urllistcompare.util.ArraySort;
 
 /**
  * @author Rocco Barbini (roccobarbi@gmail.com)
@@ -34,6 +37,7 @@ public class CheckMissing {
 	private static URLList list = null;
 	private static CSVReader[] reader = new CSVReader[CARDINALITY];
 	private static ArrayList<URLElement>[] elements = new ArrayList[CARDINALITY];
+	private static long impressions[] = new long[CARDINALITY];
 
 	/**
 	 * Empty: this class only provides a main argument.
@@ -59,6 +63,7 @@ public class CheckMissing {
 			headers[i] = false;
 			reader[i] = null;
 			elements[i] = new ArrayList<URLElement>();
+			impressions[i] = 0;
 			
 		}
 		// Check the arguments
@@ -87,9 +92,7 @@ public class CheckMissing {
 		for(int i = 0; i < CARDINALITY; i++){
 			reader[i] = new CSVReader(headers[i], urlI[i], impI[i], vSep[i], dSep[i], isTSep[i], tSep[i], theFile[i], format[i]);
 			reader[i].setDestination(list);
-			if(reader[i].read()){
-				System.out.println("File " + theFile[i].getName() + " letto correttamente!");
-			} else {
+			if(!reader[i].read()) {
 				System.out.println("Errore nella lettura del file " + theFile[i].getName() + "!");
 				System.out.println("Aborting execution");
 				System.exit(1);
@@ -99,6 +102,10 @@ public class CheckMissing {
 		for(int i = 0; i < CARDINALITY; i++){
 			elements[i] = new ArrayList<>(Arrays.asList(list.getMissingElements(i)));
 			elements[i].trimToSize();
+			elements[i].sort(new Comparator<URLElement>() {public int compare(URLElement first, URLElement second){return  second.compareTo(first);}});
+			for(URLElement e : list.getMissingElements(i)){
+				impressions[i] += e.getImpressions();
+			}
 		}
 		// Print an impression count to screen
 		printOnScreen();
@@ -168,6 +175,13 @@ public class CheckMissing {
 			System.out.println();
 			System.out.println("Inserisci il formato per il file " + theFile[i].getName());
 			formats[i] = URLFormat.inputFormat(">: ");
+		}
+		// TODO: future versions will have to remove this limitation
+		// This will require a refactoring of the URLNorm class
+		if(formats[0] == formats[1]){
+			System.out.println("The current version of this program only confronts URL lists of different formats.");
+			System.out.println("Aborting execution.");
+			System.exit(0);
 		}
 		return formats;
 	}
@@ -294,7 +308,8 @@ public class CheckMissing {
 	private static void printOnScreen(){
 		for(int i = 0; i < CARDINALITY; i++){
 			System.out.println();
-			System.out.println(elements[i].size() + " elements are missing from " + theFile[i]);
+			System.out.println(elements[i].size() + " elements are missing from " + theFile[i] + 
+					" for a total of " + impressions[i] + " page impressions.");
 			System.out.println("Top 5: ");
 			for(int k = 0; k < 5 && k < elements[i].size(); k++){
 				System.out.println(elements[i].get(k));
@@ -304,6 +319,7 @@ public class CheckMissing {
 	
 	// Save the output to appropriate files
 	private static void saveResults(){
+		PrintWriter outputStream = null;
 		// TODO
 	}
 
