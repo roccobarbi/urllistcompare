@@ -166,7 +166,7 @@ public class CheckMissing {
 		for(int i = 0; i < CARDINALITY; i++){
 			System.out.println();
 			System.out.println("Inserisci il formato per il file " + theFile[i].getName());
-			format[i] = URLFormat.inputFormat(">: ");
+			formats[i] = URLFormat.inputFormat(">: ");
 		}
 		return formats;
 	}
