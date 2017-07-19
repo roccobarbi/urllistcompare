@@ -296,7 +296,7 @@ public class CheckMissing {
 			System.out.println("Is there a header line in the file " + theFile[i].getName() + "? [y|n]");
 			System.out.println(">:");
 			input = keyboard.nextLine();
-			if(input.charAt(0) == 'y'){
+			if(input.length() > 0 && input.charAt(0) == 'y'){
 				headers[i] = true;
 			} else {
 				headers[i] = false;

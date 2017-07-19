@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.EOFException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  * @author Rocco Barbini (roccobarbi@gmail.com)
@@ -407,7 +408,7 @@ public class CSVReader {
 						page = row.split(Character.toString(vSep))[urlI];
 						impString = row.split(Character.toString(vSep))[impI];
 						impStringB = new StringBuilder();
-						for(String s : impString.split(Character.toString(tSep))) {
+						for(String s : impString.split(Pattern.quote(Character.toString(tSep)))) {
 							impStringB.append(s);
 						}
 						impString = impStringB.toString();
