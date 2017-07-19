@@ -98,6 +98,7 @@ public class CheckMissing {
 		// Check missing
 		for(int i = 0; i < CARDINALITY; i++){
 			elements[i] = new ArrayList<>(Arrays.asList(list.getMissingElements(i)));
+			elements[i].trimToSize();
 		}
 		// Print an impression count to screen
 		printOnScreen();
