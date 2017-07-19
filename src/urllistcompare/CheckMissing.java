@@ -87,7 +87,13 @@ public class CheckMissing {
 		for(int i = 0; i < CARDINALITY; i++){
 			reader[i] = new CSVReader(headers[i], urlI[i], impI[i], vSep[i], dSep[i], isTSep[i], tSep[i], theFile[i], format[i]);
 			reader[i].setDestination(list);
-			reader[i].read();
+			if(reader[i].read()){
+				System.out.println("File " + theFile[i].getName() + " letto correttamente!");
+			} else {
+				System.out.println("Errore nella lettura del file " + theFile[i].getName() + "!");
+				System.out.println("Aborting execution");
+				System.exit(1);
+			}
 		}
 		// Check missing
 		for(int i = 0; i < CARDINALITY; i++){
