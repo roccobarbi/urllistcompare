@@ -34,7 +34,7 @@ public enum URLFormat {
 			if(url.contains("://")){
 				url = url.substring(url.indexOf("://") + 3);
 			}
-			if(url.contains("/")){
+			if(url.indexOf('/') > -1){
 				url = url.substring(url.indexOf("/"));
 			} else {
 				url = "/"; // This is the root and it was saved without a trailing slash
