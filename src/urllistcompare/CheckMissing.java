@@ -25,6 +25,7 @@ import urllistcompare.util.ArraySort;
 public class CheckMissing {
 	
 	private static final int CARDINALITY = 2;
+	private static final String VSEPARATORS = ".,;:_/|\"'"; // Used to validate non-escaped values for vSep
 	
 	private static File theFile[] = new File[CARDINALITY];
 	private static URLFormat[] format = new URLFormat[CARDINALITY];
@@ -229,11 +230,31 @@ public class CheckMissing {
 		char[] vSep = new char[CARDINALITY];
 		Scanner keyboard = new Scanner(System.in);
 		String input = "";
+		boolean keepAsking = true;
 		for(int i = 0; i < CARDINALITY; i++){
-			System.out.println("Please enter the value separator for the file " + theFile[i].getName());
-			System.out.println(">:");
-			input = keyboard.nextLine();
-			vSep[i] = input.charAt(0);
+			keepAsking = true;
+			while(keepAsking){
+				System.out.println("Please enter the value separator for the file " + theFile[i].getName());
+				System.out.println(">:");
+				input = keyboard.nextLine();
+				if(input.length() > 0){
+					if(VSEPARATORS.indexOf(input.charAt(0)) != -1){
+						vSep[i] = input.charAt(0);
+						keepAsking = false;
+					} else if(input.length() > 1 && input.charAt(0) == '\\' && input.charAt(1) == 't') {
+						vSep[i] = '\t';
+						keepAsking = false;
+					} else {
+						// The choices are represented with a loop to allow for changes to the constant that is used to validate them
+						System.out.print("Please choose a valid separator between the following: ");
+						for(int k = 0; k < VSEPARATORS.length(); k++){
+							System.out.print(" " + VSEPARATORS.charAt(k));
+						}
+						System.out.println(" \\t");
+						System.out.println("\\t will be interpreted as a single tabulation.");
+					}
+				}
+			}
 		}
 		return vSep;
 	}
