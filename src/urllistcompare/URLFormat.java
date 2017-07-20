@@ -26,7 +26,7 @@ public enum URLFormat {
 			} else {
 				url = "/"; // This is the root and it was saved without a trailing slash
 			}
-			return url;
+			return url.toLowerCase();
 		}
 	},
 	URLNORM("http://www.domain.com/path/path/file.ext"){
@@ -39,7 +39,7 @@ public enum URLFormat {
 			} else {
 				url = "/"; // This is the root and it was saved without a trailing slash
 			}
-			return url;
+			return url.toLowerCase();
 		}
 	},
 	NOPROTNORM("www.domain.com/path/path/file.ext"){
@@ -49,12 +49,11 @@ public enum URLFormat {
 			} else {
 				url = "/"; // This is the root and it was saved without a trailing slash
 			}
-			return url;
+			return url.toLowerCase();
 		}
 	},
 	FULLURL("http://www.domain.com/PATH/path/file.ext?query#fragment"){
 		public String normalisePath(String url){
-			url = url.toLowerCase();
 			url = url.split("#")[0];
 			url = url.split("\\?")[0];
 			if(url.contains("://")){
@@ -65,15 +64,14 @@ public enum URLFormat {
 			} else {
 				url = "/"; // This is the root and it was saved without a trailing slash
 			}
-			return url;
+			return url.toLowerCase();
 		}
 	},
 	GOOG("/path/path/file.ext?query#fragment"){
 		public String normalisePath(String url){
-			url = url.toLowerCase();
 			url = url.split("#")[0];
 			url = url.split("\\?")[0];
-			return url;
+			return url.toLowerCase();
 		}
 	};
 	
