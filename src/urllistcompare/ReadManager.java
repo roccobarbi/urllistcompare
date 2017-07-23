@@ -14,18 +14,23 @@ import java.util.Scanner;
  * - it creates the URLList;
  * - it creates the readers;
  * - it actually runs the readers.
+ * 
  * It provides a standard input interface for the "main" classes that are meant to be executed via a command line interface.
+ * 
  * It is possible to use a ReadManager both with the dest already set (if it was passed via a command line argument to the
- * caller). The relevant constructor does not assume that the argument was right and checks it by itself.
+ * caller). The class does not assume that the argument was right and checks it by itself.
+ * 
+ * It works mainly through the static userInput method, which returns a CSVReader object which is only missing its destination
+ * list (which can be created by the caller once it has all necessary formats).
  *
  */
 public class ReadManager {
 
-	private final int QTY_READERS = 2;
-	private final String PROMPT = ">: ";
-	private CSVReader[] reader;
-	private URLList dest;
-	private URLFormat[] format;
+	private final int QTY_READERS = 2; // TO BE REMOVED
+	private final String PROMPT = ">: "; // TO BE CHANGED TO A DEFAULT
+	private CSVReader[] reader; // TO BE REMOVED
+	private URLList dest; // TO BE REMOVED
+	private URLFormat[] format; // TO BE REMOVED
 	
 	/**
 	 * Default constructor: it does almost nothing.
@@ -36,7 +41,9 @@ public class ReadManager {
 		format = null;
 	}
 	
-	public boolean userInput(){
+	public static CSVReader userInput(String file){
+		CSVReader output = null;
+		// TODO: complete rewrite of the function
 		boolean done = false, keepAsking = true;
 		Scanner keyboard = new Scanner(System.in);
 		// temp variables to store the values needed to create each reader
@@ -214,7 +221,15 @@ public class ReadManager {
 			}
 		}
 		done = true;
-		return done;
+		return output;
+	}
+	
+	// In case a file is not provided, it prompts the user to enter it for the first time 
+	public static CSVReader userInput(){
+		String fileName = "";
+		Scanner keyboard = new Scanner(System.in);
+		// TODO: write the function
+		return userInput(fileName);
 	}
 
 }
