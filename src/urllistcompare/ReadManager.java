@@ -62,6 +62,10 @@ public class ReadManager {
 		format = promptFormat(prompt, fileName);
 		// Get the decimal separator
 		dSep = promptDSep(prompt, fileName, keyboard);
+		// Get the thousand separator, if needed
+		if(promptIsTSep(prompt, fileName, keyboard)){
+			tSep = promptTSep(prompt, fileName, keyboard);
+		}
 		// TODO: complete rewrite of the function
 		// temp variables to store the values needed to create each reader
 		URLFormat tempFormat = null;
@@ -295,6 +299,46 @@ public class ReadManager {
 			keepAsking = false; // Prepped for bette input validation
 		}
 		return dSep;
+	}
+	
+	// Utility method that checks if the user needs a thousand separator
+	private static boolean promptIsTSep(String prompt, String fileName, Scanner source){
+		String input = "";
+		boolean output = false, keepAsking = true;
+		while(keepAsking){
+			System.out.println("Is there a thousand separator for the file " + fileName + "? [y|n]");
+			System.out.println(prompt + " ");
+			input = source.nextLine();
+			if(input.length() == 0){
+				System.out.println("\nERROR: the file name cannot be an empty string.\n");
+			} else {
+				if(input.toLowerCase().charAt(0) == 'y'){
+					output = true;
+				}
+				keepAsking = false;
+			}
+		}
+		return output;
+	}
+	
+	// Utility method that prompts the user for the thousand separator
+	private static char promptTSep(String prompt, String fileName, Scanner source){
+		char tSep = 0;
+		String input = "";
+		boolean keepAsking = true;
+		// Loop until the user provides a good decimal separator
+		while(keepAsking){ // Prepped for bette input validation
+			System.out.println("Please enter the thousand separator for the file " + fileName);
+			System.out.println(prompt + " ");
+			input = source.nextLine();
+			if(input.length() == 0){
+				System.out.println("\nERROR: the file name cannot be an empty string.\n");
+			} else {
+				tSep = input.charAt(0);
+				keepAsking = false; // Prepped for bette input validation
+			}
+		}
+		return tSep;
 	}
 
 }
