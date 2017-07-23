@@ -27,6 +27,7 @@ import java.util.Scanner;
 public class ReadManager {
 
 	private static final String DEFAULT_PROMPT = ">:"; // TODO: make it possible to provide a custom prompt by the caller
+	private static final String VSEPARATORS = ".,;:_/|\"'"; // Used to validate non-escaped values for vSep
 	
 	/**
 	 * Default constructor: it does nothing.
@@ -35,12 +36,31 @@ public class ReadManager {
 		// Static method only: do nothing
 	}
 	
-	public static CSVReader userInput(String file){
+	public static CSVReader userInput(String sourceName){
 		CSVReader output = null;
 		String prompt = DEFAULT_PROMPT; // TODO: make it possible to provide a custom prompt by the caller
-		// TODO: complete rewrite of the function
-		boolean done = false, keepAsking = true;
 		Scanner keyboard = new Scanner(System.in);
+		URLFormat format = null;
+		String fileName = "";
+		boolean keepAsking = true;
+		// Check the validity of the argument
+		File theFile = new File(sourceName);
+		if(!theFile.exists() || !theFile.canRead()){
+			System.out.println("File: " + sourceName + " doesn't exist or can't be read.");
+			theFile = null; // Use it only if it works
+		}
+		// If the source file is not defined, keep asking 
+		while(theFile == null){
+			fileName = promptFileName(prompt, keyboard);
+			theFile = new File(fileName);
+			if(!theFile.exists() || !theFile.canRead()){
+				System.out.println("File: " + fileName + " doesn't exist or can't be read.");
+				theFile = null; // Use it only if it works
+			}
+		}
+		// Get the format
+		format = promptFormat(prompt, fileName);
+		// TODO: complete rewrite of the function
 		// temp variables to store the values needed to create each reader
 		URLFormat tempFormat = null;
 		boolean tempHeader = false, tempIsTSep = false;
@@ -245,6 +265,18 @@ public class ReadManager {
 			}
 		}
 		return input;
+	}
+	
+	// Utility method that prompts the user for the format
+	private static URLFormat promptFormat(String prompt, String fileName){
+		System.out.println("\nPlease enter format for the file " + fileName);
+		return URLFormat.inputFormat(prompt + " ");
+		// TODO: this limitation must be applied by classes using the ReadManager
+		// if(formats[0] == formats[1]){
+		// 	System.out.println("The current version of this program only confronts URL lists of different formats.");
+		// 	System.out.println("Aborting execution.");
+		// 	System.exit(0);
+		// }
 	}
 
 }
