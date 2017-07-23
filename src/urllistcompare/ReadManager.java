@@ -26,7 +26,7 @@ import java.util.Scanner;
  */
 public class ReadManager {
 
-	private static final String DEFAULT_PROMPT = ">: "; // TODO: make it possible to provide a custom prompt by the caller
+	private static final String DEFAULT_PROMPT = ">:"; // TODO: make it possible to provide a custom prompt by the caller
 	
 	/**
 	 * Default constructor: it does nothing.
@@ -219,12 +219,32 @@ public class ReadManager {
 		return output;
 	}
 	
-	// In case a file is not provided, it prompts the user to enter it for the first time 
+	/**
+	 * In case a filename is not provided, this version of userInput prompts the user for the initial file name.
+	 * 
+	 * @return a CSVReader object for a valid file
+	 */
 	public static CSVReader userInput(){
-		String fileName = "";
+		String prompt = DEFAULT_PROMPT; // TODO: make it possible to provide a custom prompt by the caller
 		Scanner keyboard = new Scanner(System.in);
-		// TODO: write the function
-		return userInput(fileName);
+		return userInput(promptFileName(prompt, keyboard));
+	}
+	
+	// Utility method to prompt the user for a file name and check that it's not empty
+	private static String promptFileName(String prompt, Scanner source){
+		boolean keepAsking = true;
+		String input = "";
+		while(keepAsking){
+			System.out.println("Please enter file name.");
+			System.out.print(prompt + " ");
+			input = source.nextLine();
+			if(input.length() == 0){
+				System.out.println("\nERROR: the file name cannot be an empty string.\n");
+			} else {
+				keepAsking = false;
+			}
+		}
+		return input;
 	}
 
 }
