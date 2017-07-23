@@ -359,7 +359,7 @@ public class CheckMissing {
 			if(elements[i].size() > 0){
 				outputStream.println("url;impressions");
 				for(int k = 0; k < elements[i].size(); k++){
-					outputStream.println(elements[i].get(k).getUrl() + ";" + elements[i].get(k).getImpressions());
+					outputStream.println(elements[i].get(k).getUrl() + "\t" + elements[i].get(k).getImpressions());
 				}
 			}
 			outputStream.println();
