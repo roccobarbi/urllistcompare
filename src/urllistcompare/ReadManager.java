@@ -13,7 +13,10 @@ import java.util.Scanner;
  * - it prompts the user with the information needed to set up the whole process;
  * - it creates the URLList;
  * - it creates the readers;
- * - it actually runs the readers. 
+ * - it actually runs the readers.
+ * It provides a standard input interface for the "main" classes that are meant to be executed via a command line interface.
+ * It is possible to use a ReadManager both with the dest already set (if it was passed via a command line argument to the
+ * caller). The relevant constructor does not assume that the argument was right and checks it by itself.
  *
  */
 public class ReadManager {
