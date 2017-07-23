@@ -26,23 +26,18 @@ import java.util.Scanner;
  */
 public class ReadManager {
 
-	private final int QTY_READERS = 2; // TO BE REMOVED
-	private final String PROMPT = ">: "; // TO BE CHANGED TO A DEFAULT
-	private CSVReader[] reader; // TO BE REMOVED
-	private URLList dest; // TO BE REMOVED
-	private URLFormat[] format; // TO BE REMOVED
+	private static final String DEFAULT_PROMPT = ">: "; // TODO: make it possible to provide a custom prompt by the caller
 	
 	/**
-	 * Default constructor: it does almost nothing.
+	 * Default constructor: it does nothing.
 	 */
 	public ReadManager() {
-		reader = null;
-		dest = null;
-		format = null;
+		// Static method only: do nothing
 	}
 	
 	public static CSVReader userInput(String file){
 		CSVReader output = null;
+		String prompt = DEFAULT_PROMPT; // TODO: make it possible to provide a custom prompt by the caller
 		// TODO: complete rewrite of the function
 		boolean done = false, keepAsking = true;
 		Scanner keyboard = new Scanner(System.in);
@@ -55,7 +50,7 @@ public class ReadManager {
 		File file = null;
 		// Loop the formats and create the URLList
 		for(int i = 0; i < QTY_READERS; i++){
-			format[i] = URLFormat.inputFormat(PROMPT);
+			format[i] = URLFormat.inputFormat(DEFAULT_PROMPT);
 		}
 		dest = new URLList(format[0], format[1]);
 		// Loop to create each reader
@@ -67,7 +62,7 @@ public class ReadManager {
 				System.out.println("Enter the name of the file number " + i + ",\n" +
 						"with format " + format[i].getFormatSample() + "\n" +
 						"then press ENTER!"); 
-				System.out.print(PROMPT);
+				System.out.print(DEFAULT_PROMPT);
 				input = keyboard.nextLine();
 				if(input.length() > 0){ // Otherwise keep looping
 					file = new File(input);
@@ -83,7 +78,7 @@ public class ReadManager {
 			while(keepAsking){
 				// Prompt the user
 				System.out.println("Does the file have a header line? [y/n]"); 
-				System.out.print(PROMPT);
+				System.out.print(DEFAULT_PROMPT);
 				input = keyboard.nextLine();
 				if(input.length() > 0){ // Otherwise keep looping
 					char selector = input.toLowerCase().charAt(0);
@@ -106,7 +101,7 @@ public class ReadManager {
 			while(keepAsking){
 				// Prompt the user
 				System.out.println("Does the file have a thousand separator? [y/n]"); 
-				System.out.print(PROMPT);
+				System.out.print(DEFAULT_PROMPT);
 				input = keyboard.nextLine();
 				if(input.length() > 0){ // Otherwise keep looping
 					char selector = input.toLowerCase().charAt(0);
@@ -131,7 +126,7 @@ public class ReadManager {
 				System.out.println("Choose a thousand separator:");
 				System.out.println("1 : .");
 				System.out.println("2 : ,");
-				System.out.print(PROMPT);
+				System.out.print(DEFAULT_PROMPT);
 				input = keyboard.nextLine();
 				if(input.length() > 0){ // Otherwise keep looping
 					char selector = input.toLowerCase().charAt(0);
@@ -156,7 +151,7 @@ public class ReadManager {
 				System.out.println("Choose a decimal separator:");
 				System.out.println("1 : .");
 				System.out.println("2 : ,");
-				System.out.print(PROMPT);
+				System.out.print(DEFAULT_PROMPT);
 				input = keyboard.nextLine();
 				if(input.length() > 0){ // Otherwise keep looping
 					char selector = input.toLowerCase().charAt(0);
@@ -182,7 +177,7 @@ public class ReadManager {
 				System.out.println("1 : ;");
 				System.out.println("2 : ,");
 				System.out.println("3 : \t");
-				System.out.print(PROMPT);
+				System.out.print(DEFAULT_PROMPT);
 				input = keyboard.nextLine();
 				if(input.length() > 0){ // Otherwise keep looping
 					char selector = input.toLowerCase().charAt(0);
@@ -206,11 +201,11 @@ public class ReadManager {
 			}
 			// Choose the columns that will be parsed
 			System.out.println("Which column is used for the page name/url?");
-			System.out.print(PROMPT);
+			System.out.print(DEFAULT_PROMPT);
 			tempUrlI = keyboard.nextInt();
 			keyboard.nextLine();
 			System.out.println("Which column is used for the page impressions?");
-			System.out.print(PROMPT);
+			System.out.print(DEFAULT_PROMPT);
 			tempImpI = keyboard.nextInt();
 			keyboard.nextLine();
 			// Create the CSVReader
