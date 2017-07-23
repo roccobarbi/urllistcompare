@@ -42,7 +42,7 @@ public class ReadManager {
 		Scanner keyboard = new Scanner(System.in);
 		URLFormat format = null;
 		String fileName = "";
-		boolean keepAsking = true;
+		char dSep = 0, tSep = 0, vSep = 0; // Separators
 		// Check the validity of the argument
 		File theFile = new File(sourceName);
 		if(!theFile.exists() || !theFile.canRead()){
@@ -60,6 +60,8 @@ public class ReadManager {
 		}
 		// Get the format
 		format = promptFormat(prompt, fileName);
+		// Get the decimal separator
+		dSep = promptDSep(prompt, fileName, keyboard);
 		// TODO: complete rewrite of the function
 		// temp variables to store the values needed to create each reader
 		URLFormat tempFormat = null;
@@ -277,6 +279,22 @@ public class ReadManager {
 		// 	System.out.println("Aborting execution.");
 		// 	System.exit(0);
 		// }
+	}
+	
+	// Utility method that prompts the user for the decimal separator
+	private static char promptDSep(String prompt, String fileName, Scanner source){
+		char dSep = 0;
+		String input = "";
+		boolean keepAsking = true;
+		// Loop until the user provides a good decimal separator
+		while(keepAsking){ // Prepped for bette input validation
+			System.out.println("Please enter the decimal separator for the file " + fileName);
+			System.out.println(prompt + " ");
+			input = source.nextLine();
+			dSep = input.charAt(0);
+			keepAsking = false; // Prepped for bette input validation
+		}
+		return dSep;
 	}
 
 }
