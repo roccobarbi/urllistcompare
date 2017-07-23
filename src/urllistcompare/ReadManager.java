@@ -295,8 +295,12 @@ public class ReadManager {
 			System.out.println("Please enter the decimal separator for the file " + fileName);
 			System.out.println(prompt + " ");
 			input = source.nextLine();
-			dSep = input.charAt(0);
-			keepAsking = false; // Prepped for bette input validation
+			if(input.length() == 0){
+				System.out.println("\nERROR: the file name cannot be an empty string.\n");
+			} else {
+				dSep = input.charAt(0);
+				keepAsking = false; // Prepped for bette input validation
+			}
 		}
 		return dSep;
 	}
