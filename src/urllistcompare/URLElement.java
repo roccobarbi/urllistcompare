@@ -3,6 +3,8 @@
  */
 package urllistcompare;
 
+import java.io.Serializable;
+
 import urllistcompare.exceptions.InvalidUrlException;
 
 /**
@@ -18,7 +20,7 @@ import urllistcompare.exceptions.InvalidUrlException;
  * Note: this class has a natural ordering that is inconsistent with equals.
  *
  */
-public class URLElement implements Comparable<Object>{
+public class URLElement implements Comparable<Object>, Serializable{
 	private final String url;
 	private final URLFormat format;
 	private final int impressions;

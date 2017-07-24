@@ -3,6 +3,7 @@
  */
 package urllistcompare;
 
+import java.io.Serializable;
 import java.util.HashSet;
 
 import urllistcompare.exceptions.*;
@@ -22,7 +23,7 @@ import urllistcompare.util.ArraySort;
  * If the url field is null, it's a signal that the element is broken and MUST NOT be used.
  *
  */
-public class URLNorm {
+public class URLNorm implements Serializable{
 	
 	private HashSet<URLElement> elements[];
 	private int impressions[];
