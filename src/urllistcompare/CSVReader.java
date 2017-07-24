@@ -305,6 +305,13 @@ public class CSVReader {
 		set = setFile(file);
 	}
 	
+	public URLFormat getFormat(){
+		return format;
+	}
+	
+	public String getName(){
+		return source.getName();
+	}
 	
 	
 	/**
