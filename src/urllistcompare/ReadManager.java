@@ -44,6 +44,7 @@ public class ReadManager {
 		URLFormat format = null;
 		String fileName = "";
 		char dSep = 0, tSep = 0, vSep = 0; // Separators
+		boolean isTSep = false;
 		// Check the validity of the argument
 		File theFile = new File(sourceName);
 		if(!theFile.exists() || !theFile.canRead()){
@@ -65,8 +66,14 @@ public class ReadManager {
 		dSep = promptDSep(prompt, fileName, keyboard);
 		// Get the thousand separator, if needed
 		if(promptIsTSep(prompt, fileName, keyboard)){
+			isTSep = true;
 			tSep = promptTSep(prompt, fileName, keyboard);
+		} else {
+			isTSep = false;
+			tSep = 0;
 		}
+		// Get the value separator
+		vSep = promptVSep(prompt, fileName, keyboard);
 		// TODO: complete rewrite of the function
 		return output;
 	}
@@ -169,6 +176,49 @@ public class ReadManager {
 			}
 		}
 		return tSep;
+	}
+	
+	// Utility method that prompts the user for the value separator
+	private static char promptVSep(String prompt, String fileName, Scanner source){
+		char vSep = 0;
+		String input = "";
+		boolean keepAsking = true;
+		// Loop until the user provides a good decimal separator
+		while(keepAsking){ // Prepped for bette input validation
+			System.out.println("Please enter the value separator for the file " + fileName);
+			System.out.println(prompt + " ");
+			input = source.nextLine();
+			if(input.length() == 0){
+				System.out.println("\nERROR: the file name cannot be an empty string.\n");
+			} else {
+				if(VSEPARATORS.indexOf(input.charAt(0)) != -1){
+					vSep = input.charAt(0);
+					keepAsking = false;
+				} else if(input.length() > 1 && input.charAt(0) == '\\'){
+					switch(input.charAt(1)){ // Prepped to add more separators
+					case 't':
+						vSep = '\t';
+						keepAsking = false;
+						break;
+					default:
+						printVSepInstructions();	
+					}
+				} else {
+					printVSepInstructions();
+				}
+			}
+		}
+		return vSep;
+	}
+	
+	private static void printVSepInstructions(){
+		// The choices are represented with a loop to allow for changes to the constant that is used to validate them
+		System.out.print("Please choose a valid separator between the following: ");
+		for(int k = 0; k < VSEPARATORS.length(); k++){
+			System.out.print(" " + VSEPARATORS.charAt(k));
+		}
+		System.out.println(" \\t");
+		System.out.println("\\t will be interpreted as a single tabulation.");
 	}
 
 }
