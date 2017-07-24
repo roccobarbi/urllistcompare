@@ -4,6 +4,7 @@
 package urllistcompare;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -44,6 +45,7 @@ public class ReadManager {
 		URLFormat format = null;
 		String fileName = "";
 		char dSep = 0, tSep = 0, vSep = 0; // Separators
+		int[] indexes = {-1, -1}; // urlI, impI
 		boolean isTSep = false;
 		// Check the validity of the argument
 		File theFile = new File(sourceName);
@@ -74,6 +76,8 @@ public class ReadManager {
 		}
 		// Get the value separator
 		vSep = promptVSep(prompt, fileName, keyboard);
+		// Get the indexes
+		indexes = promptIndexes(prompt, fileName, keyboard, vSep);
 		// TODO: complete rewrite of the function
 		return output;
 	}
@@ -124,15 +128,15 @@ public class ReadManager {
 		String input = "";
 		boolean keepAsking = true;
 		// Loop until the user provides a good decimal separator
-		while(keepAsking){ // Prepped for bette input validation
+		while(keepAsking){ // Prepped for better input validation
 			System.out.println("Please enter the decimal separator for the file " + fileName);
 			System.out.println(prompt + " ");
 			input = source.nextLine();
 			if(input.length() == 0){
-				System.out.println("\nERROR: the file name cannot be an empty string.\n");
+				System.out.println("\nERROR: the input cannot be empty.\n");
 			} else {
 				dSep = input.charAt(0);
-				keepAsking = false; // Prepped for bette input validation
+				keepAsking = false; // Prepped for better input validation
 			}
 		}
 		return dSep;
@@ -147,7 +151,7 @@ public class ReadManager {
 			System.out.println(prompt + " ");
 			input = source.nextLine();
 			if(input.length() == 0){
-				System.out.println("\nERROR: the file name cannot be an empty string.\n");
+				System.out.println("\nERROR: the input cannot be empty.\n");
 			} else {
 				if(input.toLowerCase().charAt(0) == 'y'){
 					output = true;
@@ -163,16 +167,16 @@ public class ReadManager {
 		char tSep = 0;
 		String input = "";
 		boolean keepAsking = true;
-		// Loop until the user provides a good decimal separator
-		while(keepAsking){ // Prepped for bette input validation
+		// Loop until the user provides a good thousand separator
+		while(keepAsking){ // Prepped for better input validation
 			System.out.println("Please enter the thousand separator for the file " + fileName);
 			System.out.println(prompt + " ");
 			input = source.nextLine();
 			if(input.length() == 0){
-				System.out.println("\nERROR: the file name cannot be an empty string.\n");
+				System.out.println("\nERROR: the input cannot be empty.\n");
 			} else {
 				tSep = input.charAt(0);
-				keepAsking = false; // Prepped for bette input validation
+				keepAsking = false; // Prepped for better input validation
 			}
 		}
 		return tSep;
@@ -183,13 +187,13 @@ public class ReadManager {
 		char vSep = 0;
 		String input = "";
 		boolean keepAsking = true;
-		// Loop until the user provides a good decimal separator
-		while(keepAsking){ // Prepped for bette input validation
+		// Loop until the user provides a good value separator
+		while(keepAsking){
 			System.out.println("Please enter the value separator for the file " + fileName);
 			System.out.println(prompt + " ");
 			input = source.nextLine();
 			if(input.length() == 0){
-				System.out.println("\nERROR: the file name cannot be an empty string.\n");
+				System.out.println("\nERROR: the input cannot be empty.\n");
 			} else {
 				if(VSEPARATORS.indexOf(input.charAt(0)) != -1){
 					vSep = input.charAt(0);
@@ -219,6 +223,78 @@ public class ReadManager {
 		}
 		System.out.println(" \\t");
 		System.out.println("\\t will be interpreted as a single tabulation.");
+	}
+	
+	// Utility method that reads the file, shows the first few lines and prompts the user
+	// for the indexes of the url and impressions.
+	private static int[] promptIndexes(String prompt, String fileName, Scanner source, char vSep){
+		int[] output = {-1, -1}; // urlI, impI
+		Scanner reader = null;
+		String splitHeader[] = null, input = null;
+		int columns = 0; // To store the number of columns from the headers and implement a consistency check with the file
+		int k = 0;
+		boolean keepAsking = true;
+		// Show the head of the file
+		while(keepAsking){
+			try{
+				reader = new Scanner(new File(fileName));
+			} catch (IOException e) {
+				System.out.println("Can't read from file " + fileName + ": " + e.getMessage());
+				System.out.println("Aborting execution");
+				System.exit(1);
+			}
+			System.out.println("Headers for file " + fileName + ":");
+			k = 0;
+			while(reader.hasNextLine() && k < 10){
+				splitHeader = reader.nextLine().split(Character.toString(vSep)); // TODO: improve for doublequote-enclosed columns
+				if(k == 0){
+					columns = splitHeader.length;
+				} else {
+					// TODO: add a consistency check for the file AFTER doublequote-enclosing is accepted
+				}
+				for(int j = 0; j < splitHeader.length; j++){
+					System.out.print(splitHeader[j] + "\t");
+				}
+				System.out.println();
+				k++;
+			}
+			reader.close();
+		}
+		// Loop until the user provides a good column index for the url
+		keepAsking = true;
+		while(keepAsking){ // Prepped for better input validation
+			System.out.println("Enter the index for the column where the URL is stored, between 0 and " + (columns - 1) + ".");
+			System.out.println(prompt + " ");
+			input = source.nextLine();
+			if(input.length() == 0){
+				System.out.println("\nERROR: the input cannot be empty.\n");
+			} else {
+				if(Integer.parseInt(input) >= 0 && Integer.parseInt(input) < columns){
+					output[0] = Integer.parseInt(input);
+					keepAsking = false;
+				}
+			}
+		}
+		// Loop until the user provides a good column index for the page impressions
+		keepAsking = true;
+		while(keepAsking){ // Prepped for better input validation
+			System.out.println("Enter the index for the column where the page impressions are stored, between 0 and " + (columns - 1) + ".");
+			System.out.println(prompt + " ");
+			input = source.nextLine();
+			if(input.length() == 0){
+				System.out.println("\nERROR: the input cannot be empty.\n");
+			} else {
+				if(Integer.parseInt(input) >= 0 && Integer.parseInt(input) < columns){
+					if(Integer.parseInt(input) != output[0]){
+						output[1] = Integer.parseInt(input);
+						keepAsking = false;
+					} else {
+						System.out.println("\nERROR: the page impression can't be in the same column as the url.\n");
+					}
+				}
+			}
+		}
+		return output;
 	}
 
 }
