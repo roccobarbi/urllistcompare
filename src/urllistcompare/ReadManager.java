@@ -46,7 +46,7 @@ public class ReadManager {
 		String fileName = "";
 		char dSep = 0, tSep = 0, vSep = 0; // Separators
 		int[] indexes = {-1, -1}; // urlI, impI
-		boolean isTSep = false;
+		boolean isTSep = false, headers = false;
 		// Check the validity of the argument
 		File theFile = new File(sourceName);
 		if(!theFile.exists() || !theFile.canRead()){
@@ -78,7 +78,10 @@ public class ReadManager {
 		vSep = promptVSep(prompt, fileName, keyboard);
 		// Get the indexes
 		indexes = promptIndexes(prompt, fileName, keyboard, vSep);
-		// TODO: complete rewrite of the function
+		// Get the headers
+		headers = promptHeaders(prompt, fileName, keyboard);
+		// Create the CSVReader
+		output = new CSVReader(headers, indexes[0], indexes[1], vSep, dSep, isTSep, tSep, theFile, format);
 		return output;
 	}
 	
@@ -292,6 +295,31 @@ public class ReadManager {
 						System.out.println("\nERROR: the page impression can't be in the same column as the url.\n");
 					}
 				}
+			}
+		}
+		return output;
+	}
+	
+	// Utility method that prompts the user for the presence of a header line
+	// TODO: manage multiple lines that need to be ignored
+	private static boolean promptHeaders(String prompt, String fileName, Scanner source){
+		boolean output = false;
+		String input = "";
+		boolean keepAsking = true;
+		// Loop until the user provides a good answer
+		while(keepAsking){ // Prepped for better input validation
+			System.out.println("Is there a header line in the file " + fileName + "? [y|n]");
+			System.out.println(prompt + " ");
+			input = source.nextLine();
+			if(input.length() == 0){
+				System.out.println("\nERROR: the input cannot be empty.\n");
+			} else {
+				if(input.toLowerCase().charAt(0) == 'y'){
+					output = true;
+				} else {
+					output = false;
+				}
+				keepAsking = false; // Prepped for better input validation
 			}
 		}
 		return output;
