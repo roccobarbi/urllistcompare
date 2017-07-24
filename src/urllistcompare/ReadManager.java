@@ -278,9 +278,14 @@ public class ReadManager {
 			if(input.length() == 0){
 				System.out.println("\nERROR: the input cannot be empty.\n");
 			} else {
-				if(Integer.parseInt(input) >= 0 && Integer.parseInt(input) < columns){
-					output[0] = Integer.parseInt(input);
-					keepAsking = false;
+				try{
+					if(Integer.parseInt(input) >= 0 && Integer.parseInt(input) < columns){
+						output[0] = Integer.parseInt(input);
+						keepAsking = false;
+					}
+				} catch	(Exception e) {
+					System.out.println("ERROR: could not parse the index.");
+					keepAsking = true;
 				}
 			}
 		}
@@ -293,13 +298,18 @@ public class ReadManager {
 			if(input.length() == 0){
 				System.out.println("\nERROR: the input cannot be empty.\n");
 			} else {
-				if(Integer.parseInt(input) >= 0 && Integer.parseInt(input) < columns){
-					if(Integer.parseInt(input) != output[0]){
-						output[1] = Integer.parseInt(input);
-						keepAsking = false;
-					} else {
-						System.out.println("\nERROR: the page impression can't be in the same column as the url.\n");
+				try{
+					if(Integer.parseInt(input) >= 0 && Integer.parseInt(input) < columns){
+						if(Integer.parseInt(input) != output[0]){
+							output[1] = Integer.parseInt(input);
+							keepAsking = false;
+						} else {
+							System.out.println("\nERROR: the page impression can't be in the same column as the url.\n");
+						}
 					}
+				} catch	(Exception e) {
+					System.out.println("ERROR: could not parse the index.");
+					keepAsking = true;
 				}
 			}
 		}
