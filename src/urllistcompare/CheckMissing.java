@@ -127,6 +127,7 @@ public class CheckMissing {
 		PrintWriter outputStream = null;
 		GregorianCalendar currentTime = new GregorianCalendar();
 		String fileName = "CheckMissing-" + currentTime.getTimeInMillis() + ".txt";
+		String sep = "\t"; // In the future, this might be an information received from the user 
 		try{
 			outputStream = new PrintWriter(fileName);
 		} catch (IOException e) {
@@ -140,9 +141,9 @@ public class CheckMissing {
 			outputStream.println(elements[i].size() + " elements are missing for a total of " + impressions[i] + " page impressions.");
 			outputStream.println();
 			if(elements[i].size() > 0){
-				outputStream.println("url;impressions");
+				outputStream.println("url" + sep + "impressions");
 				for(int k = 0; k < elements[i].size(); k++){
-					outputStream.println(elements[i].get(k).getUrl() + "\t" + elements[i].get(k).getImpressions());
+					outputStream.println(elements[i].get(k).getUrl() + sep + elements[i].get(k).getImpressions());
 				}
 			}
 			outputStream.println();
