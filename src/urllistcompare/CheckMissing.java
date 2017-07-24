@@ -79,6 +79,9 @@ public class CheckMissing {
 					reader[i] = ReadManager.userInput(args[i]);
 				}
 			}
+			else{
+				reader[i] = ReadManager.userInput(); // No file was specified for this position
+			}
 		}
 		// Read the files
 		list = new URLList(reader[0].getFormat(), reader[1].getFormat());
@@ -376,8 +379,8 @@ public class CheckMissing {
 			System.exit(1);
 		}
 		for(int i = 0; i < CARDINALITY; i++){
-			outputStream.println("File 1: " + theFile[i]);
-			outputStream.println("Format: " + format[i].getFormatSample());
+			outputStream.println("File 1: " + reader[i].getName());
+			outputStream.println("Format: " + reader[i].getFormat().getFormatSample());
 			outputStream.println(elements[i].size() + " elements are missing for a total of " + impressions[i] + " page impressions.");
 			outputStream.println();
 			if(elements[i].size() > 0){

@@ -52,6 +52,8 @@ public class ReadManager {
 		if(!theFile.exists() || !theFile.canRead()){
 			System.out.println("File: " + sourceName + " doesn't exist or can't be read.");
 			theFile = null; // Use it only if it works
+		} else {
+			fileName = sourceName; // To improve compatibility later
 		}
 		// If the source file is not defined, keep asking 
 		while(theFile == null){
@@ -238,31 +240,35 @@ public class ReadManager {
 		int k = 0;
 		boolean keepAsking = true;
 		// Show the head of the file
-		while(keepAsking){
-			try{
-				reader = new Scanner(new File(fileName));
-			} catch (IOException e) {
-				System.out.println("Can't read from file " + fileName + ": " + e.getMessage());
-				System.out.println("Aborting execution");
-				System.exit(1);
-			}
-			System.out.println("Headers for file " + fileName + ":");
-			k = 0;
-			while(reader.hasNextLine() && k < 10){
-				splitHeader = reader.nextLine().split(Character.toString(vSep)); // TODO: improve for doublequote-enclosed columns
-				if(k == 0){
-					columns = splitHeader.length;
-				} else {
-					// TODO: add a consistency check for the file AFTER doublequote-enclosing is accepted
-				}
-				for(int j = 0; j < splitHeader.length; j++){
-					System.out.print(splitHeader[j] + "\t");
-				}
-				System.out.println();
-				k++;
-			}
-			reader.close();
+		try{
+			System.out.println("Trying to read file: " + fileName);
+			reader = new Scanner(new File(fileName));
+		} catch (IOException e) {
+			System.out.println("Can't read from file " + fileName + ": " + e.getMessage());
+			System.out.println("Aborting execution");
+			System.exit(1);
 		}
+		System.out.println("Headers for file " + fileName + ":");
+		k = 0;
+		while(reader.hasNextLine() && k < 10){
+			splitHeader = reader.nextLine().split(Character.toString(vSep)); // TODO: improve for doublequote-enclosed columns
+			if(k == 0){
+				columns = splitHeader.length;
+				if(columns < 2){ // Minor coherence check: there must be at least 2 columns
+					System.out.println("ERROR: there are less than 2 columns!");
+					System.out.println("Aborting execution.");
+					System.exit(0);
+				}
+			} else {
+				// TODO: add a consistency check for the file AFTER doublequote-enclosing is accepted
+			}
+			for(int j = 0; j < splitHeader.length; j++){
+				System.out.print(splitHeader[j] + "\t");
+			}
+			System.out.println();
+			k++;
+		}
+		reader.close();
 		// Loop until the user provides a good column index for the url
 		keepAsking = true;
 		while(keepAsking){ // Prepped for better input validation
