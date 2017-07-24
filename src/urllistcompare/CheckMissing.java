@@ -4,7 +4,10 @@
 package urllistcompare;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,6 +109,8 @@ public class CheckMissing {
 		printOnScreen();
 		// Create and write the output files
 		saveResults();
+		// If needed, save a binary file with the URLList
+		SaveBinary();
 		System.out.println("Execution completed without errors!");
 	}
 	
@@ -150,6 +155,37 @@ public class CheckMissing {
 			outputStream.println();
 		}
 		outputStream.close();
+	}
+	
+	// If the user decides to do so, save a binary file with the current URLList
+	private static void SaveBinary(){
+		ObjectOutputStream output = null;
+		Scanner keyboard = new Scanner(System.in);
+		String input = null;
+		GregorianCalendar currentTime = new GregorianCalendar();
+		String fileName = "URLList-" + currentTime.getTimeInMillis() + ".ulst";
+		// Check: do you want to save the binary?
+		System.out.println("Do you want to save the current list of URLs for future use? [y|n]");
+		input = keyboard.nextLine();
+		if(input.length() > 0 && input.toLowerCase().trim().charAt(0) == 'y'){
+			try{
+				output = new ObjectOutputStream(new FileOutputStream(fileName));
+			} catch (FileNotFoundException e) {
+				System.out.println("ERROR: could not open the file (FileNotFoundException).");
+				e.printStackTrace();
+			} catch (IOException e) {
+				System.out.println("ERROR: could not open the file (IOException).");
+				e.printStackTrace();
+			}
+			try{
+				output.writeObject(list);
+				output.close();
+			} catch (IOException e) {
+				System.out.println("ERROR: could not write to the file " + fileName);
+				e.printStackTrace();
+			}
+			System.out.println(fileName + " successfully written!");
+		}
 	}
 
 }
