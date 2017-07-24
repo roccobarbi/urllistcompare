@@ -68,6 +68,29 @@ public class CheckMissing {
 			impressions[i] = 0;
 			
 		}
+		// Check the arguments and create the readers
+		for(int i = 0; i < CARDINALITY; i++){ // Prepped for future needs if I ever want to compare more than 2 lists at once
+			if(args.length > i){
+				theFile[i] = new File(args[i]);
+				if(!theFile[i].exists() || !theFile[i].canRead()){
+					System.out.println("File: " + args[i] + " doesn't exist or can't be read.");
+					reader[i] = ReadManager.userInput();
+				} else {
+					reader[i] = ReadManager.userInput(args[i]);
+				}
+			}
+		}
+		// Read the files
+		list = new URLList(reader[0].getFormat(), reader[1].getFormat());
+		for(int i = 0; i < CARDINALITY; i++){
+			reader[i].setDestination(list);
+			if(!reader[i].read()) {
+				System.out.println("Errore nella lettura del file " + reader[i].getName() + "!");
+				System.out.println("Aborting execution");
+				System.exit(1);
+			}
+		}
+		/* LEGACY
 		// Check the arguments
 		if(!checkArguments(args)){
 			// If the arguments don't include the files OR the files are not valid, prompt the user for the filenames and check them.
@@ -100,6 +123,7 @@ public class CheckMissing {
 				System.exit(1);
 			}
 		}
+		// */
 		// Check missing
 		for(int i = 0; i < CARDINALITY; i++){
 			elements[i] = new ArrayList<>(Arrays.asList(list.getMissingElements(i)));
