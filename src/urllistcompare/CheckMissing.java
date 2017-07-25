@@ -4,9 +4,11 @@
 package urllistcompare;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -204,12 +206,36 @@ public class CheckMissing {
 			}
 		},
 		BINARY(){
+			private ObjectInputStream input = null;
 			public void setFileNames(String name){
 				fileNames = new String[1];
 				fileNames[0] = name;
 			}
 			public void execute(){
-				System.out.println("Not yet implemented");
+				System.out.println("not yet implemented.");
+				// TODO: refactor saveResults to allow for this case
+				/*
+				try{
+					input = new ObjectInputStream(new FileInputStream(fileNames[0]));
+				} catch (FileNotFoundException e){
+					System.out.println("Error reading " + fileNames[0]);
+					System.exit(1);
+				} catch (IOException e){
+					System.out.println("Error reading " + fileNames[0]);
+					System.exit(1);
+				}
+				try{
+					list = (URLList) input.readObject();
+				} catch (IOException e){
+					System.out.println("Error reading " + fileNames[0]);
+					System.exit(1);
+				} catch (ClassNotFoundException e){
+					System.out.println("Error reading " + fileNames[0] + ": wrong contents or corrupt file!");
+					System.exit(1);
+				}
+				checkMissing();
+				save();
+				*/
 			}
 		},
 		FILES(){
