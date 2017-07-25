@@ -43,6 +43,8 @@ public class CheckMissing {
 	private static CSVReader[] reader = new CSVReader[CARDINALITY];
 	private static ArrayList<URLElement>[] elements = new ArrayList[CARDINALITY];
 	private static long impressions[] = new long[CARDINALITY];
+	
+	private static mode execMode = null; // Execution mode
 
 	/**
 	 * Empty: this class only provides a main argument.
@@ -71,6 +73,10 @@ public class CheckMissing {
 			impressions[i] = 0;
 			
 		}
+		// Check the execution mode
+		execMode = mode.checkArguments(args);
+		execMode.execute();
+		/* LEGACY CODE
 		// Check the arguments and create the readers
 		for(int i = 0; i < CARDINALITY; i++){ // Prepped for future needs if I ever want to compare more than 2 lists at once
 			if(args.length > i){
@@ -111,7 +117,7 @@ public class CheckMissing {
 		saveResults();
 		// If needed, save a binary file with the URLList
 		SaveBinary();
-		System.out.println("Execution completed without errors!");
+		//*/
 	}
 	
 	// Print an impression count to screen
@@ -186,6 +192,154 @@ public class CheckMissing {
 			}
 			System.out.println(fileName + " successfully written!");
 		}
+	}
+	
+	private static enum mode{
+		
+		HELP(){
+			public void execute(){
+				for(String line : helpText){
+					System.out.println(line);
+				}
+			}
+		},
+		BINARY(){
+			public void setFileNames(String name){
+				fileNames = new String[1];
+				fileNames[0] = name;
+			}
+			public void execute(){
+				System.out.println("Not yet implemented");
+			}
+		},
+		FILES(){
+			public void setFileNames(String[] names){
+				fileNames = names;
+			}
+			public void execute(){
+				// Check the arguments and create the readers
+				for(int i = 0; i < CARDINALITY; i++){ // Prepped for future needs if I ever want to compare more than 2 lists at once
+					if(fileNames.length > i){
+						theFile[i] = new File(fileNames[i]);
+						if(!theFile[i].exists() || !theFile[i].canRead()){
+							System.out.println("File: " + fileNames[i] + " doesn't exist or can't be read.");
+							reader[i] = ReadManager.userInput();
+						} else {
+							reader[i] = ReadManager.userInput(fileNames[i]);
+						}
+					}
+					else{
+						reader[i] = ReadManager.userInput(); // No file was specified for this position
+					}
+				}
+				// Read the files
+				list = new URLList(reader[0].getFormat(), reader[1].getFormat());
+				for(int i = 0; i < CARDINALITY; i++){
+					reader[i].setDestination(list);
+					if(!reader[i].read()) {
+						System.out.println("Errore nella lettura del file " + reader[i].getName() + "!");
+						System.out.println("Aborting execution");
+						System.exit(1);
+					}
+				}
+				checkMissing();
+				save();
+			}
+		};
+		
+		private static String[] fileNames = null;
+		private static String[] helpText = {
+			"CheckMissing",
+			"",
+			"This program compares two lists of URLs in different formats.",
+			"The URLs are normalised to a common format before being compared.",
+			"The output is a list of URLs from each list that are missing from the other list.",
+			"",
+			"Usage:",
+			"CheckMissing",
+			"\tThe program will prompt the user to enter two text files",
+			"\twith the lists of URLs that need to be compared.",
+			"CheckMissing textFile1 textFile2",
+			"\tThe lists of URLs in the two text files will be compared.",
+			"CheckMissing -b binFile.ulst",
+			"CheckMissing --binary binFile.ulst",
+			"\tThe program will load the .ulst binary file provided by",
+			"\tthe user and will use its contents."
+		};
+		
+		public void execute(){
+			// Override only
+		};
+		
+		public void setFileNames(String[] names){
+			// Override only
+		};
+		
+		public void setFileNames(String names){
+			// Override only
+		};
+		
+		public void checkMissing(){
+			// Check missing
+			for(int i = 0; i < CARDINALITY; i++){
+				elements[i] = new ArrayList<>(Arrays.asList(list.getMissingElements(i)));
+				elements[i].trimToSize();
+				elements[i].sort(new Comparator<URLElement>() {public int compare(URLElement first, URLElement second){return  second.compareTo(first);}});
+				for(URLElement e : list.getMissingElements(i)){
+					impressions[i] += e.getImpressions();
+				}
+			}
+			// Print an impression count to screen
+			printOnScreen();
+		}
+		
+		public void save(){
+			// Create and write the output files
+			saveResults();
+			// If needed, save a binary file with the URLList
+			SaveBinary();
+			System.out.println("Execution completed without errors!");
+		}
+		
+		public static mode checkArguments(String[] args){
+			mode output = null;
+			String[] fileNames = new String[2];
+			if(args.length == 0){
+				output = mode.FILES;
+			} else {
+				if(args[0].charAt(0) == '-'){
+					switch(args[0].trim()){
+					case "-b":
+					case "--binary":
+						if(args.length > 1){
+							if(args[1].trim().toLowerCase().endsWith(".ulst")){
+								output = mode.BINARY;
+								output.setFileNames(args[1]);
+							} else {
+								System.out.println("ERROR: wrong file format!");
+								output = mode.HELP;
+							}
+						} else {
+							System.out.println("ERROR: binary file missing!");
+							output = mode.HELP;
+						}
+						break;
+					case "-h":
+					case "--help":
+					default:
+						output = mode.HELP;
+					}
+				} else {
+					output = mode.FILES;
+					for(int i = 0; i < args.length && i < CARDINALITY; i++){
+						fileNames[i] = args[i];
+					}
+					output.setFileNames(fileNames);
+				}
+			}
+			return output;
+		}
+		
 	}
 
 }
