@@ -33,14 +33,15 @@ public class CheckMissing {
 	private static final String VSEPARATORS = ".,;:_/|\"'"; // Used to validate non-escaped values for vSep
 	
 	private static File theFile[] = new File[CARDINALITY];
-	private static URLFormat[] format = new URLFormat[CARDINALITY];
+	private static String sourceNames[] = new String[CARDINALITY];
+	/*private static URLFormat[] format = new URLFormat[CARDINALITY];
 	private static boolean[] isTSep = new boolean[CARDINALITY]; // true if the user sets a thousand separator
 	private static char[] dSep = new char[CARDINALITY];
 	private static char[] tSep = new char[CARDINALITY];
 	private static int[] urlI = new int[CARDINALITY];
 	private static int[] impI = new int[CARDINALITY];
 	public static char[] vSep = new char[CARDINALITY];
-	private static boolean[] headers = new boolean[CARDINALITY];
+	private static boolean[] headers = new boolean[CARDINALITY];*/
 	private static URLList list = null;
 	private static CSVReader[] reader = new CSVReader[CARDINALITY];
 	private static ArrayList<URLElement>[] elements = new ArrayList[CARDINALITY];
@@ -62,14 +63,15 @@ public class CheckMissing {
 		// Initialisation
 		for(int i = 0; i < CARDINALITY; i++){
 			theFile[i] = null;
-			format[i] = null;
+			sourceNames[i] = null;
+			/*format[i] = null;
 			isTSep[i] = false; // true if the user sets a thousand separator
 			tSep[i] = 0;
 			dSep[i] = 0;
 			urlI[i] = -1;
 			impI[i] = -1;
 			vSep[i] = 0;
-			headers[i] = false;
+			headers[i] = false;*/
 			reader[i] = null;
 			elements[i] = new ArrayList<URLElement>();
 			impressions[i] = 0;
@@ -84,7 +86,7 @@ public class CheckMissing {
 	private static void printOnScreen(){
 		for(int i = 0; i < CARDINALITY; i++){
 			System.out.println();
-			System.out.println(elements[i].size() + " elements are missing from " + theFile[i] + 
+			System.out.println(elements[i].size() + " elements are missing from " + sourceNames[i] + 
 					" for a total of " + impressions[i] + " page impressions.");
 			System.out.println("Top 5: ");
 			for(int k = 0; k < 5 && k < elements[i].size(); k++){
@@ -107,8 +109,8 @@ public class CheckMissing {
 			System.exit(1);
 		}
 		for(int i = 0; i < CARDINALITY; i++){
-			outputStream.println("File 1: " + reader[i].getName());
-			outputStream.println("Format: " + reader[i].getFormat().getFormatSample());
+			outputStream.println("File 1: " + sourceNames[i]);
+			outputStream.println("Format: " + list.getFormat(i).getFormatSample());
 			outputStream.println(elements[i].size() + " elements are missing for a total of " + impressions[i] + " page impressions.");
 			outputStream.println();
 			if(elements[i].size() > 0){
@@ -171,8 +173,6 @@ public class CheckMissing {
 			}
 			public void execute(){
 				System.out.println("not yet implemented.");
-				// TODO: refactor saveResults to allow for this case
-				/*
 				try{
 					input = new ObjectInputStream(new FileInputStream(fileNames[0]));
 				} catch (FileNotFoundException e){
@@ -191,9 +191,12 @@ public class CheckMissing {
 					System.out.println("Error reading " + fileNames[0] + ": wrong contents or corrupt file!");
 					System.exit(1);
 				}
+				// Assign the source names
+				for(int i = 0; i < CARDINALITY; i++){
+					sourceNames[i] = list.getFormat(i).name() + ": " + list.getFormat(i).getFormatSample();
+				}
 				checkMissing();
 				save();
-				*/
 			}
 		},
 		FILES(){
@@ -215,6 +218,7 @@ public class CheckMissing {
 					else{
 						reader[i] = ReadManager.userInput(); // No file was specified for this position
 					}
+					sourceNames[i] = reader[i].getName(); // Assign the source names for future use
 				}
 				// Read the files
 				list = new URLList(reader[0].getFormat(), reader[1].getFormat());
