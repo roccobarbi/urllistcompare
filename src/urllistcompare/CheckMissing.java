@@ -163,7 +163,6 @@ public class CheckMissing {
 				fileNames[0] = name;
 			}
 			public void execute(){
-				System.out.println("not yet implemented.");
 				try{
 					input = new ObjectInputStream(new FileInputStream(fileNames[0]));
 				} catch (FileNotFoundException e){
