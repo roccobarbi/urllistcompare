@@ -34,14 +34,6 @@ public class CheckMissing {
 	
 	private static File theFile[] = new File[CARDINALITY];
 	private static String sourceNames[] = new String[CARDINALITY];
-	/*private static URLFormat[] format = new URLFormat[CARDINALITY];
-	private static boolean[] isTSep = new boolean[CARDINALITY]; // true if the user sets a thousand separator
-	private static char[] dSep = new char[CARDINALITY];
-	private static char[] tSep = new char[CARDINALITY];
-	private static int[] urlI = new int[CARDINALITY];
-	private static int[] impI = new int[CARDINALITY];
-	public static char[] vSep = new char[CARDINALITY];
-	private static boolean[] headers = new boolean[CARDINALITY];*/
 	private static URLList list = null;
 	private static CSVReader[] reader = new CSVReader[CARDINALITY];
 	private static ArrayList<URLElement>[] elements = new ArrayList[CARDINALITY];
@@ -64,14 +56,6 @@ public class CheckMissing {
 		for(int i = 0; i < CARDINALITY; i++){
 			theFile[i] = null;
 			sourceNames[i] = null;
-			/*format[i] = null;
-			isTSep[i] = false; // true if the user sets a thousand separator
-			tSep[i] = 0;
-			dSep[i] = 0;
-			urlI[i] = -1;
-			impI[i] = -1;
-			vSep[i] = 0;
-			headers[i] = false;*/
 			reader[i] = null;
 			elements[i] = new ArrayList<URLElement>();
 			impressions[i] = 0;
