@@ -248,6 +248,9 @@ public class CheckMissing {
 			"\tThe program will load the .ulst binary file provided by",
 			"\tthe user and will use its contents.",
 			"",
+			"CheckMissing --version",
+			"\tThe program prints the current version.",
+			"",
 			"Report bugs through: <https://github.com/roccobarbi/urllistcompare/issues>",
 			"pkg home page: <https://github.com/roccobarbi/urllistcompare>",
 			""
