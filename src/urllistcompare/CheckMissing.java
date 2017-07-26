@@ -78,48 +78,6 @@ public class CheckMissing {
 		// Check the execution mode
 		execMode = mode.checkArguments(args);
 		execMode.execute();
-		/* LEGACY CODE
-		// Check the arguments and create the readers
-		for(int i = 0; i < CARDINALITY; i++){ // Prepped for future needs if I ever want to compare more than 2 lists at once
-			if(args.length > i){
-				theFile[i] = new File(args[i]);
-				if(!theFile[i].exists() || !theFile[i].canRead()){
-					System.out.println("File: " + args[i] + " doesn't exist or can't be read.");
-					reader[i] = ReadManager.userInput();
-				} else {
-					reader[i] = ReadManager.userInput(args[i]);
-				}
-			}
-			else{
-				reader[i] = ReadManager.userInput(); // No file was specified for this position
-			}
-		}
-		// Read the files
-		list = new URLList(reader[0].getFormat(), reader[1].getFormat());
-		for(int i = 0; i < CARDINALITY; i++){
-			reader[i].setDestination(list);
-			if(!reader[i].read()) {
-				System.out.println("Errore nella lettura del file " + reader[i].getName() + "!");
-				System.out.println("Aborting execution");
-				System.exit(1);
-			}
-		}
-		// Check missing
-		for(int i = 0; i < CARDINALITY; i++){
-			elements[i] = new ArrayList<>(Arrays.asList(list.getMissingElements(i)));
-			elements[i].trimToSize();
-			elements[i].sort(new Comparator<URLElement>() {public int compare(URLElement first, URLElement second){return  second.compareTo(first);}});
-			for(URLElement e : list.getMissingElements(i)){
-				impressions[i] += e.getImpressions();
-			}
-		}
-		// Print an impression count to screen
-		printOnScreen();
-		// Create and write the output files
-		saveResults();
-		// If needed, save a binary file with the URLList
-		SaveBinary();
-		//*/
 	}
 	
 	// Print an impression count to screen
