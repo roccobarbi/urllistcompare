@@ -32,6 +32,8 @@ public class CheckMissing {
 	private static final int CARDINALITY = 2;
 	private static final String VSEPARATORS = ".,;:_/|\"'"; // Used to validate non-escaped values for vSep
 	
+	private static final String versionText = "CheckMissing (urllistcompare) v0.1.2";
+	
 	private static File theFile[] = new File[CARDINALITY];
 	private static String sourceNames[] = new String[CARDINALITY];
 	private static URLList list = null;
@@ -147,6 +149,11 @@ public class CheckMissing {
 				for(String line : helpText){
 					System.out.println(line);
 				}
+			}
+		},
+		VERSION(){
+			public void execute(){
+				System.out.println(versionText);
 			}
 		},
 		BINARY(){
@@ -289,6 +296,9 @@ public class CheckMissing {
 			} else {
 				if(args[0].charAt(0) == '-'){
 					switch(args[0].trim()){
+					case "--version":
+						output = mode.VERSION;
+						break;
 					case "-b":
 					case "--binary":
 						if(args.length > 1){
