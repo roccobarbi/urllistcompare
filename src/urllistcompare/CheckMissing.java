@@ -41,6 +41,11 @@ public class CheckMissing {
 	private static ArrayList<URLElement>[] elements = new ArrayList[CARDINALITY];
 	private static long impressions[] = new long[CARDINALITY];
 	
+	// Data and flags from the command line interface
+	private static String outputFileName = null;
+	private static String binOutputFileName = null;
+	
+	// Execution mode
 	private static mode execMode = null; // Execution mode
 	
 	private static final String[] HELPTEXT = {
@@ -206,7 +211,64 @@ public class CheckMissing {
 		 * --verbose
 		 * --silent
 		 */
-		else {
+		for(int i = 0; i < args.length; i++){
+			// TODO: based on the active flags
+			// read the start of the argument
+			// interpret it accordingly
+			if(args[i].charAt(0) == '-'){
+				try{
+					if(args[i].length() < 2) throw new Exception("Illegal value at parameter " + i + ": isolated single dash!");
+					if(args[i].charAt(1) == '-'){
+						if(args[i].length() < 3) throw new Exception("Illegal value at parameter " + i + ": isolated double dash!");
+						switch(args[i].substring(2).trim()){
+						// List the long parameters
+						// default = error
+						case "version":
+							output = mode.VERSION;
+							break;
+						case "help":
+							output = mode.HELP;
+							break;
+						case "output":
+							if(args.length < i + 1) throw new Exception("Output file name not specified after option --output!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option --output!");
+							outputFileName = args[++i].trim();
+							break;
+						case "binOutput":
+							if(args.length < i + 1) throw new Exception("Output file name not specified after option --binOutput!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option --binOutput!");
+							binOutputFileName = args[++i].trim();
+							if(!binOutputFileName.endsWith(".ulst")) binOutputFileName = binOutputFileName + ".ulst" ;
+							break;
+						default:
+							throw new Exception("Unexpected parameter " + i);
+						}
+					} else {
+						switch(args[i].substring(1).trim()){
+							// List the short parameters that need to be alone
+							// default = check each character to manage the parameters that can be put together
+						case "h":
+							output = mode.HELP;
+							break;
+						case "o":
+							if(args.length < i + 1) throw new Exception("Output file name not specified after option -o!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option -o!");
+							outputFileName = args[++i].trim();
+							break;
+						default:
+							throw new Exception("Unexpected parameter " + i);
+						}
+					}
+				} catch(Exception e){
+					System.out.println("ERROR!");
+					System.out.println(e.getMessage());
+					System.out.println(e.getStackTrace());
+					System.exit(1);
+				}
+			}
+		}
+		// LEGACY CODE
+		/*else {
 			if(args[0].charAt(0) == '-'){
 				switch(args[0].trim()){
 				case "--version":
@@ -239,7 +301,7 @@ public class CheckMissing {
 				}
 				output.setFileNames(fileNames);
 			}
-		}
+		}*/
 		return output;
 	}
 	
