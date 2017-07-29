@@ -182,8 +182,31 @@ public class CheckMissing {
 		mode output = null;
 		String[] fileNames = new String[2];
 		if(args.length == 0){
-			output = mode.FILES;
-		} else {
+			return mode.FILES; // If there are no arguments, the mode is FILES and there are no additional options
+		}
+		// TODO: loop through the arguments, use appropriate flags to detect the current status or any conflicting options.
+		// TODO: save the appropriate data to static class variables, then otput the mode
+		// TODO: the mode execution should consider the flags and variables that are set
+		/*
+		 * Additional options:
+		 * --output
+		 * -o
+		 * --bout
+		 * --oSep
+		 * --file
+		 * -d
+		 * -t
+		 * -v
+		 * -p
+		 * -i
+		 * -e
+		 * --noExtension
+		 * --gui
+		 * -g
+		 * --verbose
+		 * --silent
+		 */
+		else {
 			if(args[0].charAt(0) == '-'){
 				switch(args[0].trim()){
 				case "--version":
