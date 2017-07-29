@@ -188,7 +188,7 @@ public class CheckMissing {
 		},
 		BINARY(){
 			private ObjectInputStream input = null;
-			public void setFileNames(String name){
+			public void setFileName(String name){
 				fileNames = new String[1];
 				fileNames[0] = name;
 			}
@@ -265,7 +265,7 @@ public class CheckMissing {
 			// Override only
 		};
 		
-		public void setFileNames(String names){
+		public void setFileName(String name){
 			// Override only
 		};
 		
@@ -307,7 +307,7 @@ public class CheckMissing {
 						if(args.length > 1){
 							if(args[1].trim().toLowerCase().endsWith(".ulst")){
 								output = mode.BINARY;
-								output.setFileNames(args[1]);
+								output.setFileName(args[1]);
 							} else {
 								System.out.println("ERROR: wrong file format!");
 								output = mode.HELP;
