@@ -94,7 +94,7 @@ public class CheckMissing {
 			
 		}
 		// Check the execution mode
-		execMode = mode.checkArguments(args);
+		execMode = parseArguments(args);
 		execMode.execute();
 	}
 	
@@ -170,6 +170,54 @@ public class CheckMissing {
 			}
 			System.out.println(fileName + " successfully written!");
 		}
+	}
+	
+	/**
+	 * Parse the command line arguments passed to main, set the main program mode and define any additional flag or variable
+	 * that might be needed
+	 * @param args
+	 * @return the main mode for running the program
+	 */
+	public static mode parseArguments(String[] args){
+		mode output = null;
+		String[] fileNames = new String[2];
+		if(args.length == 0){
+			output = mode.FILES;
+		} else {
+			if(args[0].charAt(0) == '-'){
+				switch(args[0].trim()){
+				case "--version":
+					output = mode.VERSION;
+					break;
+				case "-b":
+				case "--binary":
+					if(args.length > 1){
+						if(args[1].trim().toLowerCase().endsWith(".ulst")){
+							output = mode.BINARY;
+							output.setFileName(args[1]);
+						} else {
+							System.out.println("ERROR: wrong file format!");
+							output = mode.HELP;
+						}
+					} else {
+						System.out.println("ERROR: binary file missing!");
+						output = mode.HELP;
+					}
+					break;
+				case "-h":
+				case "--help":
+				default:
+					output = mode.HELP;
+				}
+			} else {
+				output = mode.FILES;
+				for(int i = 0; i < args.length && i < CARDINALITY; i++){
+					fileNames[i] = args[i];
+				}
+				output.setFileNames(fileNames);
+			}
+		}
+		return output;
 	}
 	
 	private static enum mode{
@@ -289,48 +337,6 @@ public class CheckMissing {
 			// If needed, save a binary file with the URLList
 			SaveBinary();
 			System.out.println("Execution completed without errors!");
-		}
-		
-		public static mode checkArguments(String[] args){
-			mode output = null;
-			String[] fileNames = new String[2];
-			if(args.length == 0){
-				output = mode.FILES;
-			} else {
-				if(args[0].charAt(0) == '-'){
-					switch(args[0].trim()){
-					case "--version":
-						output = mode.VERSION;
-						break;
-					case "-b":
-					case "--binary":
-						if(args.length > 1){
-							if(args[1].trim().toLowerCase().endsWith(".ulst")){
-								output = mode.BINARY;
-								output.setFileName(args[1]);
-							} else {
-								System.out.println("ERROR: wrong file format!");
-								output = mode.HELP;
-							}
-						} else {
-							System.out.println("ERROR: binary file missing!");
-							output = mode.HELP;
-						}
-						break;
-					case "-h":
-					case "--help":
-					default:
-						output = mode.HELP;
-					}
-				} else {
-					output = mode.FILES;
-					for(int i = 0; i < args.length && i < CARDINALITY; i++){
-						fileNames[i] = args[i];
-					}
-					output.setFileNames(fileNames);
-				}
-			}
-			return output;
 		}
 		
 	}
