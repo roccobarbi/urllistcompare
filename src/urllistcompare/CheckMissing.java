@@ -42,6 +42,36 @@ public class CheckMissing {
 	private static long impressions[] = new long[CARDINALITY];
 	
 	private static mode execMode = null; // Execution mode
+	
+	private static final String[] HELPTEXT = {
+			"",
+			"CheckMissing",
+			"",
+			"This program compares two lists of URLs in different formats.",
+			"The URLs are normalised to a common format before being compared.",
+			"The output is a list of URLs from each list that are missing from the other list.",
+			"",
+			"Usage:",
+			"",
+			"CheckMissing",
+			"\tThe program will prompt the user to enter two text files",
+			"\twith the lists of URLs that need to be compared.",
+			"",
+			"CheckMissing textFile1 textFile2",
+			"\tThe lists of URLs in the two text files will be compared.",
+			"",
+			"CheckMissing -b binFile.ulst",
+			"CheckMissing --binary binFile.ulst",
+			"\tThe program will load the .ulst binary file provided by",
+			"\tthe user and will use its contents.",
+			"",
+			"CheckMissing --version",
+			"\tThe program prints the current version.",
+			"",
+			"Report bugs through: <https://github.com/roccobarbi/urllistcompare/issues>",
+			"pkg home page: <https://github.com/roccobarbi/urllistcompare>",
+			""
+		};
 
 	/**
 	 * Empty: this class only provides a main argument.
@@ -146,7 +176,7 @@ public class CheckMissing {
 		
 		HELP(){
 			public void execute(){
-				for(String line : helpText){
+				for(String line : HELPTEXT){
 					System.out.println(line);
 				}
 			}
@@ -226,35 +256,6 @@ public class CheckMissing {
 		};
 		
 		private static String[] fileNames = null;
-		private static String[] helpText = {
-			"",
-			"CheckMissing",
-			"",
-			"This program compares two lists of URLs in different formats.",
-			"The URLs are normalised to a common format before being compared.",
-			"The output is a list of URLs from each list that are missing from the other list.",
-			"",
-			"Usage:",
-			"",
-			"CheckMissing",
-			"\tThe program will prompt the user to enter two text files",
-			"\twith the lists of URLs that need to be compared.",
-			"",
-			"CheckMissing textFile1 textFile2",
-			"\tThe lists of URLs in the two text files will be compared.",
-			"",
-			"CheckMissing -b binFile.ulst",
-			"CheckMissing --binary binFile.ulst",
-			"\tThe program will load the .ulst binary file provided by",
-			"\tthe user and will use its contents.",
-			"",
-			"CheckMissing --version",
-			"\tThe program prints the current version.",
-			"",
-			"Report bugs through: <https://github.com/roccobarbi/urllistcompare/issues>",
-			"pkg home page: <https://github.com/roccobarbi/urllistcompare>",
-			""
-		};
 		
 		public void execute(){
 			// Override only
