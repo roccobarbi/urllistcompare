@@ -18,7 +18,7 @@ import java.util.Scanner;
 public enum URLFormat {
 	
 	WTKDEF("www_domain_com.path.path.file_ext"){
-		private String softNormalise(String url){
+		public String softNormalise(String url){
 			url = url.replace('.', '/');
 			url = url.replace('_', '.');
 			if(url.contains("/")){
@@ -30,7 +30,7 @@ public enum URLFormat {
 		}
 	},
 	URLNORM("http://www.domain.com/path/path/file.ext"){
-		private String softNormalise(String url){
+		public String softNormalise(String url){
 			if(url.contains("://")){
 				url = url.substring(url.indexOf("://") + 3);
 			}
@@ -43,7 +43,7 @@ public enum URLFormat {
 		}
 	},
 	NOPROTNORM("www.domain.com/path/path/file.ext"){
-		private String softNormalise(String url){
+		public String softNormalise(String url){
 			if(url.contains("/")){
 				url = url.substring(url.indexOf("/"));
 			} else {
@@ -53,7 +53,7 @@ public enum URLFormat {
 		}
 	},
 	FULLURL("http://www.domain.com/PATH/path/file.ext?query#fragment"){
-		private String softNormalise(String url){
+		public String softNormalise(String url){
 			url = url.split("#")[0];
 			url = url.split("\\?")[0];
 			if(url.contains("://")){
@@ -68,7 +68,7 @@ public enum URLFormat {
 		}
 	},
 	GOOG("/path/path/file.ext?query#fragment"){
-		private String softNormalise(String url){
+		public String softNormalise(String url){
 			url = url.split("#")[0];
 			url = url.split("\\?")[0];
 			return url.toLowerCase();
@@ -105,13 +105,13 @@ public enum URLFormat {
 			return softNormalise(url);
 	}
 	
-	private String softNormalise(String url){
+	public String softNormalise(String url){
 		// Override only
 		// This method represents the normalisation that keeps the extension
 		return url;
 	}
 	
-	private String hardNormalise(String url){
+	public String hardNormalise(String url){
 		// This method represents the normalisation that eliminates the extension
 		// It happens on top of the soft normalisation that is specific to each format
 		String output = softNormalise(url);  
