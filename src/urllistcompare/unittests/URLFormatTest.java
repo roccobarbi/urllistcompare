@@ -23,6 +23,7 @@ public class URLFormatTest {
 
 	@Test
 	public void testNormalisePath() {
+		// Soft normalisation tests
 		String url000 = "www_domain_com.path1.path2.file_ext";
 		URLFormat format000 = URLFormat.WTKDEF;
 		url000 = format000.normalisePath(url000);
