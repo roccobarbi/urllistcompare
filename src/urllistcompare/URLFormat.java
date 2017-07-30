@@ -81,8 +81,8 @@ public enum URLFormat {
 	// that uses the URLFormat enum.
 	private static boolean noExtension = false;
 	
-	public void setNoExtension(boolean noExtension){
-		this.noExtension = noExtension;
+	public static void setNoExtension(boolean noExt){
+		noExtension = noExt;
 	}
 	
 	private URLFormat(String format){
