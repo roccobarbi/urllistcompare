@@ -41,9 +41,13 @@ public class CheckMissing {
 	private static ArrayList<URLElement>[] elements = new ArrayList[CARDINALITY];
 	private static long impressions[] = new long[CARDINALITY];
 	
-	// Data and flags from the command line interface
+	// Data from the command line interface
 	private static String outputFileName = null;
 	private static String binOutputFileName = null;
+	private static char oSep = '\t'; // Default
+	
+	// Flags from the command line interface
+	private static boolean noExtension = false;
 	
 	// Execution mode
 	private static mode execMode = null; // Execution mode
@@ -193,11 +197,17 @@ public class CheckMissing {
 		// TODO: save the appropriate data to static class variables, then otput the mode
 		// TODO: the mode execution should consider the flags and variables that are set
 		/*
-		 * Additional options:
+		 * Options:
+		 * --help
+		 * -h
+		 * --version
 		 * --output
 		 * -o
-		 * --bout
+		 * --binOutput
 		 * --oSep
+		 * --vSep
+		 * --tSep
+		 * --dSep
 		 * --file
 		 * -d
 		 * -t
@@ -225,20 +235,56 @@ public class CheckMissing {
 						// default = error
 						case "version":
 							output = mode.VERSION;
+							i = args.length; // With mode version, nothing else is parsed
 							break;
 						case "help":
 							output = mode.HELP;
+							i = args.length; // With mode help, nothing else is parsed
 							break;
 						case "output":
-							if(args.length < i + 1) throw new Exception("Output file name not specified after option --output!");
+							if(args.length < i + 2) throw new Exception("Output file name not specified after option --output!");
 							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option --output!");
 							outputFileName = args[++i].trim();
 							break;
 						case "binOutput":
-							if(args.length < i + 1) throw new Exception("Output file name not specified after option --binOutput!");
+							if(args.length < i + 2) throw new Exception("Output file name not specified after option --binOutput!");
 							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option --binOutput!");
 							binOutputFileName = args[++i].trim();
 							if(!binOutputFileName.endsWith(".ulst")) binOutputFileName = binOutputFileName + ".ulst" ;
+							break;
+						case "oSep":
+							if(args.length < i + 2) throw new Exception("Value separator for output not specified after option --oSep!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Value separator for output not specified after option --oSep!");
+							if(VSEPARATORS.indexOf(args[i+1].charAt(0)) != -1){
+								oSep = args[i+1].charAt(0);
+							} else if(args[i+1].length() > 1 && args[i+1].charAt(0) == '\\'){
+								switch(args[i+1].charAt(1)){ // Prepped to add more separators
+								case 't':
+									oSep = '\t';
+									break;
+								default:
+									oSep = '\t'; // Default
+								}
+							} else {
+								oSep = '\t'; // Default
+							}
+							break;
+						case "vSep":
+							break;
+						case "tSep":
+							break;
+						case "dSep":
+							break;
+						case "gui":
+							break;
+						case "noExtension":
+							noExtension = true;
+							break;
+						case "verbose":
+							break;
+						case "silent":
+							break;
+						case "file":
 							break;
 						default:
 							throw new Exception("Unexpected parameter " + i);
