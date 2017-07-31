@@ -17,14 +17,14 @@ public class URLListTest {
 
 	@Test
 	public void testURLListURLFormatURLFormat() {
-		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM);
+		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, false);
 		assertTrue("Wrong class!", list001 instanceof URLList);
 		assertTrue("Not active when it should be!", list001.isActive());
 	}
 
 	@Test
 	public void testGetFormat() {
-		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM);
+		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, false);
 		assertTrue("Wrong first format", list001.getFormat(0) == URLFormat.WTKDEF);
 		assertTrue("Wrong second format", list001.getFormat(1) == URLFormat.URLNORM);
 		try{
@@ -72,7 +72,7 @@ public class URLListTest {
 		list001.setFormat(0, URLFormat.WTKDEF);
 		list001.setFormat(1, URLFormat.URLNORM);
 		assertTrue("Not active when it should be!", list001.isActive());
-		list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM);
+		list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, false);
 		assertTrue("Not active when it should be!", list001.isActive());
 	}
 
