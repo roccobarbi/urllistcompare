@@ -93,7 +93,7 @@ public class URLNorm implements Serializable{
 		format[1] = format1;
 		this.noExtension = noExtension;
 		add(first);
-		url = first.normalise();
+		url = first.normalise(noExtension);
 	}
 	
 	// Provides a deep copy
@@ -215,8 +215,8 @@ public class URLNorm implements Serializable{
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element " + 
 				"without defining both formats.");
 		if(url == null) {
-			url = u.normalise();
-		} else if(!u.normalise().equals(url)) throw new InvalidURLNormException("Wrong URL!");
+			url = u.normalise(noExtension);
+		} else if(!u.normalise(noExtension).equals(url)) throw new InvalidURLNormException("Wrong URL!");
 		if(u.getFormat() == format[0]){
 			if(elements[0].add(u)){
 				impressions[0] += u.getImpressions();
