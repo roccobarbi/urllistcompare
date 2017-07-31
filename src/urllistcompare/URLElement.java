@@ -69,12 +69,22 @@ public class URLElement implements Comparable<Object>, Serializable{
 	
 	/**
 	 * 
-	 * @return the normalised path for this URL
+	 * @return the soft-normalised path for this URL (it keeps the file extension)
 	 * @throws InvalidUrlException
 	 */
 	public String normalise() {
 		if(url == null) throw new InvalidUrlException("The url is null, it can't be normalised!");
 		return format.normalisePath(url);
+	}
+	
+	/**
+	 * 
+	 * @return if the parameter is true, the hard-normalised path for this URL (it removes the file extension), otherwise the soft-normalised version (it keeps the file extension)
+	 * @throws InvalidUrlException
+	 */
+	public String normalise(boolean noExtension) {
+		if(url == null) throw new InvalidUrlException("The url is null, it can't be normalised!");
+		return format.normalisePath(url, noExtension);
 	}
 	
 	/**

@@ -75,10 +75,9 @@ public class URLElementTest {
 			System.out.println(e);
 			fail("InvalidUrlException thrown when it should not have been.");
 		}
-		// Hard normalisation
-		URLFormat.setNoExtension(true);
+		// TODO: Hard normalisation
 		try{
-			assertTrue("Same path normalised as if it was different",element001.normalise().equals(element002.normalise()));
+			assertTrue("Same path normalised as if it was different",element001.normalise(true).equals(element002.normalise(true)));
 		}  catch(InvalidUrlException e) {
 			System.out.println(e);
 			fail("InvalidUrlException thrown when it should not have been.");
