@@ -276,7 +276,7 @@ public class CheckMissing {
 							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "vSep":
-							if(!readingInputFile) throw new Exception("Orphan --vSep parameter, must follow ")
+							if(!readingInputFile) throw new Exception("Orphan --vSep parameter, must follow ");
 							break;
 						case "tSep":
 							break;
