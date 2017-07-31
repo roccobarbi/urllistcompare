@@ -386,9 +386,10 @@ public class URLNorm implements Serializable{
 	}
 	
 	/**
-	 * @override
+	 * 
 	 * @return a String describing the URLNorm element
 	 */
+	@Override
 	public String toString(){
 		StringBuilder builder = new StringBuilder();
 		builder.append("URLNORM: " + url + "\n");
