@@ -191,7 +191,25 @@ public class URLListTest {
 		assertTrue("Before calling addExtension, the version without the extension is missing from the list contents.", list002.keySet().contains("/folder/file"));
 		assertFalse("Before calling addExtension, the extension is present int the list contents.", list002.keySet().contains("/folder/file.ext"));
 		assertTrue("After calling addExtension, the extension is missing from the list contents.", list001.keySet().contains("/folder/file.ext"));
-		assertFalse("After calling addExtension, the versions without extension is missing from the list contents.", list001.keySet().contains("/folder/file"));
+		assertFalse("After calling addExtension, the version without extension is present in the list contents.", list001.keySet().contains("/folder/file"));
 	}
 
+	@Test
+	public void testRemExtension(){
+		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, true);
+		URLElement element001 = new URLElement("www_site_com.folder.file_ext", URLFormat.WTKDEF, 15);
+		URLElement element002 = new URLElement("http://www.site.com/folder/file.ext", URLFormat.WTKDEF, 16);
+		list001.add(element001);
+		list001.add(element002);
+		assertTrue("remExtension did not return reference to self with extension already absent!", list001 == list001.remExtension());
+		URLList list002 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		list002.add(element001);
+		list002.add(element002);
+		list001.addExtension();
+		assertTrue("Before calling remExtension, the version with the extension is missing from the list contents.", list002.keySet().contains("/folder/file.ext"));
+		assertFalse("Before calling remExtension, the version without the extension is present int the list contents.", list002.keySet().contains("/folder/file"));
+		assertTrue("After calling remExtension, the the version without extension the list contents.", list001.keySet().contains("/folder/file"));
+		assertFalse("After calling remExtension, the versions wit extension is present in the list contents.", list001.keySet().contains("/folder/file.ext"));
+	}
+	
 }
