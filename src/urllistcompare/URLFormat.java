@@ -77,14 +77,6 @@ public enum URLFormat {
 	
 	private final String formatSample;
 	
-	// Static variable that defines the normalisation mode for the URLFormat in the current execution for the program
-	// that uses the URLFormat enum.
-	private static boolean noExtension = false;
-	
-	public static void setNoExtension(boolean noExt){
-		noExtension = noExt;
-	}
-	
 	private URLFormat(String format){
 		formatSample = format;
 	}
@@ -99,6 +91,16 @@ public enum URLFormat {
 	 * @return The normalised URL path.
 	 */
 	public String normalisePath(String url){
+		return softNormalise(url);
+	}
+	
+	/**
+	 * It returns the URL Path normalised either in the /path1/pathn/file.ext or in the /path1/pathn/file format.
+	 * The choice depends on the second parameter, passing it valued as true will trigger the version without an extension
+	 * @param url
+	 * @return The normalised URL path.
+	 */
+	public String normalisePath(String url, boolean noExtension){
 		if(noExtension)
 			return hardNormalise(url);
 		else

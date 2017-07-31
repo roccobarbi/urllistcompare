@@ -47,28 +47,23 @@ public class URLFormatTest {
 		// Hard normalisation tests
 		url000 = "www_domain_com.path1.path2.file_ext";
 		format000 = URLFormat.WTKDEF;
-		format000.setNoExtension(true);
-		url000 = format000.normalisePath(url000);
+		url000 = format000.normalisePath(url000, true);
 		assertTrue("The path normalised by WTKDEF is incorrect: " + url000, url000.equals("/path1/path2/file"));
 		url001 = "http://www.domain.com/path1/path2/file.ext";
 		format001 = URLFormat.URLNORM;
-		format001.setNoExtension(true);
-		url001 = format001.normalisePath(url001);
+		url001 = format001.normalisePath(url001, true);
 		assertTrue("The path normalised by URLNORM is incorrect: " + url001, url001.equals("/path1/path2/file"));
 		url002 = "www.domain.com/path1/path2/file.ext";
 		format002 = URLFormat.NOPROTNORM;
-		format002.setNoExtension(true);
-		url002 = format002.normalisePath(url002);
+		url002 = format002.normalisePath(url002, true);
 		assertTrue("The path normalised by NOPROTNORM is incorrect: " + url002, url002.equals("/path1/path2/file"));
 		url003 = "http://www.doMAin.com/PATH1/path2/file.ext?param1=value1&param2=value2#fragment";
 		format003 = URLFormat.FULLURL;
-		format003.setNoExtension(true);
-		url003 = format003.normalisePath(url003);
+		url003 = format003.normalisePath(url003, true);
 		assertTrue("The path normalised by FULLURL is incorrect: " + url003, url003.equals("/path1/path2/file"));
 		url004 = "/PATH1/path2/file.ext?param1=value1&param2=value2#fragment";
 		format004 = URLFormat.GOOG;
-		format004.setNoExtension(true);
-		url004 = format004.normalisePath(url004);
+		url004 = format004.normalisePath(url004, true);
 		assertTrue("The path normalised by WTKDEF is incorrect: " + url004, url004.equals("/path1/path2/file"));
 	}
 
