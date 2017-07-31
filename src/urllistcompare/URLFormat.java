@@ -6,13 +6,19 @@ package urllistcompare;
 import java.util.Scanner;
 
 /**
- * @author Rocco Barbini
- * @email roccobarbi@gmail.com
+ * @author Rocco Barbini (roccobarbi@gmail.com)
  * 
  * An enumeration of the URL formats accepted by the program, it can be easily expanded to accept more formats in the future.
  * Each format includes a sample value, which can be used to prompt the user with a series of examples and input the right format code.
- * Each format also includes a normalisePath() method that accepts a String parameter in the specified format and outputs a String with the
- * path, all in lowercase, without the protocol, domain, query and fragment. E.g. /path1/pathn/file.ext. 
+ * 
+ * Each format defines a normalisePath() method that accepts a String parameter in the specified format and outputs a String with the
+ * path, all in lowercase, without the protocol, domain, query and fragment, but including the file extension if it is present
+ * in the original string. E.g. /path1/pathn/file.ext. If a new format is added to the enum, this method needs to be overridden.
+ * 
+ * The enumeration also defines an overloaded normalisePath() method that accepts a String parameter and a boolean parameter. The string
+ * parameter works as described above if the boolean is false, otherwise the file extension (defined here as the last dot in the string
+ * plus anything that follows it) is removed from the output. If a new format is added to the enum, this method does not need to be
+ * overridden.
  *
  */
 public enum URLFormat {
@@ -116,8 +122,11 @@ public enum URLFormat {
 	public String hardNormalise(String url){
 		// This method represents the normalisation that eliminates the extension
 		// It happens on top of the soft normalisation that is specific to each format
-		String output = softNormalise(url);  
-		return output.substring(0, output.lastIndexOf('.'));
+		String output = softNormalise(url);
+		if(output.lastIndexOf('.') > -1){
+			output = output.substring(0, output.lastIndexOf('.'));
+		}
+		return output;
 	}
 	
 	// Prints a list of all available formats, preceded by their index
