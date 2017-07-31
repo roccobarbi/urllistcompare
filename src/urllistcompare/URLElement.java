@@ -154,10 +154,26 @@ public class URLElement implements Comparable<Object>, Serializable{
 		return url.hashCode();
 	}
 	
+	/**
+	 * 
+	 * @return the hashCode of the normalised URL (it keeps the extension)
+	 */
 	public int normalHashCode(){
 		if (url == null){
 			throw new InvalidUrlException("Tried to get the hashcode of a URLElement with no url!");
 		}
 		return format.normalisePath(url).hashCode();
+	}
+	
+	/**
+	 * 
+	 * @param noExtension true if the extension must be removed
+	 * @return the hashCode of the normalised URL (the extension is removed if the parameter is true)
+	 */
+	public int normalHashCode(boolean noExtension){
+		if (url == null){
+			throw new InvalidUrlException("Tried to get the hashcode of a URLElement with no url!");
+		}
+		return format.normalisePath(url, noExtension).hashCode();
 	}
 }
