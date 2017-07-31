@@ -190,6 +190,7 @@ public class CheckMissing {
 	public static mode parseArguments(String[] args){
 		mode output = null;
 		String[] fileNames = new String[2];
+		boolean readingInputFile = false; // Flag that is activated when reading an input file settings
 		if(args.length == 0){
 			return mode.FILES; // If there are no arguments, the mode is FILES and there are no additional options
 		}
@@ -236,21 +237,25 @@ public class CheckMissing {
 						case "version":
 							output = mode.VERSION;
 							i = args.length; // With mode version, nothing else is parsed
+							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "help":
 							output = mode.HELP;
 							i = args.length; // With mode help, nothing else is parsed
+							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "output":
 							if(args.length < i + 2) throw new Exception("Output file name not specified after option --output!");
 							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option --output!");
 							outputFileName = args[++i].trim();
+							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "binOutput":
 							if(args.length < i + 2) throw new Exception("Output file name not specified after option --binOutput!");
 							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option --binOutput!");
 							binOutputFileName = args[++i].trim();
 							if(!binOutputFileName.endsWith(".ulst")) binOutputFileName = binOutputFileName + ".ulst" ;
+							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "oSep":
 							if(args.length < i + 2) throw new Exception("Value separator for output not specified after option --oSep!");
@@ -268,8 +273,10 @@ public class CheckMissing {
 							} else {
 								oSep = '\t'; // Default
 							}
+							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "vSep":
+							if(!readingInputFile) throw new Exception("Orphan --vSep parameter, must follow ")
 							break;
 						case "tSep":
 							break;
@@ -295,13 +302,21 @@ public class CheckMissing {
 							// default = check each character to manage the parameters that can be put together
 						case "h":
 							output = mode.HELP;
+							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "o":
 							if(args.length < i + 1) throw new Exception("Output file name not specified after option -o!");
 							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option -o!");
 							outputFileName = args[++i].trim();
+							readingInputFile = false; // This command interrupts the options for a previous file that was being read
+							break;
+						case "f":
+							// TODO: Read an input file name
+							readingInputFile = true; // File reading options are now acceptable
 							break;
 						default:
+							// TODO: Manage he parameters that can be grouped
+							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							throw new Exception("Unexpected parameter " + i);
 						}
 					}
@@ -311,6 +326,9 @@ public class CheckMissing {
 					System.out.println(e.getStackTrace());
 					System.exit(1);
 				}
+			} else {
+				// Read an input file name
+				readingInputFile = true; // File reading options are now acceptable
 			}
 		}
 		// LEGACY CODE
