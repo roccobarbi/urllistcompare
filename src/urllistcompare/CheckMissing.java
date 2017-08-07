@@ -45,6 +45,7 @@ public class CheckMissing {
 	private static String outputFileName = null;
 	private static String binOutputFileName = null;
 	private static char oSep = '\t'; // Default
+	private static char[] vSep = new char[CARDINALITY];
 	
 	// Flags from the command line interface
 	private static boolean noExtension = false;
@@ -282,6 +283,21 @@ public class CheckMissing {
 							break;
 						case "vSep":
 							if(!readingInputFile) throw new Exception("Orphan --vSep parameter, must follow an input file!");
+							if(args.length < i + 2) throw new Exception("Separator not specified after option --vSep!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Separator not specified after option --vSep!");
+							if(VSEPARATORS.indexOf(args[i+1].charAt(0)) != -1){
+								vSep[currentFile] = args[i+1].charAt(0);
+							} else if(args[i+1].length() > 1 && args[i+1].charAt(0) == '\\'){
+								switch(args[i+1].charAt(1)){ // Prepped to add more separators
+								case 't':
+									vSep[currentFile] = '\t';
+									break;
+								default:
+									vSep[currentFile] = '\t'; // Default
+								}
+							} else {
+								vSep[currentFile] = '\t'; // Default
+							}
 							break;
 						case "tSep":
 							if(!readingInputFile) throw new Exception("Orphan --tSep parameter, must follow an input file!");
