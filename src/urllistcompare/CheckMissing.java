@@ -183,7 +183,11 @@ public class CheckMissing {
 	
 	/**
 	 * Parse the command line arguments passed to main, set the main program mode and define any additional flag or variable
-	 * that might be needed
+	 * that might be needed.
+	 * 
+	 * There can be only one mode, but more flags and variables can be set from the command line to reduce the number of
+	 * instructions that must be added during execution.
+	 * 
 	 * @param args
 	 * @return the main mode for running the program
 	 */
