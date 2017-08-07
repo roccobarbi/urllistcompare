@@ -192,6 +192,7 @@ public class CheckMissing {
 	 * @return the main mode for running the program
 	 */
 	public static mode parseArguments(String[] args){
+		int currentFile = -1; // Used to keep track of the input file that is being set up
 		mode output = null;
 		String[] fileNames = new String[2];
 		boolean readingInputFile = false; // Flag that is activated when reading an input file settings
@@ -280,13 +281,16 @@ public class CheckMissing {
 							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "vSep":
-							if(!readingInputFile) throw new Exception("Orphan --vSep parameter, must follow ");
+							if(!readingInputFile) throw new Exception("Orphan --vSep parameter, must follow an input file!");
 							break;
 						case "tSep":
+							if(!readingInputFile) throw new Exception("Orphan --tSep parameter, must follow an input file!");
 							break;
 						case "dSep":
+							if(!readingInputFile) throw new Exception("Orphan --dSep parameter, must follow an input file!");
 							break;
 						case "gui":
+							// TODO: use a GUI to prompt the user for missing file info
 							break;
 						case "noExtension":
 							noExtension = true;
@@ -296,6 +300,12 @@ public class CheckMissing {
 						case "silent":
 							break;
 						case "file":
+							if(args.length < i + 2) throw new Exception("Input file name not specified after option --file!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Input file name not specified after option --file!");
+							++currentFile; // Step to the next file (default was -1, so the first file will be 0).
+							if(currentFile > CARDINALITY) throw new Exception("Too many input files!");
+							readingInputFile = true; // Now we are reading a file...
+							sourceNames[currentFile] = args[++i].trim(); // ...and here it is!
 							break;
 						default:
 							throw new Exception("Unexpected parameter " + i);
@@ -315,8 +325,12 @@ public class CheckMissing {
 							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "f":
-							// TODO: Read an input file name
-							readingInputFile = true; // File reading options are now acceptable
+							if(args.length < i + 2) throw new Exception("Input file name not specified after option --file!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Input file name not specified after option --file!");
+							++currentFile; // Step to the next file (default was -1, so the first file will be 0).
+							if(currentFile > CARDINALITY) throw new Exception("Too many input files!");
+							readingInputFile = true; // Now we are reading a file...
+							sourceNames[currentFile] = args[++i].trim(); // ...and here it is!
 							break;
 						default:
 							// TODO: Manage he parameters that can be grouped
