@@ -46,9 +46,14 @@ public class CheckMissing {
 	private static String binOutputFileName = null;
 	private static char oSep = '\t'; // Default
 	private static char[] vSep = new char[CARDINALITY];
+	private static char[] dSep = new char[CARDINALITY];
+	private static char[] tSep = new char[CARDINALITY];
 	
 	// Flags from the command line interface
 	private static boolean noExtension = false;
+	private static boolean useGui = false;
+	private static boolean verbose = false;
+	private static boolean silent = false;
 	
 	// Execution mode
 	private static mode execMode = null; // Execution mode
@@ -194,44 +199,36 @@ public class CheckMissing {
 	 */
 	public static mode parseArguments(String[] args){
 		int currentFile = -1; // Used to keep track of the input file that is being set up
-		mode output = null;
+		mode output = mode.FILES; // Default
 		String[] fileNames = new String[2];
 		boolean readingInputFile = false; // Flag that is activated when reading an input file settings
-		if(args.length == 0){
-			return mode.FILES; // If there are no arguments, the mode is FILES and there are no additional options
-		}
-		// TODO: loop through the arguments, use appropriate flags to detect the current status or any conflicting options.
-		// TODO: save the appropriate data to static class variables, then otput the mode
-		// TODO: the mode execution should consider the flags and variables that are set
 		/*
-		 * Options:
+		 * Standalone options:
 		 * --help
 		 * -h
 		 * --version
+		 * Output file options:
 		 * --output
 		 * -o
 		 * --binOutput
 		 * --oSep
+		 * Input files options:
 		 * --vSep
 		 * --tSep
 		 * --dSep
 		 * --file
-		 * -d
-		 * -t
-		 * -v
-		 * -p
-		 * -i
-		 * -e
+		 * -f
+		 * Operating mode options:
 		 * --noExtension
+		 * -e
 		 * --gui
 		 * -g
 		 * --verbose
 		 * --silent
+		 * -p
+		 * -i
 		 */
 		for(int i = 0; i < args.length; i++){
-			// TODO: based on the active flags
-			// read the start of the argument
-			// interpret it accordingly
 			if(args[i].charAt(0) == '-'){
 				try{
 					if(args[i].length() < 2) throw new Exception("Illegal value at parameter " + i + ": isolated single dash!");
@@ -301,23 +298,31 @@ public class CheckMissing {
 							break;
 						case "tSep":
 							if(!readingInputFile) throw new Exception("Orphan --tSep parameter, must follow an input file!");
+							if(args.length < i + 2) throw new Exception("Separator not specified after option --tSep!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Separator not specified after option --tSep!");
+							tSep[currentFile] = args[i+1].charAt(0);
 							break;
 						case "dSep":
 							if(!readingInputFile) throw new Exception("Orphan --dSep parameter, must follow an input file!");
+							if(args.length < i + 2) throw new Exception("Separator not specified after option --dSep!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Separator not specified after option --dSep!");
+							dSep[currentFile] = args[i+1].charAt(0);
 							break;
 						case "gui":
-							// TODO: use a GUI to prompt the user for missing file info
+							useGui = true;
 							break;
 						case "noExtension":
 							noExtension = true;
 							break;
 						case "verbose":
+							verbose = true;
 							break;
 						case "silent":
+							silent = true;
 							break;
 						case "file":
-							if(args.length < i + 2) throw new Exception("Input file name not specified after option --file!");
-							if(args[i + 1].startsWith("-")) throw new Exception("Input file name not specified after option --file!");
+							if(args.length < i + 2) throw new Exception("Input file name not specified after option -f!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Input file name not specified after option -f!");
 							++currentFile; // Step to the next file (default was -1, so the first file will be 0).
 							if(currentFile > CARDINALITY) throw new Exception("Too many input files!");
 							readingInputFile = true; // Now we are reading a file...
@@ -349,7 +354,25 @@ public class CheckMissing {
 							sourceNames[currentFile] = args[++i].trim(); // ...and here it is!
 							break;
 						default:
-							// TODO: Manage he parameters that can be grouped
+							// TODO: Manage the parameters that can be grouped
+							for(char c : args[i].substring(1).toCharArray()){
+								switch(c){
+								case 'g':
+									useGui = true;
+									break;
+								case 'e':
+									noExtension = true;
+									break;
+								case 'v':
+									verbose = true;
+									break;
+								case 's':
+									silent = true;
+									break;
+								default:
+									// TODO
+								}
+							}
 							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							throw new Exception("Unexpected parameter " + i);
 						}
