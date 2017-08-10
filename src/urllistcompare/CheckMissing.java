@@ -48,6 +48,8 @@ public class CheckMissing {
 	private static char[] vSep = new char[CARDINALITY];
 	private static char[] dSep = new char[CARDINALITY];
 	private static char[] tSep = new char[CARDINALITY];
+	private static boolean[] header = new boolean[CARDINALITY];
+	private static boolean[] headerSet = new boolean[CARDINALITY]; // Flag: is the header value actually set?
 	
 	// Flags from the command line interface
 	private static boolean noExtension = false;
@@ -106,9 +108,14 @@ public class CheckMissing {
 			reader[i] = null;
 			elements[i] = new ArrayList<URLElement>();
 			impressions[i] = 0;
-			
+			vSep[i] = 0;
+			tSep[i] = 0;
+			dSep[i] = 0;
+			header[i] = false;	
+			headerSet[i] = false;
 		}
-		// Check the execution mode
+		oSep = 0;
+		// Check the execution mode, set up the sources and run it
 		execMode = parseArguments(args);
 		execMode.execute();
 	}
@@ -328,6 +335,15 @@ public class CheckMissing {
 							readingInputFile = true; // Now we are reading a file...
 							sourceNames[currentFile] = args[++i].trim(); // ...and here it is!
 							break;
+						case "header":
+							if(!readingInputFile) throw new Exception("Orphan --header parameter, must follow an input file!");
+							if(args.length < i + 2) throw new Exception("y or n not specified after option --header!");
+							if(args[i + 1].startsWith("-")) throw new Exception("y or n not specified after option --header!");
+							if(args[i + 1].toLowerCase().charAt(0) == 'y'){
+								header[currentFile] = true;
+							} else {
+								header[currentFile] = false;
+							}
 						default:
 							throw new Exception("Unexpected parameter " + i);
 						}
@@ -388,41 +404,6 @@ public class CheckMissing {
 				readingInputFile = true; // File reading options are now acceptable
 			}
 		}
-		// LEGACY CODE
-		/*else {
-			if(args[0].charAt(0) == '-'){
-				switch(args[0].trim()){
-				case "--version":
-					output = mode.VERSION;
-					break;
-				case "-b":
-				case "--binary":
-					if(args.length > 1){
-						if(args[1].trim().toLowerCase().endsWith(".ulst")){
-							output = mode.BINARY;
-							output.setFileName(args[1]);
-						} else {
-							System.out.println("ERROR: wrong file format!");
-							output = mode.HELP;
-						}
-					} else {
-						System.out.println("ERROR: binary file missing!");
-						output = mode.HELP;
-					}
-					break;
-				case "-h":
-				case "--help":
-				default:
-					output = mode.HELP;
-				}
-			} else {
-				output = mode.FILES;
-				for(int i = 0; i < args.length && i < CARDINALITY; i++){
-					fileNames[i] = args[i];
-				}
-				output.setFileNames(fileNames);
-			}
-		}*/
 		return output;
 	}
 	
@@ -480,13 +461,17 @@ public class CheckMissing {
 			public void execute(){
 				// Check the arguments and create the readers
 				for(int i = 0; i < CARDINALITY; i++){ // Prepped for future needs if I ever want to compare more than 2 lists at once
-					if(fileNames.length > i){
-						theFile[i] = new File(fileNames[i]);
+					if(sourceNames.length > i && sourceNames[i] != null){
+						theFile[i] = new File(sourceNames[i]);
 						if(!theFile[i].exists() || !theFile[i].canRead()){
-							System.out.println("File: " + fileNames[i] + " doesn't exist or can't be read.");
+							System.out.println("File: " + sourceNames[i] + " doesn't exist or can't be read.");
 							reader[i] = ReadManager.userInput();
 						} else {
-							reader[i] = ReadManager.userInput(fileNames[i]);
+							if(vSep[i] != 0){
+								// TODO: the ReadManager must be able to prompt only some information
+							} else{
+								reader[i] = ReadManager.userInput(sourceNames[i]);
+							}
 						}
 					}
 					else{
