@@ -87,6 +87,68 @@ public class ReadManager {
 		return output;
 	}
 	
+	public static CSVReader userInput(String sourceName, char extVSep, char extDSep, boolean extIsTSep, char extTSep, boolean headerSet, boolean extHeader){
+		CSVReader output = null;
+		File file = null;
+		String prompt = DEFAULT_PROMPT; // TODO: make it possible to provide a custom prompt by the caller
+		Scanner keyboard = new Scanner(System.in);
+		URLFormat format = null;
+		String fileName = "";
+		char dSep = 0, tSep = 0, vSep = 0; // Separators
+		int[] indexes = {-1, -1}; // urlI, impI
+		boolean isTSep = false, headers = false;
+		// Check the validity of the argument
+		File theFile = new File(sourceName);
+		if(!theFile.exists() || !theFile.canRead()){
+			System.out.println("File: " + sourceName + " doesn't exist or can't be read.");
+			theFile = null; // Use it only if it works
+		} else {
+			fileName = sourceName; // To improve compatibility later
+		}
+		// If the source file is not defined, keep asking 
+		while(theFile == null){
+			fileName = promptFileName(prompt, keyboard);
+			theFile = new File(fileName);
+			if(!theFile.exists() || !theFile.canRead()){
+				System.out.println("File: " + fileName + " doesn't exist or can't be read.");
+				theFile = null; // Use it only if it works
+			}
+		}
+		// Get the format
+		format = promptFormat(prompt, fileName);
+		// Get the decimal separator
+		if(extDSep == 0){
+			dSep = promptDSep(prompt, fileName, keyboard);
+		} else {
+			dSep = extDSep;
+		}
+		// Get the thousand separator, if needed
+		if(extIsTSep && extTSep == 0 && promptIsTSep(prompt, fileName, keyboard)){
+			isTSep = true;
+			tSep = promptTSep(prompt, fileName, keyboard);
+		} else {
+			isTSep = false;
+			tSep = 0;
+		}
+		// Get the value separator
+		if(extVSep == 0){
+			vSep = promptVSep(prompt, fileName, keyboard);
+		} else {
+			vSep = extVSep;
+		}
+		// Get the indexes
+		indexes = promptIndexes(prompt, fileName, keyboard, vSep);
+		// Get the headers
+		if(headerSet){
+			headers = extHeader;
+		} else{
+			headers = promptHeaders(prompt, fileName, keyboard);
+		}
+		// Create the CSVReader
+		output = new CSVReader(headers, indexes[0], indexes[1], vSep, dSep, isTSep, tSep, theFile, format);
+		return output;
+	}
+	
 	/**
 	 * In case a filename is not provided, this version of userInput prompts the user for the initial file name.
 	 * 
