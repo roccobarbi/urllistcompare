@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
+
+import org.omg.CosNaming.IstringHelper;
+
 import java.util.GregorianCalendar;
 
 import urllistcompare.unittests.URLFormatTest;
@@ -74,7 +77,8 @@ public class CheckMissing {
 			"\tThe program will prompt the user to enter two text files",
 			"\twith the lists of URLs that need to be compared.",
 			"",
-			"CheckMissing textFile1 textFile2",
+			"CheckMissing -f textFile1 -f textFile2",
+			"CheckMissing --file textFile1 --file textFile2",
 			"\tThe lists of URLs in the two text files will be compared.",
 			"",
 			"CheckMissing -b binFile.ulst",
@@ -84,6 +88,23 @@ public class CheckMissing {
 			"",
 			"CheckMissing --version",
 			"\tThe program prints the current version.",
+			"",
+			"Optional parameters after a file:",
+			"\t --vSep followed by value separator",
+			"\t --dSep followed by decimal separator",
+			"\t --tSep followed by thousand separator",
+			"\t--header_t if the file has a header line",
+			"\t--header_f if the file does not have a header line",
+			"",
+			"Other optional parameters",
+			"\t -o followed by output file name",
+			"\t --output followed by output file name",
+			"\t -oSep followed by value separator for output",
+			"\t --binOutput followed by binary output file name",
+			"\t--noExtension to remove the extension for a harder normalisation",
+			"\t-e to remove the extension for a harder normalisation",
+			"\t--gui to use a gui when prompted for the settings",
+			"\t-g to use a gui when prompted for the settings",
 			"",
 			"Report bugs through: <https://github.com/roccobarbi/urllistcompare/issues>",
 			"pkg home page: <https://github.com/roccobarbi/urllistcompare>",
@@ -225,6 +246,8 @@ public class CheckMissing {
 		 * --dSep
 		 * --file
 		 * -f
+		 * --header_t
+		 * --header_f
 		 * Operating mode options:
 		 * --noExtension
 		 * -e
@@ -315,6 +338,16 @@ public class CheckMissing {
 							if(args[i + 1].startsWith("-")) throw new Exception("Separator not specified after option --dSep!");
 							dSep[currentFile] = args[i+1].charAt(0);
 							break;
+						case "header_t":
+							if(!readingInputFile) throw new Exception("Orphan --header parameter, must follow an input file!");
+							headerSet[currentFile] = true;
+							header[currentFile] = true;
+							break;
+						case "header_f":
+							if(!readingInputFile) throw new Exception("Orphan --header parameter, must follow an input file!");
+							headerSet[currentFile] = true;
+							header[currentFile] = false;
+							break;
 						case "gui":
 							useGui = true;
 							break;
@@ -335,15 +368,6 @@ public class CheckMissing {
 							readingInputFile = true; // Now we are reading a file...
 							sourceNames[currentFile] = args[++i].trim(); // ...and here it is!
 							break;
-						case "header":
-							if(!readingInputFile) throw new Exception("Orphan --header parameter, must follow an input file!");
-							if(args.length < i + 2) throw new Exception("y or n not specified after option --header!");
-							if(args[i + 1].startsWith("-")) throw new Exception("y or n not specified after option --header!");
-							if(args[i + 1].toLowerCase().charAt(0) == 'y'){
-								header[currentFile] = true;
-							} else {
-								header[currentFile] = false;
-							}
 						default:
 							throw new Exception("Unexpected parameter " + i);
 						}
@@ -396,7 +420,6 @@ public class CheckMissing {
 				} catch(Exception e){
 					System.out.println("ERROR!");
 					System.out.println(e.getMessage());
-					System.out.println(e.getStackTrace());
 					System.exit(1);
 				}
 			} else {
@@ -467,8 +490,8 @@ public class CheckMissing {
 							System.out.println("File: " + sourceNames[i] + " doesn't exist or can't be read.");
 							reader[i] = ReadManager.userInput();
 						} else {
-							if(vSep[i] != 0){
-								// TODO: the ReadManager must be able to prompt only some information
+							if(vSep[i] != 0  || tSep[i] != 0 || dSep[i] != 0 || headerSet[i]){
+								reader[i] = ReadManager.userInput(sourceNames[i], vSep[i], dSep[i], tSep[i] != 0 ? false : true, tSep[i], headerSet[i], header[i]);
 							} else{
 								reader[i] = ReadManager.userInput(sourceNames[i]);
 							}
