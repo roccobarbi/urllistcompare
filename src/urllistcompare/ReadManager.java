@@ -87,6 +87,17 @@ public class ReadManager {
 		return output;
 	}
 	
+	/**
+	 * 
+	 * @param sourceName the filename for the source file
+	 * @param extVSep the value separator, or 0 if not set
+	 * @param extDSep the decimal separator, or 0 if not set
+	 * @param extIsTSep boolean: true if there is a thousand separator, false means that there is none
+	 * @param extTSep the external separator, or it must be prompted along with isTSep if 0
+	 * @param headerSet boolean: true if extHeader is a valid input
+	 * @param extHeader boolean: true if the file has a header
+	 * @return
+	 */
 	public static CSVReader userInput(String sourceName, char extVSep, char extDSep, boolean extIsTSep, char extTSep, boolean headerSet, boolean extHeader){
 		CSVReader output = null;
 		File file = null;
@@ -114,8 +125,6 @@ public class ReadManager {
 				theFile = null; // Use it only if it works
 			}
 		}
-		// Get the format
-		format = promptFormat(prompt, fileName);
 		// Get the decimal separator
 		if(extDSep == 0){
 			dSep = promptDSep(prompt, fileName, keyboard);
@@ -123,12 +132,12 @@ public class ReadManager {
 			dSep = extDSep;
 		}
 		// Get the thousand separator, if needed
-		if(extIsTSep && extTSep == 0 && promptIsTSep(prompt, fileName, keyboard)){
+		if(extTSep == 0 && promptIsTSep(prompt, fileName, keyboard)){
 			isTSep = true;
 			tSep = promptTSep(prompt, fileName, keyboard);
 		} else {
-			isTSep = false;
-			tSep = 0;
+			isTSep = extIsTSep;
+			tSep = isTSep ? extTSep : 0;
 		}
 		// Get the value separator
 		if(extVSep == 0){
@@ -144,6 +153,8 @@ public class ReadManager {
 		} else{
 			headers = promptHeaders(prompt, fileName, keyboard);
 		}
+		// Get the format
+		format = promptFormat(prompt, fileName);
 		// Create the CSVReader
 		output = new CSVReader(headers, indexes[0], indexes[1], vSep, dSep, isTSep, tSep, theFile, format);
 		return output;
