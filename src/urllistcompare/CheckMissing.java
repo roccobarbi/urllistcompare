@@ -228,7 +228,6 @@ public class CheckMissing {
 	public static mode parseArguments(String[] args){
 		int currentFile = -1; // Used to keep track of the input file that is being set up
 		mode output = mode.FILES; // Default
-		boolean readingInputFile = false; // Flag that is activated when reading an input file settings
 		/*
 		 * There are 3 types of arguments:
 		 * A) input files;
@@ -261,13 +260,13 @@ public class CheckMissing {
 		 * Type C arguments include the following:
 		 * -h
 		 * --help
-		 * -v
 		 * --version
 		 * -e
 		 * --noExtension
 		 * -g
 		 * --gui
 		 * --silent
+		 * -v
 		 * --verbose
 		 * 
 		 * They can be preceded by any parameter type, they can be followed by type A, C or D parameters. 
@@ -294,25 +293,21 @@ public class CheckMissing {
 						case "version":
 							output = mode.VERSION;
 							i = args.length; // With mode version, nothing else is parsed
-							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "help":
 							output = mode.HELP;
 							i = args.length; // With mode help, nothing else is parsed
-							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "output":
 							if(args.length < i + 2) throw new Exception("Output file name not specified after option --output!");
 							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option --output!");
 							outputFileName = args[++i].trim();
-							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "binOutput":
 							if(args.length < i + 2) throw new Exception("Output file name not specified after option --binOutput!");
 							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option --binOutput!");
 							binOutputFileName = args[++i].trim();
 							if(!binOutputFileName.endsWith(".ulst")) binOutputFileName = binOutputFileName + ".ulst" ;
-							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "oSep":
 							if(args.length < i + 2) throw new Exception("Value separator for output not specified after option --oSep!");
@@ -330,47 +325,6 @@ public class CheckMissing {
 							} else {
 								oSep = '\t'; // Default
 							}
-							readingInputFile = false; // This command interrupts the options for a previous file that was being read
-							break;
-						case "vSep":
-							if(!readingInputFile) throw new Exception("Orphan --vSep parameter, must follow an input file!");
-							if(args.length < i + 2) throw new Exception("Separator not specified after option --vSep!");
-							if(args[i + 1].startsWith("-")) throw new Exception("Separator not specified after option --vSep!");
-							if(VSEPARATORS.indexOf(args[i+1].charAt(0)) != -1){
-								vSep[currentFile] = args[i+1].charAt(0);
-							} else if(args[i+1].length() > 1 && args[i+1].charAt(0) == '\\'){
-								switch(args[i+1].charAt(1)){ // Prepped to add more separators
-								case 't':
-									vSep[currentFile] = '\t';
-									break;
-								default:
-									vSep[currentFile] = '\t'; // Default
-								}
-							} else {
-								vSep[currentFile] = '\t'; // Default
-							}
-							break;
-						case "tSep":
-							if(!readingInputFile) throw new Exception("Orphan --tSep parameter, must follow an input file!");
-							if(args.length < i + 2) throw new Exception("Separator not specified after option --tSep!");
-							if(args[i + 1].startsWith("-")) throw new Exception("Separator not specified after option --tSep!");
-							tSep[currentFile] = args[i+1].charAt(0);
-							break;
-						case "dSep":
-							if(!readingInputFile) throw new Exception("Orphan --dSep parameter, must follow an input file!");
-							if(args.length < i + 2) throw new Exception("Separator not specified after option --dSep!");
-							if(args[i + 1].startsWith("-")) throw new Exception("Separator not specified after option --dSep!");
-							dSep[currentFile] = args[i+1].charAt(0);
-							break;
-						case "header_t":
-							if(!readingInputFile) throw new Exception("Orphan --header parameter, must follow an input file!");
-							headerSet[currentFile] = true;
-							header[currentFile] = true;
-							break;
-						case "header_f":
-							if(!readingInputFile) throw new Exception("Orphan --header parameter, must follow an input file!");
-							headerSet[currentFile] = true;
-							header[currentFile] = false;
 							break;
 						case "gui":
 							useGui = true;
@@ -389,7 +343,6 @@ public class CheckMissing {
 							if(args[i + 1].startsWith("-")) throw new Exception("Input file name not specified after option -f!");
 							++currentFile; // Step to the next file (default was -1, so the first file will be 0).
 							if(currentFile > CARDINALITY) throw new Exception("Too many input files!");
-							readingInputFile = true; // Now we are reading a file...
 							fileNames[currentFile] = args[++i].trim(); // ...and here it is!
 							break;
 						default:
@@ -401,21 +354,20 @@ public class CheckMissing {
 							// default = check each character to manage the parameters that can be put together
 						case "h":
 							output = mode.HELP;
-							readingInputFile = false; // This command interrupts the options for a previous file that was being read
+							i = args.length; // With mode version, nothing else is parsed
 							break;
 						case "o":
 							if(args.length < i + 1) throw new Exception("Output file name not specified after option -o!");
 							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option -o!");
 							outputFileName = args[++i].trim();
-							readingInputFile = false; // This command interrupts the options for a previous file that was being read
 							break;
 						case "f":
 							if(args.length < i + 2) throw new Exception("Input file name not specified after option --file!");
 							if(args[i + 1].startsWith("-")) throw new Exception("Input file name not specified after option --file!");
 							++currentFile; // Step to the next file (default was -1, so the first file will be 0).
 							if(currentFile > CARDINALITY) throw new Exception("Too many input files!");
-							readingInputFile = true; // Now we are reading a file...
 							fileNames[currentFile] = args[++i].trim(); // ...and here it is!
+							i = parseSecondaryArguments(args, i, currentFile);
 							break;
 						default:
 							// TODO: Manage the parameters that can be grouped
@@ -434,11 +386,9 @@ public class CheckMissing {
 									silent = true;
 									break;
 								default:
-									// TODO
+									throw new Exception("Unexpected parameter " + i);
 								}
 							}
-							readingInputFile = false; // This command interrupts the options for a previous file that was being read
-							throw new Exception("Unexpected parameter " + i);
 						}
 					}
 				} catch(Exception e){
@@ -447,11 +397,79 @@ public class CheckMissing {
 					System.exit(1);
 				}
 			} else {
-				// Read an input file name
-				readingInputFile = true; // File reading options are now acceptable
+				// In case defaults are used
 			}
 		}
 		return output;
+	}
+	
+	/**
+	 * 
+	 * Parses the type B parameters.
+	 * 
+	 * @param args the argument string
+	 * @param index the current index in the main argument loop (not increased to reach the first secondary argument)
+	 * @param fileIndex the index of the file that is currently being populated
+	 * @return the index of the last type B argument, or the same index that it received if there are none
+	 */
+	public static int parseSecondaryArguments(String args[], int index, int fileIndex) throws Exception{
+		boolean keepParsing = true;
+		while(keepParsing && ++index < args.length){
+			if(args[index].charAt(0) == '-'){
+				if(args[index].length() < 2) throw new Exception("Illegal value at parameter " + index + ": isolated single dash!");
+				if(args[index].charAt(1) == '-'){
+					if(args[index].length() < 3) throw new Exception("Illegal value at parameter " + index + ": isolated double dash!");
+					// Long parameters
+					switch(args[index].substring(2).trim()){
+					case "vSep": // Value separator
+						if(args.length < index + 2) throw new Exception("Separator not specified after option --vSep!");
+						if(args[index + 1].startsWith("-")) throw new Exception("Separator not specified after option --vSep!");
+						if(VSEPARATORS.indexOf(args[index + 1].charAt(0)) != -1){
+							vSep[fileIndex] = args[index + 1].charAt(0);
+						} else if(args[index + 1].length() > 1 && args[index + 1].charAt(0) == '\\'){
+							switch(args[index + 1].charAt(1)){ // Prepped to add more separators
+							case 't':
+								vSep[fileIndex] = '\t';
+								break;
+							default:
+								vSep[fileIndex] = '\t'; // Default
+							}
+						} else {
+							throw new Exception("Unsupported value separator: " + args[index + 1] + "!");
+						}
+						index++; // To avoid parsing the separator twice
+						break;
+					case "tSep":
+						if(args.length < index + 2) throw new Exception("Separator not specified after option --tSep!");
+						if(args[index + 1].startsWith("-")) throw new Exception("Separator not specified after option --tSep!");
+						tSep[fileIndex] = args[index + 1].charAt(0);
+						index++; // To avoid parsing the separator twice
+						break;
+					case "dSep":
+						if(args.length < index + 2) throw new Exception("Separator not specified after option --dSep!");
+						if(args[index + 1].startsWith("-")) throw new Exception("Separator not specified after option --dSep!");
+						dSep[fileIndex] = args[index + 1].charAt(0);
+						index++; // To avoid parsing the separator twice
+						break;
+					case "header_t":
+						headerSet[fileIndex] = true;
+						header[fileIndex] = true;
+						break;
+					case "header_f":
+						headerSet[fileIndex] = true;
+						header[fileIndex] = false;
+						break;
+					default:
+						keepParsing = false; // First non-type-B argument found
+						break;
+					}
+				} else {
+					// No short parameters are used for type B
+					keepParsing = false; // First non-type-B argument found
+				}
+			}
+		}
+		return --index; // To allow the outer loop to go on as usual
 	}
 	
 	private static enum mode{
@@ -508,23 +526,23 @@ public class CheckMissing {
 			public void execute(){
 				// Check the arguments and create the readers
 				for(int i = 0; i < CARDINALITY; i++){ // Prepped for future needs if I ever want to compare more than 2 lists at once
-					if(fileNames.length > i && fileNames[i] != null){
-						theFile[i] = new File(fileNames[i]);
+					if(CheckMissing.fileNames.length > i && CheckMissing.fileNames[i] != null){
+						theFile[i] = new File(CheckMissing.fileNames[i]);
 						if(!theFile[i].exists() || !theFile[i].canRead()){
-							System.out.println("File: " + fileNames[i] + " doesn't exist or can't be read.");
+							System.out.println("File: " + CheckMissing.fileNames[i] + " doesn't exist or can't be read.");
 							reader[i] = ReadManager.userInput();
 						} else {
 							if(vSep[i] != 0  || tSep[i] != 0 || dSep[i] != 0 || headerSet[i]){
-								reader[i] = ReadManager.userInput(fileNames[i], vSep[i], dSep[i], tSep[i] != 0 ? false : true, tSep[i], headerSet[i], header[i]);
+								reader[i] = ReadManager.userInput(CheckMissing.fileNames[i], vSep[i], dSep[i], tSep[i] != 0 ? true : false, tSep[i], headerSet[i], header[i]);
 							} else{
-								reader[i] = ReadManager.userInput(fileNames[i]);
+								reader[i] = ReadManager.userInput(CheckMissing.fileNames[i]);
 							}
 						}
 					}
 					else{
 						reader[i] = ReadManager.userInput(); // No file was specified for this position
 					}
-					fileNames[i] = reader[i].getName(); // Assign the source names for future use
+					CheckMissing.fileNames[i] = reader[i].getName(); // Assign the source names for future use
 				}
 				// Read the files
 				list = new URLList(reader[0].getFormat(), reader[1].getFormat());
