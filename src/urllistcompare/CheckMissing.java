@@ -135,7 +135,7 @@ public class CheckMissing {
 			header[i] = false;	
 			headerSet[i] = false;
 		}
-		oSep = 0;
+		oSep = '\t'; // Default
 		// Check the execution mode, set up the sources and run it
 		execMode = parseArguments(args);
 		execMode.setFileNames(fileNames);
@@ -527,16 +527,16 @@ public class CheckMissing {
 				try{
 					input = new ObjectInputStream(new FileInputStream(fileNames[0]));
 				} catch (FileNotFoundException e){
-					System.out.println("Error reading " + fileNames[0]);
+					System.out.println("Error reading " + fileNames[0] + e.getMessage());
 					System.exit(1);
 				} catch (IOException e){
-					System.out.println("Error reading " + fileNames[0]);
+					System.out.println("Error reading " + fileNames[0] + e.getMessage());
 					System.exit(1);
 				}
 				try{
 					list = (URLList) input.readObject();
 				} catch (IOException e){
-					System.out.println("Error reading " + fileNames[0]);
+					System.out.println("Error reading " + fileNames[0] + e.getMessage());
 					System.exit(1);
 				} catch (ClassNotFoundException e){
 					System.out.println("Error reading " + fileNames[0] + ": wrong contents or corrupt file!");
@@ -545,6 +545,11 @@ public class CheckMissing {
 				// Assign the source names
 				for(int i = 0; i < CARDINALITY; i++){
 					fileNames[i] = list.getFormat(i).name() + ": " + list.getFormat(i).getFormatSample();
+				}
+				if(noExtension){
+					list = list.remExtension();
+				} else {
+					list = list.addExtension();
 				}
 				checkMissing();
 				save();
@@ -576,7 +581,7 @@ public class CheckMissing {
 					fileNames[i] = reader[i].getName(); // Assign the source names for future use
 				}
 				// Read the files
-				list = new URLList(reader[0].getFormat(), reader[1].getFormat());
+				list = new URLList(reader[0].getFormat(), reader[1].getFormat(), noExtension);
 				for(int i = 0; i < CARDINALITY; i++){
 					reader[i].setDestination(list);
 					if(!reader[i].read()) {
