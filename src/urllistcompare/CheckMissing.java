@@ -135,7 +135,7 @@ public class CheckMissing {
 			header[i] = false;	
 			headerSet[i] = false;
 		}
-		oSep = 0;
+		oSep = '\t'; // Default
 		// Check the execution mode, set up the sources and run it
 		execMode = parseArguments(args);
 		execMode.setFileNames(fileNames);
