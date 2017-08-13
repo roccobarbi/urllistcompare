@@ -38,7 +38,7 @@ public class CheckMissing {
 	private static final String versionText = "CheckMissing (urllistcompare) v0.1.2";
 	
 	private static File theFile[] = new File[CARDINALITY];
-	private static String sourceNames[] = new String[CARDINALITY];
+	private static String fileNames[] = new String[CARDINALITY];
 	private static URLList list = null;
 	private static CSVReader[] reader = new CSVReader[CARDINALITY];
 	private static ArrayList<URLElement>[] elements = new ArrayList[CARDINALITY];
@@ -125,7 +125,7 @@ public class CheckMissing {
 		// Initialisation
 		for(int i = 0; i < CARDINALITY; i++){
 			theFile[i] = null;
-			sourceNames[i] = null;
+			fileNames[i] = null;
 			reader[i] = null;
 			elements[i] = new ArrayList<URLElement>();
 			impressions[i] = 0;
@@ -145,7 +145,7 @@ public class CheckMissing {
 	private static void printOnScreen(){
 		for(int i = 0; i < CARDINALITY; i++){
 			System.out.println();
-			System.out.println(elements[i].size() + " elements are missing from " + sourceNames[i] + 
+			System.out.println(elements[i].size() + " elements are missing from " + fileNames[i] + 
 					" for a total of " + impressions[i] + " page impressions.");
 			System.out.println("Top 5: ");
 			for(int k = 0; k < 5 && k < elements[i].size(); k++){
@@ -168,7 +168,7 @@ public class CheckMissing {
 			System.exit(1);
 		}
 		for(int i = 0; i < CARDINALITY; i++){
-			outputStream.println("File 1: " + sourceNames[i]);
+			outputStream.println("File 1: " + fileNames[i]);
 			outputStream.println("Format: " + list.getFormat(i).getFormatSample());
 			outputStream.println(elements[i].size() + " elements are missing for a total of " + impressions[i] + " page impressions.");
 			outputStream.println();
@@ -222,41 +222,65 @@ public class CheckMissing {
 	 * There can be only one mode, but more flags and variables can be set from the command line to reduce the number of
 	 * instructions that must be added during execution.
 	 * 
-	 * @param args
+	 * @param args the command line arguments
 	 * @return the main mode for running the program
 	 */
 	public static mode parseArguments(String[] args){
 		int currentFile = -1; // Used to keep track of the input file that is being set up
 		mode output = mode.FILES; // Default
-		String[] fileNames = new String[2];
 		boolean readingInputFile = false; // Flag that is activated when reading an input file settings
 		/*
-		 * Standalone options:
-		 * --help
-		 * -h
-		 * --version
-		 * Output file options:
-		 * --output
-		 * -o
-		 * --binOutput
-		 * --oSep
-		 * Input files options:
-		 * --vSep
-		 * --tSep
-		 * --dSep
-		 * --file
-		 * -f
+		 * There are 3 types of arguments:
+		 * A) input files;
+		 * B) input file attributes;
+		 * C) independent arguments;
+		 * D) output arguments.
+		 * 
+		 * Type A arguments include the following:
+		 * -f [fileName]
+		 * --file [fileName]
+		 * 
+		 * They must be read by the primary parse function (which includes this comment) and they can be preceded or followed by any of the other types.
+		 * Each time a type A argument is found, it initiates the loop to parse type B arguments.
+		 * 
+		 * Type B arguments include the following:
+		 * --vSep [separator]
+		 * --tSep_f
+		 * --tSep [separator]
+		 * --dSep_f
+		 * --dSep [separator]
 		 * --header_t
 		 * --header_f
-		 * Operating mode options:
-		 * --noExtension
+		 * 
+		 * They can only follow a type A parameter and refer to its file. They can be followed by any parameter type.
+		 * They are read by a separate method, which accepts as arguments the args[] array, the current index and the index of the file that is being read.
+		 * It returns the index right after the last type B parameter has been read.
+		 * 
+		 * If found outside this inner loop, they are simply ignored.
+		 * 
+		 * Type C arguments include the following:
+		 * -h
+		 * --help
+		 * -v
+		 * --version
 		 * -e
-		 * --gui
+		 * --noExtension
 		 * -g
-		 * --verbose
+		 * --gui
 		 * --silent
-		 * -p
-		 * -i
+		 * --verbose
+		 * 
+		 * They can be preceded by any parameter type, they can be followed by type A, C or D parameters. 
+		 * 
+		 * Type D parameters include the following:
+		 * -o [fileName]
+		 * --output [fileName]
+		 * -b [fileName]
+		 * --binOutput [fileName]
+		 * --oSep [separator]
+		 * 
+		 * They can be preceded by any parameter type, they can be followed by type A, C or D parameters.
+		 * 
 		 */
 		for(int i = 0; i < args.length; i++){
 			if(args[i].charAt(0) == '-'){
@@ -366,7 +390,7 @@ public class CheckMissing {
 							++currentFile; // Step to the next file (default was -1, so the first file will be 0).
 							if(currentFile > CARDINALITY) throw new Exception("Too many input files!");
 							readingInputFile = true; // Now we are reading a file...
-							sourceNames[currentFile] = args[++i].trim(); // ...and here it is!
+							fileNames[currentFile] = args[++i].trim(); // ...and here it is!
 							break;
 						default:
 							throw new Exception("Unexpected parameter " + i);
@@ -391,7 +415,7 @@ public class CheckMissing {
 							++currentFile; // Step to the next file (default was -1, so the first file will be 0).
 							if(currentFile > CARDINALITY) throw new Exception("Too many input files!");
 							readingInputFile = true; // Now we are reading a file...
-							sourceNames[currentFile] = args[++i].trim(); // ...and here it is!
+							fileNames[currentFile] = args[++i].trim(); // ...and here it is!
 							break;
 						default:
 							// TODO: Manage the parameters that can be grouped
@@ -471,7 +495,7 @@ public class CheckMissing {
 				}
 				// Assign the source names
 				for(int i = 0; i < CARDINALITY; i++){
-					sourceNames[i] = list.getFormat(i).name() + ": " + list.getFormat(i).getFormatSample();
+					fileNames[i] = list.getFormat(i).name() + ": " + list.getFormat(i).getFormatSample();
 				}
 				checkMissing();
 				save();
@@ -484,23 +508,23 @@ public class CheckMissing {
 			public void execute(){
 				// Check the arguments and create the readers
 				for(int i = 0; i < CARDINALITY; i++){ // Prepped for future needs if I ever want to compare more than 2 lists at once
-					if(sourceNames.length > i && sourceNames[i] != null){
-						theFile[i] = new File(sourceNames[i]);
+					if(fileNames.length > i && fileNames[i] != null){
+						theFile[i] = new File(fileNames[i]);
 						if(!theFile[i].exists() || !theFile[i].canRead()){
-							System.out.println("File: " + sourceNames[i] + " doesn't exist or can't be read.");
+							System.out.println("File: " + fileNames[i] + " doesn't exist or can't be read.");
 							reader[i] = ReadManager.userInput();
 						} else {
 							if(vSep[i] != 0  || tSep[i] != 0 || dSep[i] != 0 || headerSet[i]){
-								reader[i] = ReadManager.userInput(sourceNames[i], vSep[i], dSep[i], tSep[i] != 0 ? false : true, tSep[i], headerSet[i], header[i]);
+								reader[i] = ReadManager.userInput(fileNames[i], vSep[i], dSep[i], tSep[i] != 0 ? false : true, tSep[i], headerSet[i], header[i]);
 							} else{
-								reader[i] = ReadManager.userInput(sourceNames[i]);
+								reader[i] = ReadManager.userInput(fileNames[i]);
 							}
 						}
 					}
 					else{
 						reader[i] = ReadManager.userInput(); // No file was specified for this position
 					}
-					sourceNames[i] = reader[i].getName(); // Assign the source names for future use
+					fileNames[i] = reader[i].getName(); // Assign the source names for future use
 				}
 				// Read the files
 				list = new URLList(reader[0].getFormat(), reader[1].getFormat());
