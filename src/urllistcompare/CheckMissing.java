@@ -158,8 +158,7 @@ public class CheckMissing {
 	private static void saveResults(){
 		PrintWriter outputStream = null;
 		GregorianCalendar currentTime = new GregorianCalendar();
-		String fileName = "CheckMissing-" + currentTime.getTimeInMillis() + ".txt";
-		String sep = "\t"; // In the future, this might be an information received from the user 
+		String fileName = outputFileName == null ? ("CheckMissing-" + currentTime.getTimeInMillis() + ".txt") : outputFileName;
 		try{
 			outputStream = new PrintWriter(fileName);
 		} catch (IOException e) {
@@ -173,9 +172,9 @@ public class CheckMissing {
 			outputStream.println(elements[i].size() + " elements are missing for a total of " + impressions[i] + " page impressions.");
 			outputStream.println();
 			if(elements[i].size() > 0){
-				outputStream.println("url" + sep + "impressions");
+				outputStream.println("url" + oSep + "impressions");
 				for(int k = 0; k < elements[i].size(); k++){
-					outputStream.println(elements[i].get(k).getUrl() + sep + elements[i].get(k).getImpressions());
+					outputStream.println(elements[i].get(k).getUrl() + oSep + elements[i].get(k).getImpressions());
 				}
 			}
 			outputStream.println();
@@ -186,17 +185,23 @@ public class CheckMissing {
 	
 	// If the user decides to do so, save a binary file with the current URLList
 	private static void SaveBinary(){
+		boolean saveBin = binOutputFileName == null ? false : true;
 		ObjectOutputStream output = null;
 		Scanner keyboard = new Scanner(System.in);
 		String input = null;
 		GregorianCalendar currentTime = new GregorianCalendar();
-		String fileName = "URLList-" + currentTime.getTimeInMillis() + ".ulst";
-		// Check: do you want to save the binary?
-		System.out.println("Do you want to save the current list of URLs for future use? [y|n]");
-		input = keyboard.nextLine();
-		if(input.length() > 0 && input.toLowerCase().trim().charAt(0) == 'y'){
+		if(binOutputFileName == null){
+			// Check: do you want to save the binary?
+			System.out.println("Do you want to save the current list of URLs for future use? [y|n]");
+			input = keyboard.nextLine();
+			if(input.length() > 0 && input.toLowerCase().trim().charAt(0) == 'y'){
+				saveBin = true;
+				binOutputFileName = "URLList-" + currentTime.getTimeInMillis() + ".ulst";
+			}
+		}
+		if(saveBin){
 			try{
-				output = new ObjectOutputStream(new FileOutputStream(fileName));
+				output = new ObjectOutputStream(new FileOutputStream(binOutputFileName));
 			} catch (FileNotFoundException e) {
 				System.out.println("ERROR: could not open the file (FileNotFoundException).");
 				e.printStackTrace();
@@ -208,10 +213,10 @@ public class CheckMissing {
 				output.writeObject(list);
 				output.close();
 			} catch (IOException e) {
-				System.out.println("ERROR: could not write to the file " + fileName);
+				System.out.println("ERROR: could not write to the file " + binOutputFileName);
 				e.printStackTrace();
 			}
-			System.out.println(fileName + " successfully written!");
+			System.out.println(binOutputFileName + " successfully written!");
 		}
 	}
 	
@@ -368,6 +373,12 @@ public class CheckMissing {
 							if(currentFile > CARDINALITY) throw new Exception("Too many input files!");
 							fileNames[currentFile] = args[++i].trim(); // ...and here it is!
 							i = parseSecondaryArguments(args, i, currentFile);
+							break;
+						case "b":
+							if(args.length < i + 2) throw new Exception("Output file name not specified after option -b!");
+							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option -b!");
+							binOutputFileName = args[++i].trim();
+							if(!binOutputFileName.endsWith(".ulst")) binOutputFileName = binOutputFileName + ".ulst" ;
 							break;
 						default:
 							// TODO: Manage the parameters that can be grouped
