@@ -81,8 +81,8 @@ public class CheckMissing {
 			"CheckMissing --file textFile1 --file textFile2",
 			"\tThe lists of URLs in the two text files will be compared.",
 			"",
-			"CheckMissing -b binFile.ulst",
-			"CheckMissing --binary binFile.ulst",
+			"CheckMissing -b [binary file name]",
+			"CheckMissing --binary [binary file name]",
 			"\tThe program will load the .ulst binary file provided by",
 			"\tthe user and will use its contents.",
 			"",
@@ -90,17 +90,17 @@ public class CheckMissing {
 			"\tThe program prints the current version.",
 			"",
 			"Optional parameters after a file:",
-			"\t --vSep followed by value separator",
-			"\t --dSep followed by decimal separator",
-			"\t --tSep followed by thousand separator",
+			"\t --vSep [value separator]",
+			"\t --dSep [decimal separator]",
+			"\t --tSep [thousand separator]",
 			"\t--header_t if the file has a header line",
 			"\t--header_f if the file does not have a header line",
 			"",
 			"Other optional parameters",
-			"\t -o followed by output file name",
-			"\t --output followed by output file name",
-			"\t -oSep followed by value separator for output",
-			"\t --binOutput followed by binary output file name",
+			"\t -o [output file name]",
+			"\t --output [output file name]",
+			"\t -oSep [separator for output]",
+			"\t --binOutput [binary output file name]",
 			"\t--noExtension to remove the extension for a harder normalisation",
 			"\t-e to remove the extension for a harder normalisation",
 			"\t--gui to use a gui when prompted for the settings",
@@ -138,6 +138,7 @@ public class CheckMissing {
 		oSep = 0;
 		// Check the execution mode, set up the sources and run it
 		execMode = parseArguments(args);
+		execMode.setFileNames(fileNames);
 		execMode.execute();
 	}
 	
@@ -234,11 +235,14 @@ public class CheckMissing {
 		int currentFile = -1; // Used to keep track of the input file that is being set up
 		mode output = mode.FILES; // Default
 		/*
-		 * There are 3 types of arguments:
+		 * There are 5 types of arguments:
 		 * A) input files;
 		 * B) input file attributes;
 		 * C) independent arguments;
-		 * D) output arguments.
+		 * D) output arguments;
+		 * E) binary input argument
+		 * 
+		 * Type A and E cannot coexist.
 		 * 
 		 * Type A arguments include the following:
 		 * -f [fileName]
@@ -279,11 +283,14 @@ public class CheckMissing {
 		 * Type D parameters include the following:
 		 * -o [fileName]
 		 * --output [fileName]
-		 * -b [fileName]
 		 * --binOutput [fileName]
 		 * --oSep [separator]
 		 * 
 		 * They can be preceded by any parameter type, they can be followed by type A, C or D parameters.
+		 * 
+		 * Type E parameters include the following:
+		 * -b [optional fileName]
+		 * --binary [optional fileName]
 		 * 
 		 */
 		for(int i = 0; i < args.length; i++){
@@ -302,6 +309,14 @@ public class CheckMissing {
 						case "help":
 							output = mode.HELP;
 							i = args.length; // With mode help, nothing else is parsed
+							break;
+						case "binary":
+							if(currentFile > -1) throw new Exception("Binary mode and file mode cannot coexist!");
+							if(args.length < i + 2 || args[i + 1].startsWith("-")) throw new Exception("Input file name not specified after option --binary!");
+							++currentFile; // Step to the next file (default was -1, so the first file will be 0).
+							fileNames[currentFile] = args[++i].trim(); // ...and here it is!
+							if(!fileNames[currentFile].endsWith(".ulst")) fileNames[currentFile] = fileNames[currentFile] + ".ulst" ;
+							output = mode.BINARY;
 							break;
 						case "output":
 							if(args.length < i + 2) throw new Exception("Output file name not specified after option --output!");
@@ -375,10 +390,12 @@ public class CheckMissing {
 							i = parseSecondaryArguments(args, i, currentFile);
 							break;
 						case "b":
-							if(args.length < i + 2) throw new Exception("Output file name not specified after option -b!");
-							if(args[i + 1].startsWith("-")) throw new Exception("Output file name not specified after option -b!");
-							binOutputFileName = args[++i].trim();
-							if(!binOutputFileName.endsWith(".ulst")) binOutputFileName = binOutputFileName + ".ulst" ;
+							if(currentFile > -1) throw new Exception("Binary mode and file mode cannot coexist!");
+							if(args.length < i + 2 || args[i + 1].startsWith("-")) throw new Exception("Input file name not specified after option --b!");
+							++currentFile; // Step to the next file (default was -1, so the first file will be 0).
+							fileNames[currentFile] = args[++i].trim(); // ...and here it is!
+							if(!fileNames[currentFile].endsWith(".ulst")) fileNames[currentFile] = fileNames[currentFile] + ".ulst" ;
+							output = mode.BINARY;
 							break;
 						default:
 							// TODO: Manage the parameters that can be grouped
@@ -503,6 +520,9 @@ public class CheckMissing {
 				fileNames = new String[1];
 				fileNames[0] = name;
 			}
+			public void setFileNames(String[] names){
+				fileNames = names;
+			}
 			public void execute(){
 				try{
 					input = new ObjectInputStream(new FileInputStream(fileNames[0]));
@@ -537,23 +557,23 @@ public class CheckMissing {
 			public void execute(){
 				// Check the arguments and create the readers
 				for(int i = 0; i < CARDINALITY; i++){ // Prepped for future needs if I ever want to compare more than 2 lists at once
-					if(CheckMissing.fileNames.length > i && CheckMissing.fileNames[i] != null){
-						theFile[i] = new File(CheckMissing.fileNames[i]);
+					if(fileNames.length > i && fileNames[i] != null){
+						theFile[i] = new File(fileNames[i]);
 						if(!theFile[i].exists() || !theFile[i].canRead()){
-							System.out.println("File: " + CheckMissing.fileNames[i] + " doesn't exist or can't be read.");
+							System.out.println("File: " + fileNames[i] + " doesn't exist or can't be read.");
 							reader[i] = ReadManager.userInput();
 						} else {
 							if(vSep[i] != 0  || tSep[i] != 0 || dSep[i] != 0 || headerSet[i]){
-								reader[i] = ReadManager.userInput(CheckMissing.fileNames[i], vSep[i], dSep[i], tSep[i] != 0 ? true : false, tSep[i], headerSet[i], header[i]);
+								reader[i] = ReadManager.userInput(fileNames[i], vSep[i], dSep[i], tSep[i] != 0 ? true : false, tSep[i], headerSet[i], header[i]);
 							} else{
-								reader[i] = ReadManager.userInput(CheckMissing.fileNames[i]);
+								reader[i] = ReadManager.userInput(fileNames[i]);
 							}
 						}
 					}
 					else{
 						reader[i] = ReadManager.userInput(); // No file was specified for this position
 					}
-					CheckMissing.fileNames[i] = reader[i].getName(); // Assign the source names for future use
+					fileNames[i] = reader[i].getName(); // Assign the source names for future use
 				}
 				// Read the files
 				list = new URLList(reader[0].getFormat(), reader[1].getFormat());
