@@ -66,10 +66,18 @@ public class URLElementTest {
 
 	@Test
 	public void testNormalise() {
+		// Soft normalisation
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
 		URLElement element002 = new URLElement("www.domain.com/path1/path2/file.ext", URLFormat.NOPROTNORM, 1200);
 		try{
 			assertTrue("Same path normalised as if it was different",element001.normalise().equals(element002.normalise()));
+		}  catch(InvalidUrlException e) {
+			System.out.println(e);
+			fail("InvalidUrlException thrown when it should not have been.");
+		}
+		// TODO: Hard normalisation
+		try{
+			assertTrue("Same path normalised as if it was different",element001.normalise(true).equals(element002.normalise(true)));
 		}  catch(InvalidUrlException e) {
 			System.out.println(e);
 			fail("InvalidUrlException thrown when it should not have been.");

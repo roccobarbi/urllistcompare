@@ -17,14 +17,14 @@ public class URLListTest {
 
 	@Test
 	public void testURLListURLFormatURLFormat() {
-		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM);
+		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, false);
 		assertTrue("Wrong class!", list001 instanceof URLList);
 		assertTrue("Not active when it should be!", list001.isActive());
 	}
 
 	@Test
 	public void testGetFormat() {
-		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM);
+		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, false);
 		assertTrue("Wrong first format", list001.getFormat(0) == URLFormat.WTKDEF);
 		assertTrue("Wrong second format", list001.getFormat(1) == URLFormat.URLNORM);
 		try{
@@ -72,7 +72,7 @@ public class URLListTest {
 		list001.setFormat(0, URLFormat.WTKDEF);
 		list001.setFormat(1, URLFormat.URLNORM);
 		assertTrue("Not active when it should be!", list001.isActive());
-		list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM);
+		list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, false);
 		assertTrue("Not active when it should be!", list001.isActive());
 	}
 
@@ -175,5 +175,41 @@ public class URLListTest {
 		assertTrue("Wrong second element in output001", output001[1].equals(element004));
 		assertTrue("Wrong length for output002: " + output002.length, output002.length == 0);
 	}
+	
+	@Test
+	public void testAddExtension(){
+		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		URLElement element001 = new URLElement("www_site_com.folder.file_ext", URLFormat.WTKDEF, 15);
+		URLElement element002 = new URLElement("http://www.site.com/folder/file.ext", URLFormat.WTKDEF, 16);
+		list001.add(element001);
+		list001.add(element002);
+		assertTrue("addExtension did not return reference to self with extension already present!", list001 == list001.addExtension());
+		URLList list002 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, true);
+		list002.add(element001);
+		list002.add(element002);
+		list001.addExtension();
+		assertTrue("Before calling addExtension, the version without the extension is missing from the list contents.", list002.keySet().contains("/folder/file"));
+		assertFalse("Before calling addExtension, the extension is present int the list contents.", list002.keySet().contains("/folder/file.ext"));
+		assertTrue("After calling addExtension, the extension is missing from the list contents.", list001.keySet().contains("/folder/file.ext"));
+		assertFalse("After calling addExtension, the version without extension is present in the list contents.", list001.keySet().contains("/folder/file"));
+	}
 
+	@Test
+	public void testRemExtension(){
+		URLList list001 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, true);
+		URLElement element001 = new URLElement("www_site_com.folder.file_ext", URLFormat.WTKDEF, 15);
+		URLElement element002 = new URLElement("http://www.site.com/folder/file.ext", URLFormat.WTKDEF, 16);
+		list001.add(element001);
+		list001.add(element002);
+		assertTrue("remExtension did not return reference to self with extension already absent!", list001 == list001.remExtension());
+		URLList list002 = new URLList(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		list002.add(element001);
+		list002.add(element002);
+		list001.addExtension();
+		assertTrue("Before calling remExtension, the version with the extension is missing from the list contents.", list002.keySet().contains("/folder/file.ext"));
+		assertFalse("Before calling remExtension, the version without the extension is present int the list contents.", list002.keySet().contains("/folder/file"));
+		assertTrue("After calling remExtension, the the version without extension the list contents.", list001.keySet().contains("/folder/file"));
+		assertFalse("After calling remExtension, the versions wit extension is present in the list contents.", list001.keySet().contains("/folder/file.ext"));
+	}
+	
 }

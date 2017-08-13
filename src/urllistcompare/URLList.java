@@ -20,18 +20,26 @@ public class URLList implements Serializable{
 	private HashMap<String, URLNorm> url;
 	private URLFormat[] format;
 	private boolean active;
+	private boolean noExtension; // Read-only after the URLList has been constructed
 
 	public URLList() {
 		url = new HashMap<String, URLNorm>(1500, (float) 0.95);
 		format = new URLFormat[2];
 		active = false;
+		noExtension = false; // Default behaviour to ensure consistency with legacy code
 	}
 	
+	@Deprecated
 	public URLList(URLFormat format01, URLFormat format02){
+		this(format01, format02, false); // Default behaviour to ensure consistency with legacy code: noExtension is false
+	}
+	
+	public URLList(URLFormat format01, URLFormat format02, boolean noExtension){
 		this();
 		format[0] = format01;
 		format[1] = format02;
 		active = true;
+		this.noExtension = noExtension; 
 	}
 	
 	/**
@@ -108,7 +116,7 @@ public class URLList implements Serializable{
 		if(url.containsKey(element.normalise())){
 			output = url.get(element.normalise()).add(element);;
 		} else {
-			URLNorm n = new URLNorm(format[0], format[1]);
+			URLNorm n = new URLNorm(format[0], format[1], noExtension);
 			output = n.add(element);;
 			url.put(n.getUrl(), n);
 		}
@@ -145,5 +153,45 @@ public class URLList implements Serializable{
 					" with a format that is not included in this URLNorm instance.");
 		}
 		return getMissingElements(index);
+	}
+	
+	/**
+	 * 
+	 * @return a reference to the current URLList if noExtension is false, otherwise a new URLList recalculated with the extension (soft normalisation)
+	 */
+	public URLList addExtension(){
+		if(!noExtension){
+			return this;
+		} else {
+			URLList output = new URLList(this.getFormat(0), this.getFormat(1), false);
+			for(String key : this.keySet()){
+				for(int i = 0; i < 2; i++){
+					for(URLElement element : this.getUrlNorm(key).getUrlElements(i)){
+						output.add(element);
+					}
+				}
+			}
+			return output;
+		}
+	}
+	
+	/**
+	 * 
+	 * @return a reference to the current URLList if noExtension is true, otherwise a new URLList recalculated without the extension (hard normalisation)
+	 */
+	public URLList remExtension(){
+		if(noExtension){
+			return this;
+		} else {
+			URLList output = new URLList(this.getFormat(0), this.getFormat(1), true);
+			for(String key : this.keySet()){
+				for(int i = 0; i < 2; i++){
+					for(URLElement element : this.getUrlNorm(key).getUrlElements(i)){
+						output.add(element);
+					}
+				}
+			}
+			return output;
+		}
 	}
 }

@@ -28,7 +28,8 @@ public class URLNorm implements Serializable{
 	private HashSet<URLElement> elements[];
 	private int impressions[];
 	private URLFormat format[];
-	private String url;
+	private String url; // Read-only after the URLNorm has been constructed
+	private boolean noExtension; // Read-only after the URLNorm has been constructed
 
 	@SuppressWarnings("unchecked")
 	public URLNorm() {
@@ -37,10 +38,16 @@ public class URLNorm implements Serializable{
 		elements[1] = new HashSet<URLElement>();
 		impressions = new int[2];
 		format = new URLFormat[2];
+		noExtension = false; // Default behaviour to ensure consistency with legacy code
+	}
+	
+	@Deprecated
+	public URLNorm(URLFormat format01, URLFormat format02) {
+		this(format01, format02, false); // Default behaviour to ensure consistency with legacy code: noExtension is false
 	}
 	
 	@SuppressWarnings("unchecked")
-	public URLNorm(URLFormat format01, URLFormat format02) {
+	public URLNorm(URLFormat format01, URLFormat format02, boolean noExtension) {
 		elements = new HashSet[2];
 		elements[0] = new HashSet<URLElement>();
 		elements[1] = new HashSet<URLElement>();
@@ -48,10 +55,16 @@ public class URLNorm implements Serializable{
 		format = new URLFormat[2];
 		format[0] = format01;
 		format[1] = format02;
+		this.noExtension = noExtension;
+	}
+	
+	@Deprecated
+	public URLNorm(URLElement element01, URLFormat format02) {
+		this(element01, format02, false); // Default behaviour to ensure consistency with legacy code: noExtension is false
 	}
 	
 	@SuppressWarnings("unchecked")
-	public URLNorm(URLElement element01, URLFormat format02) {
+	public URLNorm(URLElement element01, URLFormat format02, boolean noExtension) {
 		elements = new HashSet[2];
 		elements[0] = new HashSet<URLElement>();
 		elements[1] = new HashSet<URLElement>();
@@ -59,12 +72,18 @@ public class URLNorm implements Serializable{
 		format = new URLFormat[2];
 		format[0] = element01.getFormat();
 		format[1] = format02;
+		this.noExtension = noExtension;
 		add(element01);
-		url = element01.normalise();
+		url = element01.normalise(noExtension);
+	}
+	
+	@Deprecated
+	public URLNorm(URLFormat format0, URLFormat format1, URLElement first) {
+		this(format0, format1, first, false); // Default behaviour to ensure consistency with legacy code: noExtension is false
 	}
 	
 	@SuppressWarnings("unchecked")
-	public URLNorm(URLFormat format0, URLFormat format1, URLElement first) {
+	public URLNorm(URLFormat format0, URLFormat format1, URLElement first, boolean noExtension) {
 		elements = new HashSet[2];
 		elements[0] = new HashSet<URLElement>();
 		elements[1] = new HashSet<URLElement>();
@@ -72,10 +91,12 @@ public class URLNorm implements Serializable{
 		format = new URLFormat[2];
 		format[0] = format0;
 		format[1] = format1;
+		this.noExtension = noExtension;
 		add(first);
-		url = first.normalise();
+		url = first.normalise(noExtension);
 	}
 	
+	// Provides a deep copy
 	@SuppressWarnings("unchecked")
 	public URLNorm(URLNorm original) {
 		elements = new HashSet[2];
@@ -85,9 +106,14 @@ public class URLNorm implements Serializable{
 		format = new URLFormat[2];
 		format[0] = original.getFormats()[0];
 		format[1] = original.getFormats()[1];
+		noExtension = original.getNoExtension(); 
 		url = original.getUrl();
 		for(URLElement e : original.getUrlElements(0)) add(e);
 		for(URLElement e : original.getUrlElements(1)) add(e);
+	}
+	
+	public boolean getNoExtension(){
+		return noExtension;
 	}
 	
 	public String getUrl(){
@@ -189,8 +215,8 @@ public class URLNorm implements Serializable{
 		if(format[0] == null || format[1] == null) throw new InvalidURLNormException("Tried to add an element " + 
 				"without defining both formats.");
 		if(url == null) {
-			url = u.normalise();
-		} else if(!u.normalise().equals(url)) throw new InvalidURLNormException("Wrong URL!");
+			url = u.normalise(noExtension);
+		} else if(!u.normalise(noExtension).equals(url)) throw new InvalidURLNormException("Wrong URL!");
 		if(u.getFormat() == format[0]){
 			if(elements[0].add(u)){
 				impressions[0] += u.getImpressions();
@@ -360,9 +386,10 @@ public class URLNorm implements Serializable{
 	}
 	
 	/**
-	 * @override
+	 * 
 	 * @return a String describing the URLNorm element
 	 */
+	@Override
 	public String toString(){
 		StringBuilder builder = new StringBuilder();
 		builder.append("URLNORM: " + url + "\n");

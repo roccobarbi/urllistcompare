@@ -35,9 +35,33 @@ public class URLNormTest extends TestCase {
 	}
 
 	public void testURLNormURLFormatURLFormat() {
-		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM);
+		// Soft normalisation
+		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
 		URLFormat formats[] = new URLFormat[2];
 		int[] impressions;
+		try{
+			url001.getUrl();
+			fail("Did not throw an exception when one was needed!");
+		} catch(InvalidURLNormException e){
+			assertTrue("The URL is not null!", e.getMessage().equals("url not defined!"));
+		}
+		try{
+			formats = url001.getFormats();
+			assertTrue("The first format is wrong!", formats[0] == URLFormat.WTKDEF);
+			assertTrue("The second format is wrong!", formats[1] == URLFormat.URLNORM);
+		} catch(InvalidURLNormException e){
+			fail("At least one format is null!");
+		}
+		try{
+			impressions = url001.getImpressions();
+			assertTrue("The first format has the wrong impressions!", impressions[0] == 0);
+			assertTrue("The second format has the wrong impressions!", impressions[1] == 0);
+		} catch(InvalidURLNormException e){
+			fail("At least one format is null!");
+		}
+		// Hard normalisation
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, true);
+		formats = new URLFormat[2];
 		try{
 			url001.getUrl();
 			fail("Did not throw an exception when one was needed!");
@@ -61,14 +85,39 @@ public class URLNormTest extends TestCase {
 	}
 
 	public void testURLNormURLElementURLFormat() {
+		// Soft normalisation
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		URLNorm url001 = new URLNorm(element001, URLFormat.URLNORM);
+		URLNorm url001 = new URLNorm(element001, URLFormat.URLNORM, false);
 		URLFormat formats[] = new URLFormat[2];
 		String theUrl;
 		int[] impressions;
 		try{
 			theUrl = url001.getUrl();
 			assertTrue("The URL is not correct!", theUrl.equals("/path1/path2/file.ext"));
+		} catch(InvalidURLNormException e){
+			fail("The URL is null!");
+		}
+		try{
+			formats = url001.getFormats();
+			assertTrue("The first format is wrong!", formats[0] == URLFormat.WTKDEF);
+			assertTrue("The second format is wrong!", formats[1] == URLFormat.URLNORM);
+		} catch(InvalidURLNormException e){
+			fail("At least one format is null!");
+		}
+		try{
+			impressions = url001.getImpressions();
+			assertTrue("The first format has the wrong impressions!", impressions[0] == 1200);
+			assertTrue("The second format has the wrong impressions!", impressions[1] == 0);
+		} catch(InvalidURLNormException e){
+			fail("At least one format is null!");
+		}
+		// Hard normalisation
+		element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		url001 = new URLNorm(element001, URLFormat.URLNORM, true);
+		formats = new URLFormat[2];
+		try{
+			theUrl = url001.getUrl();
+			assertTrue("The URL is not correct!", theUrl.equals("/path1/path2/file"));
 		} catch(InvalidURLNormException e){
 			fail("The URL is null!");
 		}
@@ -89,8 +138,9 @@ public class URLNormTest extends TestCase {
 	}
 
 	public void testURLNormURLFormatURLFormatURLElement() {
+		// Soft normalisation
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001, false);
 		URLFormat formats[] = new URLFormat[2];
 		String theUrl;
 		int[] impressions;
@@ -114,11 +164,36 @@ public class URLNormTest extends TestCase {
 		} catch(InvalidURLNormException e){
 			fail("At least one format is null!");
 		}
+		// Hard normalisation
+		element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001, true);
+		formats = new URLFormat[2];
+		try{
+			theUrl = url001.getUrl();
+			assertTrue("The URL is not correct!", theUrl.equals("/path1/path2/file"));
+		} catch(InvalidURLNormException e){
+			fail("The URL is null!");
+		}
+		try{
+			formats = url001.getFormats();
+			assertTrue("The first format is wrong!", formats[0] == URLFormat.WTKDEF);
+			assertTrue("The second format is wrong!", formats[1] == URLFormat.URLNORM);
+		} catch(InvalidURLNormException e){
+			fail("At least one format is null!");
+		}
+		try{
+			impressions = url001.getImpressions();
+			assertTrue("The first format has the wrong impressions!", impressions[0] == 1200);
+			assertTrue("The second format has the wrong impressions!", impressions[1] == 0);
+		} catch(InvalidURLNormException e){
+			fail("At least one format is null!");
+		}
 	}
 
 	public void testGetUrl() {
+		// Soft normalisation
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM);
+		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
 		String theUrl;
 		try{
 			url001.getUrl();
@@ -133,6 +208,22 @@ public class URLNormTest extends TestCase {
 		} catch(InvalidURLNormException e){
 			fail("The URL is null!");
 		}
+		// Hard normalisation
+		element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, true);
+		try{
+			url001.getUrl();
+			fail("Did not throw an exception when one was needed!");
+		} catch(InvalidURLNormException e){
+			assertTrue("The URL is not null!", e.getMessage().equals("url not defined!"));
+		}
+		url001.add(element001);
+		try{
+			theUrl = url001.getUrl();
+			assertTrue("The URL is not correct!", theUrl.equals("/path1/path2/file"));
+		} catch(InvalidURLNormException e){
+			fail("The URL is null!");
+		}
 	}
 
 	public void testSetFormat() {
@@ -144,17 +235,19 @@ public class URLNormTest extends TestCase {
 	}
 
 	public void testAdd() {
+		// Soft Normalisation
 		URLNorm url001 = new URLNorm();
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
 		URLElement element002 = new URLElement("http://www.domain.com/path1/path2/file2.ext", URLFormat.WTKDEF, 1200);
 		URLElement element003 = new URLElement("http://www.domain.com/path1/path2/file.ext", URLFormat.FULLURL, 1200);
+		URLElement element004 = new URLElement("http://www.domain.com/path1/path2/file", URLFormat.FULLURL, 1200);
 		try{
 			url001.add(element001);
 			fail("Did not throw an exception when one was needed!");
 		} catch(InvalidURLNormException e){
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to add an element without defining both formats."));
 		}
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
 		url001.add(element001);
 		assertTrue("The element was not added correctly!", url001.getImpressions()[0] == 1200);
 		try{
@@ -169,6 +262,47 @@ public class URLNormTest extends TestCase {
 		} catch(RuntimeException e){
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to add a URLElement in the wrong format to a URLNorm instance!"));
 		}
+		try{
+			url001.add(element004);
+			fail("Did not throw an exception when one was needed!");
+		} catch(RuntimeException e){
+			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Wrong URL!"));
+		}
+		// Hard Normalisation
+		url001 = new URLNorm();
+		element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		element002 = new URLElement("http://www.domain.com/path1/path2/file2.ext", URLFormat.WTKDEF, 1200);
+		element003 = new URLElement("http://www.domain.com/path1/path2/file.ext", URLFormat.FULLURL, 1200);
+		element004 = new URLElement("http://www.domain.com/path1/path2/file", URLFormat.URLNORM, 1200);
+		try{
+			url001.add(element001);
+			fail("Did not throw an exception when one was needed!");
+		} catch(InvalidURLNormException e){
+			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to add an element without defining both formats."));
+		}
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, true);
+		url001.add(element001);
+		assertTrue("The element was not added correctly!", url001.getImpressions()[0] == 1200);
+		try{
+			url001.add(element002);
+			fail("Did not throw an exception when one was needed!");
+		} catch(InvalidURLNormException e){
+			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Wrong URL!"));
+		}
+		try{
+			url001.add(element003);
+			fail("Did not throw an exception when one was needed!");
+		} catch(RuntimeException e){
+			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to add a URLElement in the wrong format to a URLNorm instance!"));
+		}
+		try{
+			url001.add(element004);
+		} catch(RuntimeException e){
+			System.out.println(url001.getUrl());
+			System.out.println(element004.normalise(true));
+			fail("Did not add a URL that should have been if the hard normalisation was used properly: " + e.getMessage());
+		}
+
 	}
 
 	public void testIsMissingURLFormat() {

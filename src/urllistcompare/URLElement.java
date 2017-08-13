@@ -8,14 +8,19 @@ import java.io.Serializable;
 import urllistcompare.exceptions.InvalidUrlException;
 
 /**
- * @author Rocco Barbini
- * @email roccobarbi@gmail.com
+ * @author Rocco Barbini (roccobarbi@gmail.com)
  * 
  * A single URL in a specific format: once created it can't be modified.
  * This is the basic building bloc of the whole program: each url is read into a URLElement, then added
  * to the URLMap based on its normalised path and format.
  * 
  * If the url field is null, it's a signal that the element is broken and MUST NOT be used.
+ * 
+ * If the URLElement is normalised without passing any arguments, soft normalisation is used by default. This behaviour is defined
+ * to ensure compatibility with legacy code.
+ * If the URLElement is normalised by passing a boolean value as an argument (true = noExtension, false = keep the extension), the
+ * appropriate type of normalisation is guaranteed. This is the recommended usage for the normalise method.
+ * The same goes for normalHashCode.
  * 
  * Note: this class has a natural ordering that is inconsistent with equals.
  *
@@ -69,12 +74,22 @@ public class URLElement implements Comparable<Object>, Serializable{
 	
 	/**
 	 * 
-	 * @return the normalised path for this URL
+	 * @return the soft-normalised path for this URL (it keeps the file extension)
 	 * @throws InvalidUrlException
 	 */
 	public String normalise() {
 		if(url == null) throw new InvalidUrlException("The url is null, it can't be normalised!");
 		return format.normalisePath(url);
+	}
+	
+	/**
+	 * 
+	 * @return if the parameter is true, the hard-normalised path for this URL (it removes the file extension), otherwise the soft-normalised version (it keeps the file extension)
+	 * @throws InvalidUrlException
+	 */
+	public String normalise(boolean noExtension) {
+		if(url == null) throw new InvalidUrlException("The url is null, it can't be normalised!");
+		return format.normalisePath(url, noExtension);
 	}
 	
 	/**
@@ -139,10 +154,26 @@ public class URLElement implements Comparable<Object>, Serializable{
 		return url.hashCode();
 	}
 	
+	/**
+	 * 
+	 * @return the hashCode of the normalised URL (it keeps the extension)
+	 */
 	public int normalHashCode(){
 		if (url == null){
 			throw new InvalidUrlException("Tried to get the hashcode of a URLElement with no url!");
 		}
 		return format.normalisePath(url).hashCode();
+	}
+	
+	/**
+	 * 
+	 * @param noExtension true if the extension must be removed
+	 * @return the hashCode of the normalised URL (the extension is removed if the parameter is true)
+	 */
+	public int normalHashCode(boolean noExtension){
+		if (url == null){
+			throw new InvalidUrlException("Tried to get the hashcode of a URLElement with no url!");
+		}
+		return format.normalisePath(url, noExtension).hashCode();
 	}
 }
