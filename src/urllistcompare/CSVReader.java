@@ -10,6 +10,8 @@ import java.io.EOFException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import urllistcompare.util.Parser;
+
 /**
  * @author Rocco Barbini (roccobarbi@gmail.com)
  * 
@@ -414,13 +416,11 @@ public class CSVReader {
 					if(k > 0 || !headers){
 						page = row.split(Character.toString(vSep))[urlI];
 						impString = row.split(Character.toString(vSep))[impI];
-						impStringB = new StringBuilder();
-						for(String s : impString.split(Pattern.quote(Character.toString(tSep)))) {
-							impStringB.append(s);
+						try{
+							impressions = Parser.parseInt(impString, isTSep ? tSep : 0, dSep);
+						} catch (Exception e) {
+							System.out.println("Error parsing the impressions at line " + k + ": " + e.getMessage());
 						}
-						impString = impStringB.toString();
-						if(dSep != '.') impString.replace(dSep, '.');
-						impressions = Integer.parseInt(impString);
 						element = new URLElement(page, format, impressions);
 						destination.add(element);
 					}
