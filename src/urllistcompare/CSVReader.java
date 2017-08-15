@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.EOFException;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 import urllistcompare.util.Parser;
 
@@ -420,6 +419,7 @@ public class CSVReader {
 							impressions = Parser.parseInt(impString, isTSep ? tSep : 0, dSep);
 						} catch (Exception e) {
 							System.out.println("Error parsing the impressions at line " + k + ": " + e.getMessage());
+							System.exit(1);
 						}
 						element = new URLElement(page, format, impressions);
 						destination.add(element);
