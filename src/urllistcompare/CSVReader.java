@@ -447,34 +447,62 @@ public class CSVReader {
 	 * @param vSep the value separator for the file
 	 * @return a String array with the columns
 	 */
-	private String[] readLine(String line, char vSep){
+	private String[] readLine(String line, char vSep) throws Exception{
 		StringBuilder tempCol = null;
 		ArrayList <String> output = new ArrayList <String> ();
 		boolean dQuote = false; // Flag: a doublequote has been opened.
 		boolean column = false; // Flag: a column is already being read
 		char [] input = line.toCharArray();
 		for(int c = 0; c < input.length; c++){
-			// Read a character, if it's the first one of the column, check it
 			if(!column){
-				if(c == '"'){
-					// If it is a double quote, jump to the next and flag dQuote
+				// If the character is the first one in a column (the column flag is false)
+				if(input[c] == '"'){
+					// If it is a double quote, jump to the next and set the dQuote flag to true
 					dQuote = true;
 					column = true;
-				} else if(c == vSep){
+					// Reset tempCol
+					tempCol = new StringBuilder();
+				} else if(c != vSep){
+					// If it is a vSep, do nothing. Otherwise, read it and go on.
+					// Also, set the column flag to true to mark that a column is being read.
 					column = true;
-				} else {
-					// Otherwise, unless it'a a vSep, read it and go on
-					column = true;
-					tempCol.append(c);
+					// Reset tempCol
+					tempCol = new StringBuilder();
+					// Read the character
+					tempCol.append(input[c]);
 				}
-			} else if (dQuote) {
-				// If it's not the first one, and dQuote is flagged
-				// Check the next character, if it is a doublequote read one of them and add 1 to i
-				// If not, and it's a vSep unflag column and dQuote and add tempCol to the output
-				// Otherwise, there's somehting wrong with the file
-			} else {
-				// If it is a vSep, unflag column and add tempCol to the output
-				// Otherwise, just read it
+			} else{
+				// If the character is not the first one in a column (the column flag is true)
+				if(dQuote && input[c] == '"'){
+					// If it is a doublequote and the column is double quoted (the dQuote flag is true)
+					if (input.length == c || input[c+ 1] == vSep) {
+						// If it's the last character in the input or the next one is a vSep
+						// Unflag dQuote and column
+						dQuote = false;
+						column = false;
+						// If it is not the last character in the input, move one additional character forward
+						if(input.length > c)
+							c++;
+						// Add tempCol to the output
+						output.add(tempCol.toString());
+					} else if(input[c+ 1] == '"'){
+						// If the next character is a doublequote read one of them and add 1 to i
+						tempCol.append('"');
+						c++;
+					} else {
+						// Otherwise, there's something wrong with the file
+						throw new Exception ("Unescaped doublequote at character " + c + " of a doublequoted sequence!");
+					}
+				} else if (!dQuote && input[c] == vSep){
+					// If it is a vSep AND the column is not double quoted (the dQuote flag is false)
+					// Unflag column
+					column = false;
+					// Add tempCol to the output
+					output.add(tempCol.toString());
+				} else {
+					// In any other case, just read the character
+					tempCol.append(input[c]);
+				}
 			}
 		}
 		return output.toArray(new String[0]);
