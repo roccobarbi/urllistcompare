@@ -447,7 +447,7 @@ public class CSVReader {
 	 * @param vSep the value separator for the file
 	 * @return a String array with the columns
 	 */
-	private String[] readLine(String line, char vSep) throws Exception{
+	private String[] readCSVLine(String line, char vSep) throws Exception{
 		StringBuilder tempCol = null;
 		ArrayList <String> output = new ArrayList <String> ();
 		boolean dQuote = false; // Flag: a doublequote has been opened.
