@@ -382,6 +382,9 @@ public class CSVReader {
 		boolean output = false;
 		Scanner inputStream;
 		int impressions = 0;
+		int columns = 0; // To perform a consistency check based on the first line
+		String [] line = null; // To temporarily save the line as a String array
+		String row; // To store the row as it is received from the file 
 		String impString;
 		StringBuilder impStringB;
 		String page;
@@ -397,7 +400,6 @@ public class CSVReader {
 				return false;
 			}
 			try{
-				String row;
 				while(true){
 					if(!inputStream.hasNextLine())
 						throw new EOFException("End of file reached!");
@@ -410,12 +412,17 @@ public class CSVReader {
 								break;
 							}
 						}
+						// Count the number of columns that are to be expected
+						columns = readCSVLine(row, vSep).length;
 					}
 					// If there are no headers, parse the first line
 					// All other lines are parsed
 					if(k > 0 || !headers){
-						page = row.split(Character.toString(vSep))[urlI];
-						impString = row.split(Character.toString(vSep))[impI];
+						line = readCSVLine(row, vSep);
+						if(line.length != columns)
+							throw new Exception ("Wrong number of columns at line " + k);
+						page = line[urlI];
+						impString = line[impI];
 						try{
 							impressions = Parser.parseInt(impString, isTSep ? tSep : 0, dSep);
 						} catch (Exception e) {
@@ -431,6 +438,8 @@ public class CSVReader {
 				System.out.println("File " + source + " letto correttamente!");
 			} catch (IOException e) {
 				System.out.println("Errore nella lettura da " + source);
+			} catch (Exception e) {
+				System.out.println("Errore nella lettura da " + source + ": " + e.getMessage());
 			} finally {
 				inputStream.close();
 			}
