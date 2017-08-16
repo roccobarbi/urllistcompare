@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.EOFException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import urllistcompare.util.Parser;
@@ -436,6 +437,47 @@ public class CSVReader {
 			output = true;
 		}
 		return output;
+	}
+	
+	/**
+	 * Parses a line of the input file and returns a String array with each column.
+	 * After the line has been parsed, the program should check that the number of columns is coherent with the document.
+	 * 
+	 * @param line the line from the input file
+	 * @param vSep the value separator for the file
+	 * @return a String array with the columns
+	 */
+	private String[] readLine(String line, char vSep){
+		StringBuilder tempCol = null;
+		ArrayList <String> output = new ArrayList <String> ();
+		boolean dQuote = false; // Flag: a doublequote has been opened.
+		boolean column = false; // Flag: a column is already being read
+		char [] input = line.toCharArray();
+		for(int c = 0; c < input.length; c++){
+			// Read a character, if it's the first one of the column, check it
+			if(!column){
+				if(c == '"'){
+					// If it is a double quote, jump to the next and flag dQuote
+					dQuote = true;
+					column = true;
+				} else if(c == vSep){
+					column = true;
+				} else {
+					// Otherwise, unless it'a a vSep, read it and go on
+					column = true;
+					tempCol.append(c);
+				}
+			} else if (dQuote) {
+				// If it's not the first one, and dQuote is flagged
+				// Check the next character, if it is a doublequote read one of them and add 1 to i
+				// If not, and it's a vSep unflag column and dQuote and add tempCol to the output
+				// Otherwise, there's somehting wrong with the file
+			} else {
+				// If it is a vSep, unflag column and add tempCol to the output
+				// Otherwise, just read it
+			}
+		}
+		return output.toArray(new String[0]);
 	}
 
 }
