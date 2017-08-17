@@ -418,7 +418,11 @@ public class CSVReader {
 					// If there are no headers, parse the first line
 					// All other lines are parsed
 					if(k > 0 || !headers){
-						line = readCSVLine(row, vSep);
+						try{
+							line = readCSVLine(row, vSep);
+						} catch (Exception e) {
+							throw new Exception("Consistency error within the file " + source + " at line " + k + ": " + e.getMessage());
+						}
 						if(line.length != columns)
 							throw new Exception ("Wrong number of columns at line " + k);
 						page = line[urlI];
@@ -439,7 +443,10 @@ public class CSVReader {
 			} catch (IOException e) {
 				System.out.println("Errore nella lettura da " + source);
 			} catch (Exception e) {
-				System.out.println("Errore nella lettura da " + source + ": " + e.getMessage());
+				// Close the input stream
+				inputStream.close();
+				// Stop all engines, but in a way that can be catched
+				throw new RuntimeException("Unrecoverable error while reading " + source + ": " + e.getMessage());
 			} finally {
 				inputStream.close();
 			}
@@ -457,60 +464,69 @@ public class CSVReader {
 	 * @return a String array with the columns
 	 */
 	private String[] readCSVLine(String line, char vSep) throws Exception{
-		StringBuilder tempCol = null;
+		StringBuilder tempCol = new StringBuilder();
 		ArrayList <String> output = new ArrayList <String> ();
 		boolean dQuote = false; // Flag: a doublequote has been opened.
 		boolean column = false; // Flag: a column is already being read
 		char [] input = line.toCharArray();
 		for(int c = 0; c < input.length; c++){
-			if(!column){
-				// If the character is the first one in a column (the column flag is false)
+			if(dQuote){
+				// If there is an open double quote
 				if(input[c] == '"'){
-					// If it is a double quote, jump to the next and set the dQuote flag to true
-					dQuote = true;
-					column = true;
-					// Reset tempCol
-					tempCol = new StringBuilder();
-				} else if(c != vSep){
-					// If it is a vSep, do nothing. Otherwise, read it and go on.
-					// Also, set the column flag to true to mark that a column is being read.
-					column = true;
-					// Reset tempCol
-					tempCol = new StringBuilder();
-					// Read the character
-					tempCol.append(input[c]);
-				}
-			} else{
-				// If the character is not the first one in a column (the column flag is true)
-				if(dQuote && input[c] == '"'){
-					// If it is a doublequote and the column is double quoted (the dQuote flag is true)
+					// If another doublequote is encountered
 					if (input.length == c || input[c+ 1] == vSep) {
 						// If it's the last character in the input or the next one is a vSep
-						// Unflag dQuote and column
+						// Unflag dQuote
 						dQuote = false;
-						column = false;
 						// If it is not the last character in the input, move one additional character forward
 						if(input.length > c)
 							c++;
 						// Add tempCol to the output
 						output.add(tempCol.toString());
+						// Reset tempCol
+						tempCol.delete(0, tempCol.length());
 					} else if(input[c+ 1] == '"'){
-						// If the next character is a doublequote read one of them and add 1 to i
+						// If the next character is a doublequote read one of them and add 1 to c
 						tempCol.append('"');
 						c++;
 					} else {
 						// Otherwise, there's something wrong with the file
 						throw new Exception ("Unescaped doublequote at character " + c + " of a doublequoted sequence!");
 					}
-				} else if (!dQuote && input[c] == vSep){
-					// If it is a vSep AND the column is not double quoted (the dQuote flag is false)
-					// Unflag column
-					column = false;
-					// Add tempCol to the output
+				} else if(input.length == c + 1){
+					// If this is the last character in the line and it is not a doublequote
+					// Then something is wrong with the file
+					throw new Exception ("Double quoted sequence not closed at the end of the line!");
+				} else {
+					// Otherwise just read the character and move on
+					tempCol.append(input[c]);
+				}
+			} else {
+				// If there is not an open double quote
+				if (input[c] == vSep){
+					// If the current char is a vSep
+					// Otherwise add tempCol to the output
 					output.add(tempCol.toString());
+					if(input.length == c + 1){
+						// If this was the last character in the line
+						// Add an empty string to the output
+						output.add("");
+					} else if (input[c + 1] == '"'){
+						// If the new column starts with a double quote
+						// Flag dQuote and jump one character farther
+						dQuote = true;
+						c++;
+					}
+					// Reset tempCol
+					tempCol.delete(0, tempCol.length());
 				} else {
 					// In any other case, just read the character
 					tempCol.append(input[c]);
+					if(input.length == c + 1){
+						// If this was the last character in the line
+						// Add tempCol to the output
+						output.add(tempCol.toString());
+					}
 				}
 			}
 		}
