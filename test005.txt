@@ -1,0 +1,11 @@
+Pages;Page Impressions
+"https://www.e-pitti.com/en/fieradigitale/fairs/pittiuomo92/search.html";1.543
+"https://www.e-pitti.com/en/fieradigitale/fairs/pittiuomo92.html";892
+"https://www.e-pitti.com/it/fieradigitale/login.html";729
+"https://www.e-pitti.com/en/fieradigitale.html";671
+"https://www.e-pitti.com/en/fieradigitale/errors/404.html";534
+"https://www.e-pitti.com/it/fieradigitale/fairs/pittiuomo92.""html";398
+"https://www.e-pitti.com/it/fieradigitale/fairs/pittiuomo92/search.html";396
+"https://www.e-pitti.com/it/fieradigitale.html";392
+"https://www.e-pitti.com/fieradigitale/login.html";326
+"https://www.e-pitti.com/en/fieradigitale/our-brands/pitti-uomo-brands.html";301
