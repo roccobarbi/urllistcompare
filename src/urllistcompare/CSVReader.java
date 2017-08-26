@@ -386,7 +386,6 @@ public class CSVReader {
 		String [] line = null; // To temporarily save the line as a String array
 		String row; // To store the row as it is received from the file 
 		String impString;
-		StringBuilder impStringB;
 		String page;
 		URLElement element;
 		int k = 0;
@@ -430,8 +429,7 @@ public class CSVReader {
 						try{
 							impressions = Parser.parseInt(impString, isTSep ? tSep : 0, dSep);
 						} catch (Exception e) {
-							System.out.println("Error parsing the impressions at line " + k + ": " + e.getMessage());
-							System.exit(1);
+							throw new Exception("Error parsing the impressions at line " + k + ": " + e.getMessage());
 						}
 						element = new URLElement(page, format, impressions);
 						destination.add(element);
@@ -520,12 +518,18 @@ public class CSVReader {
 					// Reset tempCol
 					tempCol.delete(0, tempCol.length());
 				} else {
-					// In any other case, just read the character
-					tempCol.append(input[c]);
-					if(input.length == c + 1){
-						// If this was the last character in the line
-						// Add tempCol to the output
-						output.add(tempCol.toString());
+					// if it's a first character and a double quote
+					if (c == 0 && input[c] == '"') {
+						// flag dQuote
+						dQuote = true;
+					} else {
+						// In any other case, just read the character
+						tempCol.append(input[c]);
+						if(input.length == c + 1){
+							// If this was the last character in the line
+							// Add tempCol to the output
+							output.add(tempCol.toString());
+						}
 					}
 				}
 			}
