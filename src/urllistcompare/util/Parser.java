@@ -39,6 +39,8 @@ public final class Parser {
 				noTSepSB.append(s);
 			}
 			noTSep = noTSepSB.toString();
+		} else {
+			noTSep = input;
 		}
 		// If the decimal separator is used...
 		if(dSep > 0 && noTSep.contains(Character.toString(dSep))){
