@@ -30,7 +30,7 @@ import urllistcompare.util.ArraySort;
  *
  */
 public class URLNorm implements Serializable {
-
+	
 	private HashSet<URLElement> elements[];
 	private int impressions[];
 	private URLFormat format[];
