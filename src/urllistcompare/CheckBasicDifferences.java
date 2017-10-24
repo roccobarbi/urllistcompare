@@ -24,15 +24,17 @@ import urllistcompare.unittests.URLFormatTest;
 import urllistcompare.util.ArraySort;
 
 /**
- * @author Rocco Barbini (roccobarbi@gmail.com)
+ * This class provides a command line interface that allows users to compare two
+ * lists of URLs and check if which ones are different (excluding any missing
+ * ones, which are covered by CheckMissing).
  * 
- *         This class provides a command line interface that allows users to
- *         compare two lists of URLs and check if which ones are different
- *         (excluding any missing ones, which are covered by CheckMissing
+ * @author Rocco Barbini (roccobarbi@gmail.com)
  *
  */
 public class CheckBasicDifferences {
 
+	//TODO: improve output with totals per format and sample urls per format
+	
 	private static final int CARDINALITY = 2;
 	private static final String VSEPARATORS = ".,;:_/|\"'"; // Used to validate
 															// non-escaped
@@ -135,9 +137,9 @@ public class CheckBasicDifferences {
 	private static void
 		printOnScreen() {
 		System.out.println();
-		System.out.println(differences.length
-				+ " elements show different values between " + fileNames[0]
-				+ " and " + fileNames[1]);
+		System.out.println(
+				differences.length + " elements show different values between "
+						+ fileNames[0] + " and " + fileNames[1]);
 		System.out.println("Top 5: ");
 		for (int k = 0; k < 5 && k < differences.length; k++) {
 			System.out.println(differences[k].getUrl() + "\t"
@@ -174,9 +176,9 @@ public class CheckBasicDifferences {
 		if (differences.length > 0) {
 			outputStream.println("url" + oSep + "delta" + oSep + "delta %");
 			for (int k = 0; k < differences.length; k++) {
-				outputStream.println(differences[k].getUrl()
-						+ oSep + differences[k].getDifference()
-						+ oSep + differences[k].getDifferencePercent());
+				outputStream.println(differences[k].getUrl() + oSep
+						+ differences[k].getDifference() + oSep
+						+ differences[k].getDifferencePercent());
 			}
 		}
 		outputStream.println();
