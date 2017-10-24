@@ -223,11 +223,16 @@ public class URLNorm implements Serializable {
 	 */
 	public double
 		getDifferencePercent() {
+		double output = 0.0;
 		if (format[0] == null || format[1] == null)
 			throw new InvalidURLNormException(
 					"Tried to check the difference between the formats"
 							+ " without defining both formats.");
-		return (double) getDifference() / (double) impressions[1];
+		if (impressions[1] != 0)
+			output = (double) getDifference() / (double) impressions[1];
+		else
+			output = (double) impressions[0] / 1.0;
+		return output;
 	}
 
 	/**
@@ -249,11 +254,17 @@ public class URLNorm implements Serializable {
 					"Tried to check if a format is missing"
 							+ "with a format that is not included in this URLNorm instance.");
 		if (f == format[0]) {
-			output = (double) getDifference(format[0])
-					/ (double) impressions[1];
+			if (impressions[1] != 0)
+				output = (double) getDifference(format[0])
+						/ (double) impressions[1];
+			else
+				output = (double) impressions[0] / 1.0;
 		} else {
-			output = (double) getDifference(format[1])
-					/ (double) impressions[0];
+			if (impressions[0] != 0)
+				output = (double) getDifference(format[1])
+						/ (double) impressions[0];
+			else
+				output = (double) impressions[1] / 1.0;
 		}
 		return output;
 	}

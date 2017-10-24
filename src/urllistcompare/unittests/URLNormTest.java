@@ -386,6 +386,48 @@ public class URLNormTest extends TestCase {
 		url001.add(element002);
 		assertTrue("Wrong difference: " + url001.getDifference(URLFormat.URLNORM), url001.getDifference(URLFormat.URLNORM) == 300);
 	}
+	
+	public void testGetDifferencePercent() {
+		URLNorm url001 = new URLNorm();
+		try{
+			url001.getDifferencePercent();
+			fail("Did not throw an exception when one was needed!");
+		} catch(InvalidURLNormException e){
+			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to check the difference between the formats without defining both formats."));
+		}
+		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001, false);
+		assertTrue("Wrong difference: " + url001.getDifferencePercent(), url001.getDifferencePercent() == 1200);
+		URLElement element002 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 100);
+		url001.add(element002);
+		element002 = new URLElement("http://www.domain.com/path1/path2/file.ext", URLFormat.URLNORM, 1300);
+		url001.add(element002);
+		assertTrue("Wrong difference: " + url001.getDifferencePercent(), Math.abs(url001.getDifferencePercent()) - 0.000 < 0.0001);
+		element002 = new URLElement("http://www.domain.com/path1/path2/file.ext", URLFormat.URLNORM, 300);
+		url001.add(element002);
+		assertTrue("Wrong difference: " + url001.getDifferencePercent(), Math.abs(url001.getDifferencePercent()) - 0.1875 < 0.0001);
+	}
+	
+	public void testGetDifferencePercentURLFormat() {
+		URLNorm url001 = new URLNorm();
+		try{
+			url001.getDifference(URLFormat.URLNORM);
+			fail("Did not throw an exception when one was needed!");
+		} catch(InvalidURLNormException e){
+			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to check the difference between the formats without defining both formats."));
+		}
+		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001, false);
+		assertTrue("Wrong difference: " + url001.getDifferencePercent(URLFormat.URLNORM), url001.getDifferencePercent(URLFormat.URLNORM) == -1);
+		URLElement element002 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 100);
+		url001.add(element002);
+		element002 = new URLElement("http://www.domain.com/path1/path2/file.ext", URLFormat.URLNORM, 1300);
+		url001.add(element002);
+		assertTrue("Wrong difference: " + url001.getDifferencePercent(URLFormat.URLNORM), Math.abs(url001.getDifferencePercent(URLFormat.URLNORM)) - 0.000 < 0.0001);
+		element002 = new URLElement("http://www.domain.com/path1/path2/file.ext", URLFormat.URLNORM, 300);
+		url001.add(element002);
+		assertTrue("Wrong difference: " + url001.getDifferencePercent(URLFormat.URLNORM), Math.abs(url001.getDifferencePercent(URLFormat.URLNORM)) - 0.2308 < 0.0001);
+	}
 
 	public void testGetUrlElementsInt() {
 		URLNorm url001 = new URLNorm();
