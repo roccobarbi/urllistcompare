@@ -156,6 +156,13 @@ public class URLList implements Serializable {
 		return output;
 	}
 
+	/**
+	 * 
+	 * @param index
+	 *            the index to check for any missing elements
+	 * @return An array of URLElement objects that are missing the format of the
+	 *         specified index
+	 */
 	public URLElement[]
 		getMissingElements(int index) {
 		if (index < 0 || index >= format.length)
@@ -177,6 +184,13 @@ public class URLList implements Serializable {
 			return output.toArray(new URLElement[1]);
 	}
 
+	/**
+	 * 
+	 * @param f
+	 *            the format to check for any missing elements
+	 * @return An array of URLElement objects that are missing the format
+	 *         specified
+	 */
 	public URLElement[]
 		getMissingElements(URLFormat f) {
 		int index = 0;
