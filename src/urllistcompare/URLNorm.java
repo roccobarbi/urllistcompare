@@ -218,6 +218,47 @@ public class URLNorm implements Serializable {
 	}
 
 	/**
+	 * 
+	 * @return the ratio between the difference (0 - 1) and the impressions (1)
+	 */
+	public double
+		getDifferencePercent() {
+		if (format[0] == null || format[1] == null)
+			throw new InvalidURLNormException(
+					"Tried to check the difference between the formats"
+							+ " without defining both formats.");
+		return (double) getDifference() / (double) impressions[1];
+	}
+
+	/**
+	 * 
+	 * @param f
+	 *            the format to check
+	 * @return the ratio between the difference between f and the other format
+	 *         and the impressions of the other format
+	 */
+	public double
+		getDifferencePercent(URLFormat f) {
+		double output = 0.0;
+		if (format[0] == null || format[1] == null)
+			throw new InvalidURLNormException(
+					"Tried to check the difference between the formats"
+							+ " without defining both formats.");
+		if (format[0] != f && format[1] != f)
+			throw new InvalidURLNormException(
+					"Tried to check if a format is missing"
+							+ "with a format that is not included in this URLNorm instance.");
+		if (f == format[0]) {
+			output = (double) getDifference(format[0])
+					/ (double) impressions[1];
+		} else {
+			output = (double) getDifference(format[1])
+					/ (double) impressions[0];
+		}
+		return output;
+	}
+
+	/**
 	 * If the format is null, it sets it as indicated by the argument. Otherwise
 	 * the format becomes read-only.
 	 * 
