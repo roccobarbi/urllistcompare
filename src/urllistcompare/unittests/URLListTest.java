@@ -212,4 +212,70 @@ public class URLListTest {
 		assertFalse("After calling remExtension, the versions wit extension is present in the list contents.", list001.keySet().contains("/folder/file.ext"));
 	}
 	
+	@Test
+	public void testgetDifferentURLsInt() {
+		System.out.println();
+		System.out.println("==========================");
+		System.out.println("| testgetDifferentURLsInt |");
+		System.out.println("==========================");
+		System.out.println();
+		URLList list001 = new URLList();
+		URLNorm output001[];
+		URLNorm output002[];
+		list001.setFormat(0, URLFormat.WTKDEF);
+		list001.setFormat(1, URLFormat.URLNORM);
+		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
+		URLElement element002 = new URLElement("www_domain_com.path1.path2.file2_ext", URLFormat.WTKDEF, 1200);
+		URLElement element003 = new URLElement("www.domain.com/path1/path2/file.ext", URLFormat.URLNORM, 1205);
+		URLElement element004 = new URLElement("www.domain.com/path1/path2/file2.ext", URLFormat.URLNORM, 200);
+		list001.add(element001);
+		list001.add(element002);
+		list001.add(element003);
+		list001.add(element004);
+		URLNorm norm001;
+		System.out.println(">>>> Checking keys and elements...");
+		System.out.println();
+		for(String e : list001.keySet()){
+			System.out.println("KEY: " + e);
+			norm001 = list001.getUrlNorm(e);
+			System.out.println(norm001);
+		}
+		System.out.println("<<<< Keys and elements checked!");
+		System.out.println();
+		try{
+			list001.getDifferentURLs(-1);
+			fail("Did not throw an exception with wrong index: -1.");
+		} catch(IndexOutOfBoundsException e) {
+			// passed
+		}
+		try{
+			list001.getDifferentURLs(2);
+			fail("Did not throw an exception with wrong index: 2.");
+		} catch(IndexOutOfBoundsException e) {
+			// passed
+		}
+		output001 = list001.getDifferentURLs(0);
+		output002 = list001.getDifferentURLs(1);
+		System.out.println(">>>> Checking output 001...");
+		System.out.println();
+		for(URLNorm e : output001){
+			System.out.println(e);
+		}
+		System.out.println("<<<< Output 001 checked!");
+		System.out.println();
+		assertTrue("Wrong length for output001: " + output001.length, output001.length == 1);
+		System.out.println(">>> output001[0].getUrl()");
+		System.out.println(output001[0].getUrl());
+		System.out.println(">>> element002.normalise()");
+		System.out.println(element002.normalise());
+		assertTrue("Wrong first element in output001", output001[0].getUrl().equals(element002.normalise()));
+		System.out.println(">>>> Checking output 002...");
+		System.out.println();
+		for(URLNorm e : output002){
+			System.out.println(e);
+		}
+		System.out.println("<<<< Output 002 checked!");
+		assertTrue("Wrong length for output002: " + output002.length, output002.length == 1);
+	}
+	
 }

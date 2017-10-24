@@ -21,6 +21,11 @@ import urllistcompare.exceptions.InvalidURLNormException;
  */
 public class URLList implements Serializable {
 
+	// Default threshold for absolute differences (if less than 10, ignore)
+	public static final int DEF_ABS_THRESHOLD = 10;
+	// Default threshold for percent differences (if less than 0.01, ignore)
+	public static final double DEF_PER_THRESHOLD = 0.01;
+
 	private HashMap<String, URLNorm> url;
 	private URLFormat[] format;
 	private boolean active;
@@ -209,6 +214,39 @@ public class URLList implements Serializable {
 		}
 		return getMissingElements(index);
 	}
+
+	/**
+	 * 
+	 * @param index
+	 *            the index to be checked
+	 * @return an array of deep copies of those URLNorm objects in which the
+	 *         difference between the format with the specified index and the
+	 *         other format exceeds the default thresholds
+	 */
+	public URLNorm[]
+		getDifferentURLs(int index) {
+		if (index < 0 || index >= format.length)
+			throw new IndexOutOfBoundsException();
+		if (!isActive())
+			throw new InvalidURLListException("URLList not active!");
+		ArrayList<URLNorm> output = new ArrayList<URLNorm>(100);
+		int tempAbsDiff = 0;
+		double tempPerDiff = 0.0;
+		URLNorm tempUrl = null;
+		for (String k : url.keySet()) {
+			tempUrl = url.get(k);
+			tempAbsDiff = tempUrl.getDifference(format[index]);
+			if (Math.abs(tempAbsDiff) > DEF_ABS_THRESHOLD) {
+				tempPerDiff = tempUrl.getDifferencePercent(format[index]);
+				if (Math.abs(tempPerDiff) > DEF_PER_THRESHOLD) {
+					output.add(new URLNorm(tempUrl)); // Deep copy
+				}
+			}
+		}
+		return output.toArray(new URLNorm[0]);
+	}
+	
+	// TODO: add versions in which you specify the format and thresholds
 
 	/**
 	 * 
