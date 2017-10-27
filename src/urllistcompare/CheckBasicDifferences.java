@@ -33,8 +33,8 @@ import urllistcompare.util.ArraySort;
  */
 public class CheckBasicDifferences {
 
-	//TODO: improve output with totals per format and sample urls per format
-	
+	// TODO: improve output with totals per format and sample urls per format
+
 	private static final int CARDINALITY = 2;
 	private static final String VSEPARATORS = ".,;:_/|\"'"; // Used to validate
 															// non-escaped
@@ -102,6 +102,8 @@ public class CheckBasicDifferences {
 			"pkg home page: <https://github.com/roccobarbi/urllistcompare>",
 			"" };
 
+	private static final String TXT_EXPLANATION_HEADER_001 = " elements are different, excluding all missing elements and those elements whose difference is not significant enough.";
+
 	/**
 	 * Empty: this class only provides a main argument.
 	 */
@@ -152,6 +154,7 @@ public class CheckBasicDifferences {
 	private static void
 		saveResults() {
 		PrintWriter outputStream = null;
+		int [] impressions = null;
 		GregorianCalendar currentTime = new GregorianCalendar();
 		String fileName = outputFileName == null
 				? ("CheckMissing-" + currentTime.getTimeInMillis() + ".txt")
@@ -168,17 +171,30 @@ public class CheckBasicDifferences {
 				.println("Format 1: " + list.getFormat(0).getFormatSample());
 		outputStream
 				.println("Format 2: " + list.getFormat(1).getFormatSample());
-		outputStream.println(differences.length
-				+ " elements are different, excluding all missing elements"
-				+ " and those elements whose difference is not significant"
-				+ " enough.");
+		outputStream.print(differences.length);
+		outputStream.println(TXT_EXPLANATION_HEADER_001);
 		outputStream.println();
 		if (differences.length > 0) {
-			outputStream.println("url" + oSep + "delta" + oSep + "delta %");
+			outputStream.print("url");
+			outputStream.print(oSep);
+			outputStream.print("impressions fmt 1");
+			outputStream.print(oSep);
+			outputStream.print("impressions fmt 2");
+			outputStream.print(oSep);
+			outputStream.print("delta");
+			outputStream.print(oSep);
+			outputStream.println("delta %");
 			for (int k = 0; k < differences.length; k++) {
-				outputStream.println(differences[k].getUrl() + oSep
-						+ differences[k].getDifference() + oSep
-						+ differences[k].getDifferencePercent());
+				impressions = differences[k].getImpressions();
+				outputStream.print(differences[k].getUrl());
+				outputStream.print(oSep);
+				outputStream.print(impressions[0]);
+				outputStream.print(oSep);
+				outputStream.print(impressions[1]);
+				outputStream.print(oSep);
+				outputStream.print(differences[k].getDifference());
+				outputStream.print(oSep);
+				outputStream.println(differences[k].getDifferencePercent());
 			}
 		}
 		outputStream.println();
