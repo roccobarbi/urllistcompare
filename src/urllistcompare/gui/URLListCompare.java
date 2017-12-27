@@ -8,6 +8,7 @@ import urllistcompare.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.GroupLayout.Alignment;
 
 /**
  * This class provides a GUI to load the files, set up a URL List and access the
@@ -20,12 +21,24 @@ public class URLListCompare extends JFrame {
 
 	public URLListCompare() {
 		// Retrieve the top-level container
+		
 		Container cp = getContentPane();
 
+		/*
 		// Set the layout
 		cp.setLayout(new BorderLayout());
+		// */
+		
+		// MAIN PANEL
+		/*
+		JPanel pnl = new JPanel();
+	    GroupLayout l = new GroupLayout(pnl);
+	    pnl.setLayout(l);
+	    l.setAutoCreateGaps(true);
+	    l.setAutoCreateContainerGaps(true);
+	    // */
 
-		// Top Panel
+		// TOP PANEL
 		JPanel topPanel = new JPanel();
 		GroupLayout topLayout = new GroupLayout(topPanel);
 		topLayout.setAutoCreateGaps(true);
@@ -44,7 +57,7 @@ public class URLListCompare extends JFrame {
 		extensionIndicator.setForeground(new Color(85, 107, 47));
 		extensionIndicator.setBackground(new Color(0, 255, 0));
 		extensionIndicator.setEditable(false);
-		JButton extensionToggle = new JButton("Extension Toggle");
+		JButton extensionToggle = new JButton("Toggle");
 		extensionToggle
 				.setToolTipText("Toggle file extensions in the URL List.");
 		extensionToggle.setEnabled(true);
@@ -67,32 +80,53 @@ public class URLListCompare extends JFrame {
 		loadBinary.setPreferredSize(new Dimension(100, 20));
 
 		// Add elements to top panel layout
-		topLayout.setHorizontalGroup(topLayout.createSequentialGroup()
-				.addGroup(topLayout
-						.createParallelGroup(GroupLayout.Alignment.LEADING)
-						.addGroup(topLayout.createSequentialGroup()
-								.addComponent(programStatus)
-								.addComponent(statusIndicator))
-						.addGroup(topLayout.createSequentialGroup()
-								.addComponent(extension)
-								.addComponent(extensionIndicator)
-								.addComponent(extensionToggle))
-						.addGroup(topLayout
-								.createParallelGroup(
-										GroupLayout.Alignment.LEADING)
-								.addComponent(loadFiles)
-								.addComponent(loadBinary))));
-		topLayout.setVerticalGroup(topLayout.createSequentialGroup().addGroup(
-				topLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-				.addComponent(programStatus)
-				.addComponent(statusIndicator)
-				.addComponent(loadFiles))
-				.addGroup(topLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-						.addComponent(extension)
-						.addComponent(extensionIndicator)
-						.addComponent(extensionToggle)
+		// Horizontal
+		GroupLayout.ParallelGroup topHGroup = topLayout.createParallelGroup(Alignment.CENTER);
+		topHGroup.addGroup(topLayout.createSequentialGroup()
+				.addGroup(topLayout.createParallelGroup()
+						.addComponent(programStatus)
+						.addComponent(extension))
+				.addGroup(topLayout.createParallelGroup()
+						.addComponent(statusIndicator)
+						.addComponent(extensionIndicator))
+				.addGroup(topLayout.createParallelGroup()
+						.addComponent(extensionToggle))
+				.addGroup(topLayout.createParallelGroup()
+						.addComponent(loadFiles)
 						.addComponent(loadBinary)));
-
+		topLayout.setHorizontalGroup(topHGroup);
+		topLayout.linkSize(SwingConstants.HORIZONTAL, loadBinary, loadFiles);
+		
+		// Vertical
+        GroupLayout.SequentialGroup topVGroup = topLayout.createSequentialGroup();
+        topVGroup.addGroup(topLayout.createParallelGroup()
+        		.addComponent(programStatus)
+        		.addComponent(statusIndicator)
+        		.addComponent(loadFiles));
+        topVGroup.addGroup(topLayout.createParallelGroup()
+        		.addComponent(extension)
+        		.addComponent(extensionIndicator)
+        		.addComponent(extensionToggle)
+        		.addComponent(loadBinary));
+        topLayout.setVerticalGroup(topVGroup);
+		
+        // LAYOUT OF MAIN CONTAINER
+        /*
+		GroupLayout.ParallelGroup hGroup = l.createParallelGroup(Alignment.CENTER);
+		hGroup.addGroup(l.createSequentialGroup()
+				.addComponent(topPanel));
+		l.setHorizontalGroup(hGroup);
+		
+		GroupLayout.ParallelGroup vGroup = l.createParallelGroup(Alignment.LEADING);
+		vGroup.addGroup(l.createSequentialGroup()
+				.addComponent(topPanel));
+		l.setVerticalGroup(vGroup);
+		
+		// */
+		
+		cp.setLayout(topLayout);
+        
+        /*
 		// Top Panel Add
 		cp.add(topPanel, BorderLayout.NORTH);
 
@@ -123,6 +157,7 @@ public class URLListCompare extends JFrame {
 		});
 		hasHeaderA.setEditable(false);
 		centerPanel.add(hasHeaderA);
+		// */
 
 		// Exit the program when the close-window button clicked
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
