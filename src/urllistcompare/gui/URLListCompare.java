@@ -22,10 +22,19 @@ public class URLListCompare extends JFrame {
 	private final JLabel programStatus;
 	private final JLabel extension;
 
+	JFrame frame; // Main frame
+	JPanel mainPanel; // Main panel
+	BorderLayout mainLayout; // Main layout
+
+	JPanel topPanel; // Top panel
+	GroupLayout topLayout; // Layout for the top panel
+
 	public URLListCompare() {
 
 		programStatus = new JLabel("Program Status");
 		extension = new JLabel("Extension");
+
+		// TOP PANEL ELEMENTS
 
 		// Program Status
 		JTextField statusIndicator = new JTextField("INACTIVE", 10);
@@ -61,53 +70,65 @@ public class URLListCompare extends JFrame {
 		loadBinary.setEnabled(true); // Default when opening the program
 		loadBinary.setPreferredSize(new Dimension(100, 20));
 
-		JFrame frame = new JFrame();
-		JPanel panel = new JPanel();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		GroupLayout layout = new GroupLayout(panel);
-		panel.setLayout(layout);
+		// TOP PANEL
 
-		GroupLayout.ParallelGroup hGroup = layout
+		topPanel = new JPanel();
+		topLayout = new GroupLayout(topPanel);
+		topPanel.setLayout(topLayout);
+		
+		/*
+		JPanel topButtonP = new JPanel();
+		GroupLayout topBPL = new GroupLayout(topButtonP);
+		topButtonP.setLayout(topBPL);
+		topBPL.setHorizontalGroup(topBPL.createParallelGroup(Alignment.TRAILING)
+				.addComponent(loadFiles)
+				.addComponent(loadBinary));
+				*/
+
+		GroupLayout.ParallelGroup hGroup = topLayout
 				.createParallelGroup(Alignment.LEADING);
 
-		hGroup.addGroup(layout.createSequentialGroup()
-				.addGroup(layout.createParallelGroup()
-						.addComponent(programStatus).addComponent(extension))
-				.addGroup(layout.createParallelGroup()
+		hGroup.addGroup(topLayout.createSequentialGroup()
+				.addGroup(topLayout.createParallelGroup()
+						.addComponent(programStatus)
+						.addComponent(extension))
+				.addGroup(topLayout.createParallelGroup()
 						.addComponent(statusIndicator)
 						.addComponent(extensionIndicator))
-				.addGroup(layout.createParallelGroup()
+				.addGroup(topLayout.createParallelGroup()
 						.addComponent(extensionToggle))
-				.addGroup(layout.createParallelGroup().addComponent(loadFiles)
+				.addGroup(topLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(loadFiles)
 						.addComponent(loadBinary)));
-		layout.setHorizontalGroup(hGroup);
-		layout.linkSize(SwingConstants.HORIZONTAL, loadBinary, loadFiles,
+		topLayout.setHorizontalGroup(hGroup);
+		topLayout.linkSize(SwingConstants.HORIZONTAL, loadBinary, loadFiles,
 				statusIndicator, extensionIndicator, extensionToggle);
 
 		// Vertical
-		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
-		vGroup.addGroup(layout.createParallelGroup().addComponent(programStatus)
-				.addComponent(statusIndicator).addComponent(loadFiles));
-		vGroup.addGroup(layout.createParallelGroup().addComponent(extension)
+		GroupLayout.SequentialGroup vGroup = topLayout.createSequentialGroup();
+		vGroup.addGroup(
+				topLayout.createParallelGroup().addComponent(programStatus)
+						.addComponent(statusIndicator).addComponent(loadFiles));
+		vGroup.addGroup(topLayout.createParallelGroup().addComponent(extension)
 				.addComponent(extensionIndicator).addComponent(extensionToggle)
 				.addComponent(loadBinary));
-		layout.setVerticalGroup(vGroup);
-		layout.linkSize(SwingConstants.VERTICAL, loadBinary, loadFiles,
+		topLayout.setVerticalGroup(vGroup);
+		topLayout.linkSize(SwingConstants.VERTICAL, loadBinary, loadFiles,
 				statusIndicator, extensionIndicator, extensionToggle);
 
-		// frame.add(panel);
+		// MAIN PANEL;
+		mainPanel = new JPanel();
+		mainLayout = new BorderLayout();
+		mainPanel.setLayout(mainLayout);
+		mainPanel.add(topPanel, BorderLayout.NORTH);
+		mainPanel.add(new JLabel("second frame"), BorderLayout.SOUTH);
 
-		JPanel panel2 = new JPanel();
-		BorderLayout fLayout = new BorderLayout();
-		panel2.setLayout(fLayout);
-		panel2.add(panel, BorderLayout.NORTH);
-		panel2.add(new JLabel("second frame"), BorderLayout.SOUTH);
-		frame.add(panel2);
-		
+		// MAIN FRAME
+		frame = new JFrame();
+		frame.add(mainPanel);
 		frame.setTitle("Rocco Barbini's URL List Compare");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(1024, 768);
-
 		frame.setVisible(true);
 
 	}
