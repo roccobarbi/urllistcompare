@@ -19,44 +19,26 @@ import javax.swing.GroupLayout.Alignment;
  */
 public class URLListCompare extends JFrame {
 
+	private final JLabel programStatus;
+	private final JLabel extension;
+
 	public URLListCompare() {
-		// Retrieve the top-level container
-		
-		Container cp = getContentPane();
 
-		/*
-		// Set the layout
-		cp.setLayout(new BorderLayout());
-		// */
-		
-		// MAIN PANEL
-		/*
-		JPanel pnl = new JPanel();
-	    GroupLayout l = new GroupLayout(pnl);
-	    pnl.setLayout(l);
-	    l.setAutoCreateGaps(true);
-	    l.setAutoCreateContainerGaps(true);
-	    // */
-
-		// TOP PANEL
-		JPanel topPanel = new JPanel();
-		GroupLayout topLayout = new GroupLayout(topPanel);
-		topLayout.setAutoCreateGaps(true);
-		topLayout.setAutoCreateContainerGaps(true);
+		programStatus = new JLabel("Program Status");
+		extension = new JLabel("Extension");
 
 		// Program Status
-		JLabel programStatus = new JLabel("Program Status");
 		JTextField statusIndicator = new JTextField("INACTIVE", 10);
 		statusIndicator.setForeground(Color.red);
 		statusIndicator.setBackground(Color.orange);
 		statusIndicator.setEditable(false);
 
 		// Extension
-		JLabel extension = new JLabel("Extension");
 		JTextField extensionIndicator = new JTextField("ON", 4);
 		extensionIndicator.setForeground(new Color(85, 107, 47));
 		extensionIndicator.setBackground(new Color(0, 255, 0));
 		extensionIndicator.setEditable(false);
+
 		JButton extensionToggle = new JButton("Toggle");
 		extensionToggle
 				.setToolTipText("Toggle file extensions in the URL List.");
@@ -79,91 +61,55 @@ public class URLListCompare extends JFrame {
 		loadBinary.setEnabled(true); // Default when opening the program
 		loadBinary.setPreferredSize(new Dimension(100, 20));
 
-		// Add elements to top panel layout
-		// Horizontal
-		GroupLayout.ParallelGroup topHGroup = topLayout.createParallelGroup(Alignment.CENTER);
-		topHGroup.addGroup(topLayout.createSequentialGroup()
-				.addGroup(topLayout.createParallelGroup()
-						.addComponent(programStatus)
-						.addComponent(extension))
-				.addGroup(topLayout.createParallelGroup()
+		JFrame frame = new JFrame();
+		JPanel panel = new JPanel();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		GroupLayout layout = new GroupLayout(panel);
+		panel.setLayout(layout);
+
+		GroupLayout.ParallelGroup hGroup = layout
+				.createParallelGroup(Alignment.LEADING);
+
+		hGroup.addGroup(layout.createSequentialGroup()
+				.addGroup(layout.createParallelGroup()
+						.addComponent(programStatus).addComponent(extension))
+				.addGroup(layout.createParallelGroup()
 						.addComponent(statusIndicator)
 						.addComponent(extensionIndicator))
-				.addGroup(topLayout.createParallelGroup()
+				.addGroup(layout.createParallelGroup()
 						.addComponent(extensionToggle))
-				.addGroup(topLayout.createParallelGroup()
-						.addComponent(loadFiles)
+				.addGroup(layout.createParallelGroup().addComponent(loadFiles)
 						.addComponent(loadBinary)));
-		topLayout.setHorizontalGroup(topHGroup);
-		topLayout.linkSize(SwingConstants.HORIZONTAL, loadBinary, loadFiles);
-		
+		layout.setHorizontalGroup(hGroup);
+		layout.linkSize(SwingConstants.HORIZONTAL, loadBinary, loadFiles,
+				statusIndicator, extensionIndicator, extensionToggle);
+
 		// Vertical
-        GroupLayout.SequentialGroup topVGroup = topLayout.createSequentialGroup();
-        topVGroup.addGroup(topLayout.createParallelGroup()
-        		.addComponent(programStatus)
-        		.addComponent(statusIndicator)
-        		.addComponent(loadFiles));
-        topVGroup.addGroup(topLayout.createParallelGroup()
-        		.addComponent(extension)
-        		.addComponent(extensionIndicator)
-        		.addComponent(extensionToggle)
-        		.addComponent(loadBinary));
-        topLayout.setVerticalGroup(topVGroup);
-		
-        // LAYOUT OF MAIN CONTAINER
-        /*
-		GroupLayout.ParallelGroup hGroup = l.createParallelGroup(Alignment.CENTER);
-		hGroup.addGroup(l.createSequentialGroup()
-				.addComponent(topPanel));
-		l.setHorizontalGroup(hGroup);
-		
-		GroupLayout.ParallelGroup vGroup = l.createParallelGroup(Alignment.LEADING);
-		vGroup.addGroup(l.createSequentialGroup()
-				.addComponent(topPanel));
-		l.setVerticalGroup(vGroup);
-		
-		// */
-		
-		cp.setLayout(topLayout);
-        
-        /*
-		// Top Panel Add
-		cp.add(topPanel, BorderLayout.NORTH);
+		GroupLayout.SequentialGroup vGroup = layout.createSequentialGroup();
+		vGroup.addGroup(layout.createParallelGroup().addComponent(programStatus)
+				.addComponent(statusIndicator).addComponent(loadFiles));
+		vGroup.addGroup(layout.createParallelGroup().addComponent(extension)
+				.addComponent(extensionIndicator).addComponent(extensionToggle)
+				.addComponent(loadBinary));
+		layout.setVerticalGroup(vGroup);
+		layout.linkSize(SwingConstants.VERTICAL, loadBinary, loadFiles,
+				statusIndicator, extensionIndicator, extensionToggle);
 
-		JPanel centerPanel = new JPanel(new GridLayout(4, 3));
-		cp.add(centerPanel, BorderLayout.CENTER);
-		cp.add(new JLabel("East"), BorderLayout.EAST);
-		cp.add(new JLabel("West"), BorderLayout.WEST);
+		// frame.add(panel);
 
-		JTextField hasHeaderA = new JTextField(7);
-		hasHeaderA.setText("Header");
-		hasHeaderA.setForeground(Color.red);
-		hasHeaderA.setBackground(Color.orange);
-		hasHeaderA.addMouseListener(new MouseAdapter() {
-			@Override
-			public void
-				mouseClicked(MouseEvent e) {
-				JTextField source = (JTextField) e.getSource();
-				if (source.getText().equals("Header")) {
-					source.setText("Toggled");
-					source.setForeground(Color.green);
-					source.setBackground(Color.white);
-				} else {
-					source.setText("Header");
-					source.setForeground(Color.red);
-					source.setBackground(Color.orange);
-				}
-			}
-		});
-		hasHeaderA.setEditable(false);
-		centerPanel.add(hasHeaderA);
-		// */
+		JPanel panel2 = new JPanel();
+		BorderLayout fLayout = new BorderLayout();
+		panel2.setLayout(fLayout);
+		panel2.add(panel, BorderLayout.NORTH);
+		panel2.add(new JLabel("second frame"), BorderLayout.SOUTH);
+		frame.add(panel2);
+		
+		frame.setTitle("Rocco Barbini's URL List Compare");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(1024, 768);
 
-		// Exit the program when the close-window button clicked
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("URLListCompare"); // "super" JFrame sets title
-		setSize(800, 600);
-		setVisible(true); // "super" JFrame shows
+		frame.setVisible(true);
+
 	}
 
 	/**
