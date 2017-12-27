@@ -76,15 +76,6 @@ public class URLListCompare extends JFrame {
 		topLayout = new GroupLayout(topPanel);
 		topPanel.setLayout(topLayout);
 		
-		/*
-		JPanel topButtonP = new JPanel();
-		GroupLayout topBPL = new GroupLayout(topButtonP);
-		topButtonP.setLayout(topBPL);
-		topBPL.setHorizontalGroup(topBPL.createParallelGroup(Alignment.TRAILING)
-				.addComponent(loadFiles)
-				.addComponent(loadBinary));
-				*/
-
 		GroupLayout.ParallelGroup hGroup = topLayout
 				.createParallelGroup(Alignment.LEADING);
 
@@ -96,31 +87,48 @@ public class URLListCompare extends JFrame {
 						.addComponent(statusIndicator)
 						.addComponent(extensionIndicator))
 				.addGroup(topLayout.createParallelGroup()
-						.addComponent(extensionToggle))
-				.addGroup(topLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(loadFiles)
-						.addComponent(loadBinary)));
+						.addComponent(extensionToggle)));
 		topLayout.setHorizontalGroup(hGroup);
-		topLayout.linkSize(SwingConstants.HORIZONTAL, loadBinary, loadFiles,
+		topLayout.linkSize(SwingConstants.HORIZONTAL,
 				statusIndicator, extensionIndicator, extensionToggle);
 
 		// Vertical
 		GroupLayout.SequentialGroup vGroup = topLayout.createSequentialGroup();
 		vGroup.addGroup(
 				topLayout.createParallelGroup().addComponent(programStatus)
-						.addComponent(statusIndicator).addComponent(loadFiles));
+						.addComponent(statusIndicator));
 		vGroup.addGroup(topLayout.createParallelGroup().addComponent(extension)
-				.addComponent(extensionIndicator).addComponent(extensionToggle)
-				.addComponent(loadBinary));
+				.addComponent(extensionIndicator).addComponent(extensionToggle));
 		topLayout.setVerticalGroup(vGroup);
-		topLayout.linkSize(SwingConstants.VERTICAL, loadBinary, loadFiles,
+		topLayout.linkSize(SwingConstants.VERTICAL,
 				statusIndicator, extensionIndicator, extensionToggle);
-
+		
+		// BUTTONS TOP PANEL
+		JPanel topButtonP = new JPanel();
+		GroupLayout topBPL = new GroupLayout(topButtonP);
+		topButtonP.setLayout(topBPL);
+		topBPL.setHorizontalGroup(topBPL.createParallelGroup(Alignment.TRAILING)
+				.addComponent(loadFiles)
+				.addComponent(loadBinary));
+		topLayout.linkSize(SwingConstants.HORIZONTAL, loadFiles, loadBinary);
+		topBPL.setVerticalGroup(topBPL.createSequentialGroup()
+				.addComponent(loadFiles)
+				.addComponent(loadBinary));
+		topLayout.linkSize(SwingConstants.VERTICAL, loadFiles, loadBinary);
+		
+		// SUPER TOP PANEL
+		JPanel superTop = new JPanel();
+		BorderLayout stLayout = new BorderLayout();
+		superTop.setLayout(stLayout);
+		superTop.add(topPanel, BorderLayout.WEST);
+		superTop.add(topButtonP, BorderLayout.EAST);
+		
 		// MAIN PANEL;
 		mainPanel = new JPanel();
 		mainLayout = new BorderLayout();
 		mainPanel.setLayout(mainLayout);
-		mainPanel.add(topPanel, BorderLayout.NORTH);
+		//mainPanel.add(topPanel, BorderLayout.NORTH);
+		mainPanel.add(superTop, BorderLayout.NORTH);
 		mainPanel.add(new JLabel("second frame"), BorderLayout.SOUTH);
 
 		// MAIN FRAME
