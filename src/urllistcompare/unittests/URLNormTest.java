@@ -8,7 +8,8 @@ public class URLNormTest extends TestCase {
 
 	public void testHashCode() {
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		assertTrue("Wrong hash code", url001.hashCode() == "/path1/path2/file.ext".hashCode());
 	}
 
@@ -87,7 +88,8 @@ public class URLNormTest extends TestCase {
 	public void testURLNormURLElementURLFormat() {
 		// Soft normalisation
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		URLNorm url001 = new URLNorm(element001, URLFormat.URLNORM, false);
+		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		URLFormat formats[] = new URLFormat[2];
 		String theUrl;
 		int[] impressions;
@@ -113,7 +115,8 @@ public class URLNormTest extends TestCase {
 		}
 		// Hard normalisation
 		element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(element001, URLFormat.URLNORM, true);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, true);
+		url001.add(element001);
 		formats = new URLFormat[2];
 		try{
 			theUrl = url001.getUrl();
@@ -140,7 +143,8 @@ public class URLNormTest extends TestCase {
 	public void testURLNormURLFormatURLFormatURLElement() {
 		// Soft normalisation
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001, false);
+		URLNorm url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		URLFormat formats[] = new URLFormat[2];
 		String theUrl;
 		int[] impressions;
@@ -166,7 +170,8 @@ public class URLNormTest extends TestCase {
 		}
 		// Hard normalisation
 		element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001, true);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, true);
+		url001.add(element001);
 		formats = new URLFormat[2];
 		try{
 			theUrl = url001.getUrl();
@@ -314,7 +319,8 @@ public class URLNormTest extends TestCase {
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to check if a format is missing without defining both formats."));
 		}
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		assertTrue("A format that should be missing is not so!", url001.isMissing(URLFormat.URLNORM));
 		assertFalse("A format that should not be missing is reported as missing!", url001.isMissing(URLFormat.WTKDEF));
 		try{
@@ -334,7 +340,8 @@ public class URLNormTest extends TestCase {
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to check if a format is missing without defining both formats."));
 		}
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		assertTrue("A format that should be missing is not so!", url001.isMissing(1));
 		assertFalse("A format that should not be missing is reported as missing!", url001.isMissing(0));
 		try{
@@ -354,7 +361,8 @@ public class URLNormTest extends TestCase {
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to check the difference between the formats without defining both formats."));
 		}
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		assertTrue("Wrong difference: " + url001.getDifference(), url001.getDifference() == 1200);
 		URLElement element002 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 100);
 		url001.add(element002);
@@ -375,7 +383,8 @@ public class URLNormTest extends TestCase {
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to check the difference between the formats without defining both formats."));
 		}
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		assertTrue("Wrong difference: " + url001.getDifference(URLFormat.URLNORM), url001.getDifference(URLFormat.URLNORM) == -1200);
 		URLElement element002 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 100);
 		url001.add(element002);
@@ -396,7 +405,8 @@ public class URLNormTest extends TestCase {
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to check the difference between the formats without defining both formats."));
 		}
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001, false);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		assertTrue("Wrong difference: " + url001.getDifferencePercent(), url001.getDifferencePercent() == 1200);
 		URLElement element002 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 100);
 		url001.add(element002);
@@ -417,7 +427,8 @@ public class URLNormTest extends TestCase {
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to check the difference between the formats without defining both formats."));
 		}
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001, false);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		assertTrue("Wrong difference: " + url001.getDifferencePercent(URLFormat.URLNORM), url001.getDifferencePercent(URLFormat.URLNORM) == -1);
 		URLElement element002 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 100);
 		url001.add(element002);
@@ -438,7 +449,8 @@ public class URLNormTest extends TestCase {
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to extract the elements without defining both formats."));
 		}
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		try{
 			url001.getUrlElements(-1);
 			fail("Did not throw an exception when one was needed!");
@@ -476,7 +488,8 @@ public class URLNormTest extends TestCase {
 			assertTrue("Wrong error message: " + e.getMessage(), e.getMessage().equals("Tried to extract the elements without defining both formats."));
 		}
 		URLElement element001 = new URLElement("www_domain_com.path1.path2.file_ext", URLFormat.WTKDEF, 1200);
-		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, element001);
+		url001 = new URLNorm(URLFormat.WTKDEF, URLFormat.URLNORM, false);
+		url001.add(element001);
 		try{
 			url001.getUrlElements(URLFormat.GOOG);
 			fail("Did not throw an exception when one was needed!");
