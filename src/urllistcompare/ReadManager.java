@@ -39,7 +39,6 @@ public class ReadManager {
 	
 	public static CSVReader userInput(String sourceName){
 		CSVReader output = null;
-		File file = null;
 		String prompt = DEFAULT_PROMPT; // TODO: make it possible to provide a custom prompt by the caller
 		Scanner keyboard = new Scanner(System.in);
 		URLFormat format = null;
@@ -100,7 +99,6 @@ public class ReadManager {
 	 */
 	public static CSVReader userInput(String sourceName, char extVSep, char extDSep, boolean extIsTSep, char extTSep, boolean headerSet, boolean extHeader){
 		CSVReader output = null;
-		File file = null;
 		String prompt = DEFAULT_PROMPT; // TODO: make it possible to provide a custom prompt by the caller
 		Scanner keyboard = new Scanner(System.in);
 		URLFormat format = null;
