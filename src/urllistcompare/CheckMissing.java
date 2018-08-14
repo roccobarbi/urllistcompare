@@ -41,6 +41,7 @@ public class CheckMissing {
 	private static String fileNames[] = new String[CARDINALITY];
 	private static URLList list = null;
 	private static CSVReader[] reader = new CSVReader[CARDINALITY];
+	@SuppressWarnings("unchecked") // Suppressed warning because the array is initialised later
 	private static ArrayList<URLElement>[] elements = new ArrayList[CARDINALITY];
 	private static long impressions[] = new long[CARDINALITY];
 	
@@ -606,6 +607,7 @@ public class CheckMissing {
 			// Override only
 		};
 		
+		@SuppressWarnings("unused")
 		public void setFileName(String name){
 			// Override only
 		};
