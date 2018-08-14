@@ -16,12 +16,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
 
-import org.omg.CosNaming.IstringHelper;
+//import org.omg.CosNaming.IstringHelper;
 
 import java.util.GregorianCalendar;
 
-import urllistcompare.unittests.URLFormatTest;
-import urllistcompare.util.ArraySort;
+//import urllistcompare.unittests.URLFormatTest;
+//import urllistcompare.util.ArraySort;
 
 /**
  * @author Rocco Barbini (roccobarbi@gmail.com)
