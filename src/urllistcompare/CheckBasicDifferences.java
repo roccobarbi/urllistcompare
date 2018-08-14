@@ -11,17 +11,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+//import java.util.ArrayList;
+//import java.util.Arrays;
+//import java.util.Comparator;
 import java.util.Scanner;
 
-import org.omg.CosNaming.IstringHelper;
+//import org.omg.CosNaming.IstringHelper;
 
 import java.util.GregorianCalendar;
 
-import urllistcompare.unittests.URLFormatTest;
-import urllistcompare.util.ArraySort;
+//import urllistcompare.unittests.URLFormatTest;
+//import urllistcompare.util.ArraySort;
 
 /**
  * This class provides a command line interface that allows users to compare two
