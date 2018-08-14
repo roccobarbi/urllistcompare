@@ -78,6 +78,9 @@ public class URLNorm implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Deprecated // Only the formats should be specified.
+				// The different elements should be added later specifying also the position
+				// element 1 or 2
 	public URLNorm(URLElement element01, URLFormat format02,
 			boolean noExtension) {
 		elements = new HashSet[2];
@@ -100,6 +103,9 @@ public class URLNorm implements Serializable {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Deprecated // Only the formats should be specified.
+				// The different elements should be added later specifying also the position
+				// element 1 or 2
 	public URLNorm(URLFormat format0, URLFormat format1, URLElement first,
 			boolean noExtension) {
 		elements = new HashSet[2];
