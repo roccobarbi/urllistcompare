@@ -188,6 +188,7 @@ public class CheckMissing {
 	private static void SaveBinary(){
 		boolean saveBin = binOutputFileName == null ? false : true;
 		ObjectOutputStream output = null;
+		@SuppressWarnings("resource")
 		Scanner keyboard = new Scanner(System.in);
 		String input = null;
 		GregorianCalendar currentTime = new GregorianCalendar();

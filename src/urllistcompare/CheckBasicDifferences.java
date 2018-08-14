@@ -206,6 +206,7 @@ public class CheckBasicDifferences {
 		SaveBinary() {
 		boolean saveBin = binOutputFileName == null ? false : true;
 		ObjectOutputStream output = null;
+		@SuppressWarnings("resource")
 		Scanner keyboard = new Scanner(System.in);
 		String input = null;
 		GregorianCalendar currentTime = new GregorianCalendar();

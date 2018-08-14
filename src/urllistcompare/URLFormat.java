@@ -194,6 +194,7 @@ public enum URLFormat {
 		// Variables needed to process the input loop
 		char selector = 0;
 		String input;
+		@SuppressWarnings("resource")
 		Scanner keyboard = new Scanner(System.in);
 		// Variables needed to parse the desired index
 		StringBuilder indexString = new StringBuilder();
@@ -253,6 +254,7 @@ public enum URLFormat {
 		// Variables needed to process the input loop
 		char selector = 0;
 		String input;
+		@SuppressWarnings("resource")
 		Scanner keyboard = new Scanner(System.in);
 		// Variables needed to parse the desired index
 		StringBuilder indexString = new StringBuilder();

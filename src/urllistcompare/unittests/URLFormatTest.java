@@ -2,8 +2,6 @@ package urllistcompare.unittests;
 
 import static org.junit.Assert.*;
 
-import javax.print.DocFlavor.URL;
-
 import org.junit.Test;
 
 import urllistcompare.URLFormat;
