@@ -21,6 +21,7 @@ import urllistcompare.exceptions.InvalidURLListException;
  */
 public class URLList implements Serializable {
 
+	private static final long serialVersionUID = 3866668960472537773L;
 	// Default threshold for absolute differences (if less than 10, ignore)
 	public static final int DEF_ABS_THRESHOLD = 10;
 	// Default threshold for percent differences (if less than 0.01, ignore)
