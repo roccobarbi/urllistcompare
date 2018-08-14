@@ -465,7 +465,6 @@ public class CSVReader {
 		StringBuilder tempCol = new StringBuilder();
 		ArrayList <String> output = new ArrayList <String> ();
 		boolean dQuote = false; // Flag: a doublequote has been opened.
-		boolean column = false; // Flag: a column is already being read
 		char [] input = line.toCharArray();
 		for(int c = 0; c < input.length; c++){
 			if(dQuote){
