@@ -31,6 +31,7 @@ import urllistcompare.util.ArraySort;
  */
 public class URLNorm implements Serializable {
 	
+	private static final long serialVersionUID = 7469036981953949805L;
 	private HashSet<URLElement> elements[];
 	private int impressions[];
 	private URLFormat format[];
