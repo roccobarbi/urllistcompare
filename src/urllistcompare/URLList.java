@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import urllistcompare.exceptions.InvalidURLListException;
-import urllistcompare.exceptions.InvalidURLNormException;
+//import urllistcompare.exceptions.InvalidURLNormException;
 
 /**
  * Implements an hashmap of URLNorm elements that can be processed to extract,
