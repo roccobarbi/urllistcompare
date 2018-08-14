@@ -26,6 +26,7 @@ import urllistcompare.exceptions.InvalidUrlException;
  *
  */
 public class URLElement implements Comparable<Object>, Serializable{
+	private static final long serialVersionUID = -6173902609070360677L;
 	private final String url;
 	private final URLFormat format;
 	private final int impressions;
