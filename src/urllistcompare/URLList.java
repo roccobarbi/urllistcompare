@@ -139,7 +139,7 @@ public class URLList implements Serializable {
 	 * 
 	 * @param element
 	 *            the URLElement to add
-	 * @return true if successful, false otherwise (e.g. duplicated element
+	 * @return true if successful, false otherwise (e.g. duplicated element)
 	 */
 	public boolean
 		add(URLElement element) {
@@ -157,6 +157,35 @@ public class URLList implements Serializable {
 			URLNorm n = new URLNorm(format[0], format[1], noExtension);
 			output = n.add(element);
 			;
+			url.put(n.getUrl(), n);
+		}
+		return output;
+	}
+	
+	/**
+	 * Adds an element to the hashmap of URLNorm instances, creating the URLNorm
+	 * instance if needed.
+	 * 
+	 * @param element the URLElement to add
+	 * @param pos the position of the element (if it's format 1 or 2)
+	 * @return true if successful, false otherwise (e.g. duplicated element)
+	 */
+	public boolean
+		add(URLElement element, int pos) {
+		boolean output = false;
+		if (!isActive())
+			throw new InvalidURLListException("URLList not active!");
+		if (pos < 0 || pos >= format.length)
+			throw new RuntimeException(
+					"Tried to add a URLElement to a URLList instance in an invalid position: " + pos + "!");
+		if (element.getFormat() != format[pos])
+			throw new RuntimeException(
+					"Tried to add a URLElement in the wrong format to a URLList instance!");
+		if (url.containsKey(element.normalise())) {
+			output = url.get(element.normalise()).add(element, pos);
+		} else {
+			URLNorm n = new URLNorm(format[0], format[1], noExtension);
+			output = n.add(element, pos);
 			url.put(n.getUrl(), n);
 		}
 		return output;

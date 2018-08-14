@@ -347,6 +347,55 @@ public class URLNorm implements Serializable {
 		}
 		return output;
 	}
+	
+	/**
+	 * Adds a URLElement instance to the relevant LinkeList and adds its page
+	 * impressions count to the relevant array. Checks that both the URLElement
+	 * and the current URLNorm are properly set. If the normalised url is still
+	 * null, it sets it to the normalised url of the new element.
+	 * 
+	 * Precondition: both formats must be set
+	 * 
+	 * @param u the URLElement that needs to be added
+	 * @param pos the position of the element (if it's format 1 or 2)
+	 * @throws InvalidURLNormException
+	 *             if at least one of the formats has not been set correctly or
+	 *             if the URL has the wrong format
+	 * @throws InvalidURLNormException
+	 *             if the URL is not null, but it is different from the
+	 *             normalised url from the new element.
+	 * @throws RuntimeException
+	 *             if the URLElement is in a format that is not included in the
+	 *             URLNorm instance
+	 * @return true if the operation was successful
+	 */
+	public boolean
+		add(URLElement u, int pos) {
+		boolean output = false;
+		if (format[0] == null || format[1] == null)
+			throw new InvalidURLNormException("Tried to add an element "
+					+ "without defining both formats.");
+		if (pos < 0 || pos >= format.length)
+			throw new RuntimeException(
+					"Tried to add a URLElement to a URLNorm instance in an invalid position: " + pos + "!");
+		if (u.getFormat() != format[pos])
+			throw new RuntimeException(
+					"Tried to add a URLElement in the wrong format to a URLNorm instance!");
+		if (url == null) {
+			url = u.normalise(noExtension);
+		} else if (!u.normalise(noExtension).equals(url))
+			throw new InvalidURLNormException("Wrong URL!");
+		if (u.getFormat() == format[pos]) {
+			if (elements[pos].add(u)) {
+				impressions[pos] += u.getImpressions();
+				output = true;
+			}
+		} else {
+			throw new RuntimeException(
+					"Tried to add a URLElement in the wrong format to a URLNorm instance!");
+		}
+		return output;
+	}
 
 	/**
 	 * Checks if the URL is completely missing (zero page impressions) in at
