@@ -747,10 +747,10 @@ public class CheckBasicDifferences {
 			// Override only
 		};
 
-		/*public void
+		public void
 			setFileName(String name) {
 			// Override only
-		};//*/
+		};
 
 		public void
 			checkDifferences() {
