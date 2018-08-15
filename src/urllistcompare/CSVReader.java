@@ -50,6 +50,8 @@ public class CSVReader {
 	private URLFormat format;
 	// the destination
 	private URLList destination;
+	// the position at the destination
+	private int position;
 
 	/**
 	 * Default constructor, the CSVReader instance is not set and can't be used unless all variables are set correctly.
@@ -66,6 +68,7 @@ public class CSVReader {
 		this.format = null;
 		destination = null;
 		set = false;
+		position = -1; // default: invalid position
 	}
 	
 	/**
@@ -372,6 +375,11 @@ public class CSVReader {
 	 */
 	public void setDestination(URLList destination){
 		this.destination = destination;
+	}
+	
+	public CSVReader setPosition(int position) {
+		this.position = position;
+		return this;
 	}
 	
 	/**

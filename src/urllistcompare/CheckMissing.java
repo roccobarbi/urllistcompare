@@ -588,7 +588,7 @@ public class CheckMissing {
 				// Read the files
 				list = new URLList(reader[0].getFormat(), reader[1].getFormat(), noExtension);
 				for(int i = 0; i < CARDINALITY; i++){
-					reader[i].setDestination(list);
+					reader[i].setPosition(i).setDestination(list);
 					if(!reader[i].read()) {
 						System.out.println("Errore nella lettura del file " + reader[i].getName() + "!");
 						System.out.println("Aborting execution");
