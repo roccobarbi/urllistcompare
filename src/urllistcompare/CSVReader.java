@@ -93,7 +93,6 @@ public class CSVReader {
 		return source.getName();
 	}
 	
-	
 	/**
 	 * 
 	 * @return true if the CSVReader instance is set up and can be used, false otherwise
@@ -115,27 +114,6 @@ public class CSVReader {
 	
 	/**
 	 * 
-	 * @param filename the name of the file that needs to be read
-	 * @return true if the file exists and can be read
-	 */
-	public boolean setFile(String filename){
-		source = new File(filename);
-		return source.exists() && source.canRead();
-	}
-	
-	/**
-	 * 
-	 * @param filename the name of the file that needs to be read
-	 * @param path the path where the file can be found
-	 * @return true if the file exists and can be read
-	 */
-	public boolean setFile(String path, String filename){
-		source = new File(path, filename);
-		return source.exists() && source.canRead();
-	}
-	
-	/**
-	 * 
 	 * @param file the file that needs to be read
 	 * @return true if the file exists and can be read
 	 */
@@ -152,9 +130,12 @@ public class CSVReader {
 		this.destination = destination;
 	}
 	
-	public CSVReader setPosition(int position) {
+	/**
+	 * 
+	 * @param position the index for the output of this reader within the destination URLList
+	 */
+	public void setPosition(int position) {
 		this.position = position;
-		return this;
 	}
 	
 	/**
@@ -320,7 +301,25 @@ public class CSVReader {
 	}
 	
 	/**
-	 * Implementation with the builder pattern
+	 * Implementation with the builder pattern.
+	 * 
+	 * The CSVReaderBuilder must always be called with a source File as the argument. It is
+	 * also strongly advised that the other methods are called to properly set all values
+	 * before the build method is ultimately called to return a proper CSVReader.
+	 * 
+	 * Example:
+	 * 
+	 * CSVReader reader = new CSVReader
+	 *			.CSVReaderBuilder(new File("test001.txt"))
+	 *			.headers(true)
+	 *			.urlI(0)
+	 *			.impI(1)
+	 *			.vSep(';')
+	 *			.dSep('.')
+	 *			.isTSep(true)
+	 *			.tSep(',')
+	 *			.format(URLFormat.URLNORM)
+	 *			.build();
 	 * 
 	 * @author rocco barbini (roccobarbi@gmail.com)
 	 *
