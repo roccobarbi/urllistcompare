@@ -187,6 +187,22 @@ public class CSVReader {
 	}
 	
 	/**
+	 * 
+	 * @param urlI the index of the column with the URLs in the source file
+	 */
+	public void setUrlI(int urlI) {
+		this.urlI = urlI;
+	}
+	
+	/**
+	 * 
+	 * @param impI the index of the column with the page impressions in the source file
+	 */
+	public void setImpI(int impI) {
+		this.impI = impI;
+	}
+	
+	/**
 	 * Read the source file's contents into the destination URLList
 	 * @return true if successful, false otherwise
 	 */
