@@ -13,15 +13,23 @@ import java.util.Scanner;
 import urllistcompare.util.Parser;
 
 /**
- * @author Rocco Barbini (roccobarbi@gmail.com)
  * 
  * This class is tasked with reading the contents of a CSV file into a URLList.
+ * <p>
+ * The class supports a default constructor, but the suggested way to create a CSVReader is
+ * to use a CSVReaderBuilder
+ * <p>
  * It can receive the format, otherwise it will prompt the user to receive it.
  * It can be set with the presence of headers, thousand and decimal separators, value separator,
  * with the column numbers for the page impressions and the url. Otherwise, it prompts the user
  * for those values.
+ * <p>
  * In case this class is used with a GUI, those values should be set in the constructor or with accessor
- * functions before the class start reading the file. 
+ * functions before the class start reading the file.
+ * 
+ * @see CSVReaderBuilder
+ * 
+ * @author Rocco Barbini (roccobarbi@gmail.com)
  *
  */
 public class CSVReader {
@@ -136,6 +144,46 @@ public class CSVReader {
 	 */
 	public void setPosition(int position) {
 		this.position = position;
+	}
+	
+	/**
+	 * 
+	 * @param headers true if there is a header line
+	 */
+	public void setHeaders(boolean headers) {
+		this.headers = headers;
+	}
+	
+	/**
+	 * 
+	 * @param isTSep true if there is a thousand separator
+	 */
+	public void setIsTSep(boolean isTSep) {
+		this.isTSep = isTSep;
+	}
+	
+	/**
+	 * 
+	 * @param tSep the thousand separator
+	 */
+	public void setTSep(char tSep) {
+		this.tSep = tSep;
+	}
+	
+	/**
+	 * 
+	 * @param dSep the decimal separator
+	 */
+	public void setDSep(char dSep) {
+		this.dSep = dSep;
+	}
+	
+	/**
+	 * 
+	 * @param vSep the value separator
+	 */
+	public void setVSep(char vSep) {
+		this.vSep = vSep;
 	}
 	
 	/**
