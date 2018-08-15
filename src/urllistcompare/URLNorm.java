@@ -12,11 +12,11 @@ import urllistcompare.util.ArraySort;
 /**
  * 
  * A single normalised URL, which includes 2 hashsets of URLElements (for the
- * formats that are being compared).
+ * lists that are being compared, which can be of the same format if needed).
  * <p>
- * This class must manage at least:
+ * This class manages:
  * <ul>
- * <li>the addition of new URLElement instances, which must be processed to
+ * <li>the addition of new URLElement instances, which are processed to
  * increase the relevant page impressions count;
  * <li>the decision if one of the formats is missing (0 page impressions);
  * <li>the computation of relative and absolute differences between the two
@@ -50,13 +50,6 @@ public class URLNorm implements Serializable {
 								// legacy code
 	}
 
-	@Deprecated
-	public URLNorm(URLFormat format01, URLFormat format02) {
-		this(format01, format02, false); // Default behaviour to ensure
-											// consistency with legacy code:
-											// noExtension is false
-	}
-
 	@SuppressWarnings("unchecked")
 	public URLNorm(URLFormat format01, URLFormat format02,
 			boolean noExtension) {
@@ -69,7 +62,32 @@ public class URLNorm implements Serializable {
 		format[1] = format02;
 		this.noExtension = noExtension;
 	}
-
+	
+	// Provides a deep copy
+	@SuppressWarnings("unchecked")
+	public URLNorm(URLNorm original) {
+		elements = new HashSet[2];
+		elements[0] = new HashSet<URLElement>();
+		elements[1] = new HashSet<URLElement>();
+		impressions = new int[2];
+		format = new URLFormat[2];
+		format[0] = original.getFormats()[0];
+		format[1] = original.getFormats()[1];
+		noExtension = original.getNoExtension();
+		url = original.getUrl();
+		for (URLElement e : original.getUrlElements(0))
+			add(e);
+		for (URLElement e : original.getUrlElements(1))
+			add(e);
+	}
+	
+	@Deprecated
+	public URLNorm(URLFormat format01, URLFormat format02) {
+		this(format01, format02, false); // Default behaviour to ensure
+											// consistency with legacy code:
+											// noExtension is false
+	}
+	
 	@Deprecated
 	public URLNorm(URLElement element01, URLFormat format02) {
 		this(element01, format02, false); // Default behaviour to ensure
@@ -118,24 +136,6 @@ public class URLNorm implements Serializable {
 		this.noExtension = noExtension;
 		add(first);
 		url = first.normalise(noExtension);
-	}
-
-	// Provides a deep copy
-	@SuppressWarnings("unchecked")
-	public URLNorm(URLNorm original) {
-		elements = new HashSet[2];
-		elements[0] = new HashSet<URLElement>();
-		elements[1] = new HashSet<URLElement>();
-		impressions = new int[2];
-		format = new URLFormat[2];
-		format[0] = original.getFormats()[0];
-		format[1] = original.getFormats()[1];
-		noExtension = original.getNoExtension();
-		url = original.getUrl();
-		for (URLElement e : original.getUrlElements(0))
-			add(e);
-		for (URLElement e : original.getUrlElements(1))
-			add(e);
 	}
 
 	public boolean
