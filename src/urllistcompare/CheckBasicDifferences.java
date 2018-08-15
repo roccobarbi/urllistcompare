@@ -63,8 +63,11 @@ public class CheckBasicDifferences {
 
 	// Flags from the command line interface
 	private static boolean noExtension = false;
+	@SuppressWarnings("unused")
 	private static boolean useGui = false;
+	@SuppressWarnings("unused")
 	private static boolean verbose = false;
+	@SuppressWarnings("unused")
 	private static boolean silent = false;
 
 	// Execution mode
@@ -747,6 +750,7 @@ public class CheckBasicDifferences {
 			// Override only
 		};
 
+		@SuppressWarnings("unused")
 		public void
 			setFileName(String name) {
 			// Override only

@@ -57,8 +57,11 @@ public class CheckMissing {
 	
 	// Flags from the command line interface
 	private static boolean noExtension = false;
+	@SuppressWarnings("unused")
 	private static boolean useGui = false;
+	@SuppressWarnings("unused")
 	private static boolean verbose = false;
+	@SuppressWarnings("unused")
 	private static boolean silent = false;
 	
 	// Execution mode
