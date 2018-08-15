@@ -440,7 +440,7 @@ public class CSVReader {
 							throw new Exception("Error parsing the impressions at line " + k + ": " + e.getMessage());
 						}
 						element = new URLElement(page, format, impressions);
-						destination.add(element);
+						destination.add(element, position);
 					}
 					k++;
 				}
