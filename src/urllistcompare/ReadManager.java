@@ -82,7 +82,17 @@ public class ReadManager {
 		// Get the headers
 		headers = promptHeaders(prompt, fileName, keyboard);
 		// Create the CSVReader
-		output = new CSVReader(headers, indexes[0], indexes[1], vSep, dSep, isTSep, tSep, theFile, format);
+		output = new CSVReader
+				.CSVReaderBuilder(theFile)
+				.headers(headers)
+				.urlI(indexes[0])
+				.impI(indexes[1])
+				.vSep(vSep)
+				.dSep(dSep)
+				.isTSep(isTSep)
+				.tSep(tSep)
+				.format(format)
+				.build();
 		return output;
 	}
 	
@@ -154,7 +164,17 @@ public class ReadManager {
 		// Get the format
 		format = promptFormat(prompt, fileName);
 		// Create the CSVReader
-		output = new CSVReader(headers, indexes[0], indexes[1], vSep, dSep, isTSep, tSep, theFile, format);
+		output = new CSVReader
+				.CSVReaderBuilder(theFile)
+				.headers(headers)
+				.urlI(indexes[0])
+				.impI(indexes[1])
+				.vSep(vSep)
+				.dSep(dSep)
+				.isTSep(isTSep)
+				.tSep(tSep)
+				.format(format)
+				.build();
 		return output;
 	}
 	
