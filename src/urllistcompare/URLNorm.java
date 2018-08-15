@@ -306,6 +306,10 @@ public class URLNorm implements Serializable {
 	 * and the current URLNorm are properly set. If the normalised url is still
 	 * null, it sets it to the normalised url of the new element.
 	 * 
+	 * This older method signature is temporarily kept to ensure consistency with
+	 * legacy code. The position is inferred from the format if the formats for
+	 * the different lists are wrong, otherwise an exception is thrown.
+	 * 
 	 * Precondition: both formats must be set
 	 * 
 	 * @param u
@@ -321,26 +325,22 @@ public class URLNorm implements Serializable {
 	 *             URLNorm instance
 	 * @return true if the operation was successful
 	 */
+	@Deprecated
 	public boolean
 		add(URLElement u) {
 		boolean output = false;
 		if (format[0] == null || format[1] == null)
-			throw new InvalidURLNormException("Tried to add an element "
-					+ "without defining both formats.");
+			throw new InvalidURLNormException("Tried to add an element without defining both formats.");
+		if (format[0] == format[1])
+			throw new InvalidURLNormException("Tried to add an element without specifying the position and both formats are equal.");
 		if (url == null) {
 			url = u.normalise(noExtension);
 		} else if (!u.normalise(noExtension).equals(url))
 			throw new InvalidURLNormException("Wrong URL!");
 		if (u.getFormat() == format[0]) {
-			if (elements[0].add(u)) {
-				impressions[0] += u.getImpressions();
-				output = true;
-			}
+			add(u, 0);
 		} else if (u.getFormat() == format[1]) {
-			if (elements[1].add(u)) {
-				impressions[1] += u.getImpressions();
-				output = true;
-			}
+			add(u, 1);
 		} else {
 			throw new RuntimeException(
 					"Tried to add a URLElement in the wrong format to a URLNorm instance!");
