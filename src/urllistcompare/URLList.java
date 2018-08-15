@@ -10,6 +10,7 @@ import java.util.Set;
 
 import urllistcompare.exceptions.InvalidURLListException;
 //import urllistcompare.exceptions.InvalidURLNormException;
+import urllistcompare.exceptions.InvalidURLNormException;
 
 /**
  * Implements an hashmap of URLNorm elements that can be processed to extract,
@@ -137,26 +138,38 @@ public class URLList implements Serializable {
 	 * Adds an element to the hashmap of URLNorm instances, creating the URLNorm
 	 * instance if needed.
 	 * 
+	 * Legacy version that infers the position from the format of the element. 
+	 * 
 	 * @param element
 	 *            the URLElement to add
 	 * @return true if successful, false otherwise (e.g. duplicated element)
 	 */
+	@Deprecated
 	public boolean
 		add(URLElement element) {
 		boolean output = false;
+		int pos = -1; // Default: invalid value
 		if (!isActive())
 			throw new InvalidURLListException("URLList not active!");
 		if (element.getFormat() != format[0]
 				&& element.getFormat() != format[1])
 			throw new RuntimeException(
 					"Tried to add a URLElement in the wrong format to a URLList instance!");
+		if (format[0] == format[1])
+			throw new InvalidURLNormException("Tried to add an element without specifying the position and both formats are equal.");
+		if (format[0] == element.getFormat()) {
+			pos = 0;
+		} else if (format[0] == element.getFormat()) {
+			pos = 1;
+		} else {
+			throw new RuntimeException("Tried to add a URLElement in the wrong format to a URLList instance!");
+		}
 		if (url.containsKey(element.normalise())) {
-			output = url.get(element.normalise()).add(element);
+			output = url.get(element.normalise()).add(element, pos);
 			;
 		} else {
 			URLNorm n = new URLNorm(format[0], format[1], noExtension);
-			output = n.add(element);
-			;
+			output = n.add(element, pos);
 			url.put(n.getUrl(), n);
 		}
 		return output;
