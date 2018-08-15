@@ -71,8 +71,25 @@ public class CSVReader {
 		position = -1; // default: invalid position
 	}
 	
+	private CSVReader(CSVReaderBuilder builder) {
+		this.headers = builder.headers;
+		this.isTSep = builder.isTSep;
+		this.tSep = builder.tSep;
+		this.dSep = builder.dSep;
+		this.vSep = builder.vSep;
+		this.urlI = builder.urlI;
+		this.impI = builder.impI;
+		this.source = builder.source;
+		this.format = builder.format;
+		this.destination = builder.destination;
+		this.position = builder.position;
+	}
+	
 	/**
 	 * Almost full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -80,6 +97,7 @@ public class CSVReader {
 	 * @param dSep
 	 * @param isTSep
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -96,6 +114,9 @@ public class CSVReader {
 	
 	/**
 	 * Almost full constructor that can be used when isTSep = true.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -104,6 +125,7 @@ public class CSVReader {
 	 * @param isTSep
 	 * @param tSep
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -120,6 +142,9 @@ public class CSVReader {
 	
 	/**
 	 * Almost full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -128,6 +153,7 @@ public class CSVReader {
 	 * @param isTSep
 	 * @param filename
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, String filename) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -143,6 +169,9 @@ public class CSVReader {
 	
 	/**
 	 * Almost full constructor that can be used when isTSep = true.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -152,6 +181,7 @@ public class CSVReader {
 	 * @param tSep
 	 * @param filename
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, String filename) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -167,6 +197,9 @@ public class CSVReader {
 	
 	/**
 	 * Almost full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -175,6 +208,7 @@ public class CSVReader {
 	 * @param isTSep
 	 * @param filename
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, File file) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -190,6 +224,9 @@ public class CSVReader {
 	
 	/**
 	 * Almost full constructor that can be used when isTSep = true.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -199,6 +236,7 @@ public class CSVReader {
 	 * @param tSep
 	 * @param filename
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, File file) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -214,6 +252,9 @@ public class CSVReader {
 	
 	/**
 	 * Full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -223,6 +264,7 @@ public class CSVReader {
 	 * @param filename
 	 * @param format
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, String filename, URLFormat format) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -238,6 +280,9 @@ public class CSVReader {
 	
 	/**
 	 * Full constructor that can be used when isTSep = true.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -248,6 +293,7 @@ public class CSVReader {
 	 * @param filename
 	 * @param format
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, String filename, URLFormat format) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -263,6 +309,9 @@ public class CSVReader {
 	
 	/**
 	 * Full constructor that can be used when isTSep = false, no value needs to be specified.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -272,6 +321,7 @@ public class CSVReader {
 	 * @param filename
 	 * @param format
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, File file, URLFormat format) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -287,6 +337,9 @@ public class CSVReader {
 	
 	/**
 	 * Full constructor that can be used when isTSep = true.
+	 * 
+	 * Deprecated: use the builder instead
+	 * 
 	 * @param headers
 	 * @param urlI
 	 * @param impI
@@ -297,6 +350,7 @@ public class CSVReader {
 	 * @param filename
 	 * @param format
 	 */
+	@Deprecated
 	public CSVReader(boolean headers, int urlI, int impI, char vSep, char dSep, boolean isTSep, char tSep, File file, URLFormat format) {
 		this.headers = headers;
 		this.isTSep = isTSep;
@@ -542,6 +596,94 @@ public class CSVReader {
 			}
 		}
 		return output.toArray(new String[0]);
+	}
+	
+	/**
+	 * Implementation with the builder pattern
+	 * 
+	 * @author rocco barbini (roccobarbi@gmail.com)
+	 *
+	 */
+	public static class CSVReaderBuilder {
+		private boolean headers;
+		private boolean isTSep;
+		private char tSep;
+		private char dSep;
+		private char vSep;
+		private int urlI;
+		private int impI;
+		private URLFormat format;
+		private final File source;
+		private int position;
+		private URLList destination;
+		
+		public CSVReaderBuilder (File source) {
+			this.source = source;
+			this.headers = true; // default
+			this.isTSep = true; // default
+			this.tSep = 0; // default
+			this.dSep = 0; // default
+			this.vSep = 0; // default
+			this.urlI = -1; //default
+			this.impI = -1; // default
+			this.format = null; // default
+			this.destination = null; // default
+			this.position = -1;
+		}
+		
+		public CSVReaderBuilder headers(boolean headers) {
+			this.headers = headers;
+			return this;
+		}
+		
+		public CSVReaderBuilder isTsep(boolean isTsep) {
+			this.isTSep = isTsep;
+			return this;
+		}
+		
+		public CSVReaderBuilder tSep(char tSep) {
+			this.tSep = tSep;
+			return this;
+		}
+		
+		public CSVReaderBuilder dSep(char dSep) {
+			this.dSep = dSep;
+			return this;
+		}
+		
+		public CSVReaderBuilder vSep(char vSep) {
+			this.vSep = vSep;
+			return this;
+		}
+		
+		public CSVReaderBuilder urlI(int urlI) {
+			this.urlI = urlI;
+			return this;
+		}
+		
+		public CSVReaderBuilder impI(int impI) {
+			this.impI = impI;
+			return this;
+		}
+		
+		public CSVReaderBuilder format(URLFormat format) {
+			this.format = format;
+			return this;
+		}
+		
+		public CSVReaderBuilder destination(URLList destination) {
+			this.destination = destination;
+			return this;
+		}
+		
+		public CSVReaderBuilder position(int position) {
+			this.position = position;
+			return this;
+		}
+		
+		public CSVReader build() {
+			return new CSVReader(this);
+		}
 	}
 
 }
