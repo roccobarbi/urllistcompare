@@ -79,7 +79,7 @@ public class CSVReader {
 		this.vSep = builder.vSep;
 		this.urlI = builder.urlI;
 		this.impI = builder.impI;
-		this.source = builder.source;
+		this.set = setFile(builder.source);
 		this.format = builder.format;
 		this.destination = builder.destination;
 		this.position = builder.position;
@@ -636,8 +636,8 @@ public class CSVReader {
 			return this;
 		}
 		
-		public CSVReaderBuilder isTsep(boolean isTsep) {
-			this.isTSep = isTsep;
+		public CSVReaderBuilder isTSep(boolean isTSep) {
+			this.isTSep = isTSep;
 			return this;
 		}
 		
