@@ -228,9 +228,9 @@ public class URLList implements Serializable {
 		URLNorm tempUrl = null;
 		for (String k : url.keySet()) {
 			tempUrl = url.get(k);
-			tempAbsDiff = tempUrl.getDifference(format[index]);
+			tempAbsDiff = tempUrl.getDifference(index);
 			if (Math.abs(tempAbsDiff) > DEF_ABS_THRESHOLD) {
-				tempPerDiff = tempUrl.getDifferencePercent(format[index]);
+				tempPerDiff = tempUrl.getDifferencePercent(index);
 				if (Math.abs(tempPerDiff) > DEF_PER_THRESHOLD) {
 					output.add(new URLNorm(tempUrl)); // Deep copy
 				}

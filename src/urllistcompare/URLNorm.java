@@ -165,6 +165,29 @@ public class URLNorm implements Serializable {
 		}
 		return output;
 	}
+	
+	/**
+	 * Checks the absolute difference between the page impressions of the
+	 * specified format and those of the other format. If there are formats A
+	 * and B, and format A is passed as argument, the result is A - B.
+	 * 
+	 * @param index the index of the format to check
+	 * @return the difference of f relative to the other format
+	 * @throws InvalidURLNormException
+	 *             if at least one of the formats has not been set correctly or
+	 *             the wrong URLFormat is passed as an argument
+	 */
+	public int
+		getDifference(int index) {
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException(
+					"Tried to check the difference between the formats without defining both formats.");
+		}
+		if (index < 0 || index > 1) {
+			throw new IndexOutOfBoundsException();
+		}
+		return impressions[index] - impressions[1 - index];
+	}
 
 	/**
 	 * 
@@ -215,6 +238,30 @@ public class URLNorm implements Serializable {
 						/ (double) impressions[0];
 			else
 				output = (double) impressions[1] / 1.0;
+		}
+		return output;
+	}
+	
+	/**
+	 * 
+	 * @param f the index of the format to check
+	 * @return the ratio between the difference between f and the other format
+	 *         and the impressions of the other format
+	 */
+	public double
+		getDifferencePercent(int index) {
+		double output = 0.0;
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException(
+					"Tried to check the difference between the formats without defining both formats.");
+		}
+		if (index < 0 || index > 1) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (impressions[1 - index] != 0) {
+			output = (double) getDifference(index) / (double) impressions[1 - index];
+		} else {
+			output = (double) getDifference(index) / 1.0;
 		}
 		return output;
 	}
