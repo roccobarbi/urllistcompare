@@ -133,38 +133,6 @@ public class URLNorm implements Serializable {
 		}
 		return impressions[0] - impressions[1];
 	}
-
-	/**
-	 * Checks the absolute difference between the page impressions of the
-	 * specified format and those of the other format. If there are formats A
-	 * and B, and format A is passed as argument, the result is A - B.
-	 * 
-	 * @param f
-	 *            the format to check
-	 * @return the difference of f relative to the other format
-	 * @throws InvalidURLNormException
-	 *             if at least one of the formats has not been set correctly or
-	 *             the wrong URLFormat is passed as an argument
-	 */
-	@Deprecated // Only the index should be used
-	public int
-		getDifference(URLFormat f) {
-		int output = 0;
-		if (!isFormatSet()) {
-			throw new InvalidURLNormException(
-					"Tried to check the difference between the formats without defining both formats.");
-		}
-		if (format[0] != f && format[1] != f)
-			throw new InvalidURLNormException(
-					"Tried to check if a format is missing"
-							+ "with a format that is not included in this URLNorm instance.");
-		if (f == format[0]) {
-			output = impressions[0] - impressions[1];
-		} else {
-			output = impressions[1] - impressions[0];
-		}
-		return output;
-	}
 	
 	/**
 	 * Checks the absolute difference between the page impressions of the
@@ -204,41 +172,6 @@ public class URLNorm implements Serializable {
 			output = (double) getDifference() / (double) impressions[1];
 		else
 			output = (double) impressions[0] / 1.0;
-		return output;
-	}
-
-	/**
-	 * 
-	 * @param f
-	 *            the format to check
-	 * @return the ratio between the difference between f and the other format
-	 *         and the impressions of the other format
-	 */
-	@Deprecated // Only the index should be used
-	public double
-		getDifferencePercent(URLFormat f) {
-		double output = 0.0;
-		if (!isFormatSet()) {
-			throw new InvalidURLNormException(
-					"Tried to check the difference between the formats without defining both formats.");
-		}
-		if (format[0] != f && format[1] != f)
-			throw new InvalidURLNormException(
-					"Tried to check if a format is missing"
-							+ "with a format that is not included in this URLNorm instance.");
-		if (f == format[0]) {
-			if (impressions[1] != 0)
-				output = (double) getDifference(format[0])
-						/ (double) impressions[1];
-			else
-				output = (double) impressions[0] / 1.0;
-		} else {
-			if (impressions[0] != 0)
-				output = (double) getDifference(format[1])
-						/ (double) impressions[0];
-			else
-				output = (double) impressions[1] / 1.0;
-		}
 		return output;
 	}
 	
@@ -343,33 +276,6 @@ public class URLNorm implements Serializable {
 	 * Checks if the URL is completely missing (zero page impressions) in at
 	 * least one of the formats.
 	 * 
-	 * @param f
-	 *            the URLFormat that is been checked
-	 * @return true if the format passed as an argument recorded zero
-	 *         impressions, false otherwise
-	 * @throws InvalidURLNormException
-	 *             if at least one of the formats has not been set correctly or
-	 *             the wrong URLFormat is passed as an argument
-	 */
-	@Deprecated // Only the index should be used
-	public boolean
-		isMissing(URLFormat f) {
-		if (!isFormatSet()) {
-			throw new InvalidURLNormException(
-					"Tried to check if a format is missing without defining both formats.");
-		}
-		if (format[0] != f && format[1] != f)
-			throw new InvalidURLNormException(
-					"Tried to check if a format is missing"
-							+ " with a format that is not included in this URLNorm instance.");
-		return ((f == format[0] && impressions[0] == 0)
-				|| (f == format[1] && impressions[1] == 0));
-	}
-
-	/**
-	 * Checks if the URL is completely missing (zero page impressions) in at
-	 * least one of the formats.
-	 * 
 	 * @param index
 	 *            the index of the format that is been checked
 	 * @return true if the format passed as an argument recorded zero
@@ -410,31 +316,6 @@ public class URLNorm implements Serializable {
 				.toArray(new URLElement[elements[index].size()]);
 		output = ArraySort.insertionSortDesc(output);
 		return output;
-	}
-
-	/**
-	 * 
-	 * @param f
-	 *            the format for which the elements should be exported
-	 * @return a sorted (desc) array of URLElements in the specified format
-	 */
-	@Deprecated // Only the index should be used
-	public URLElement[]
-		getUrlElements(URLFormat f) {
-		int index = 0;
-		if (!isFormatSet()) {
-			throw new InvalidURLNormException("Tried to extract the elements without defining both formats.");
-		}
-		if (format[0] == f) {
-			index = 0;
-		} else if (format[1] == f) {
-			index = 1;
-		} else {
-			throw new InvalidURLNormException(
-					"Tried to check if a format is missing"
-							+ " with a format that is not included in this URLNorm instance.");
-		}
-		return getUrlElements(index);
 	}
 
 	/**
