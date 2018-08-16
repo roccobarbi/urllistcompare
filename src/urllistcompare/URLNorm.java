@@ -46,8 +46,7 @@ public class URLNorm implements Serializable {
 		elements[1] = new HashSet<URLElement>();
 		impressions = new int[2];
 		format = new URLFormat[2];
-		noExtension = false; // Default behaviour to ensure consistency with
-								// legacy code
+		noExtension = false; // Default behaviour to ensure consistency with legacy code
 	}
 
 	@SuppressWarnings("unchecked")
@@ -81,6 +80,11 @@ public class URLNorm implements Serializable {
 			add(e, 1);
 	}
 	
+	// Check: are both formats set?
+	private boolean isFormatSet() {
+		return format[0] != null && format[1] != null;
+	}
+	
 	public boolean
 		getNoExtension() {
 		return noExtension;
@@ -96,22 +100,16 @@ public class URLNorm implements Serializable {
 
 	public URLFormat[]
 		getFormats() {
-		if (format[0] == null) {
-			throw new InvalidURLNormException("The first format is null!");
-		}
-		if (format[0] == null) {
-			throw new InvalidURLNormException("The second format is null!");
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException("The URL formats are not set!");
 		}
 		return format;
 	}
 
 	public int[]
 		getImpressions() {
-		if (format[0] == null) {
-			throw new InvalidURLNormException("The first format is null!");
-		}
-		if (format[0] == null) {
-			throw new InvalidURLNormException("The second format is null!");
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException("The URL formats are not set!");
 		}
 		return impressions;
 	}
@@ -129,10 +127,10 @@ public class URLNorm implements Serializable {
 	 */
 	public int
 		getDifference() {
-		if (format[0] == null || format[1] == null)
+		if (!isFormatSet()) {
 			throw new InvalidURLNormException(
-					"Tried to check the difference between the formats"
-							+ " without defining both formats.");
+					"Tried to check the difference between the formats without defining both formats.");
+		}
 		return impressions[0] - impressions[1];
 	}
 
@@ -148,13 +146,14 @@ public class URLNorm implements Serializable {
 	 *             if at least one of the formats has not been set correctly or
 	 *             the wrong URLFormat is passed as an argument
 	 */
+	@Deprecated // Only the index should be used
 	public int
 		getDifference(URLFormat f) {
 		int output = 0;
-		if (format[0] == null || format[1] == null)
+		if (!isFormatSet()) {
 			throw new InvalidURLNormException(
-					"Tried to check the difference between the formats"
-							+ " without defining both formats.");
+					"Tried to check the difference between the formats without defining both formats.");
+		}
 		if (format[0] != f && format[1] != f)
 			throw new InvalidURLNormException(
 					"Tried to check if a format is missing"
@@ -174,10 +173,10 @@ public class URLNorm implements Serializable {
 	public double
 		getDifferencePercent() {
 		double output = 0.0;
-		if (format[0] == null || format[1] == null)
+		if (!isFormatSet()) {
 			throw new InvalidURLNormException(
-					"Tried to check the difference between the formats"
-							+ " without defining both formats.");
+					"Tried to check the difference between the formats without defining both formats.");
+		}
 		if (impressions[1] != 0)
 			output = (double) getDifference() / (double) impressions[1];
 		else
@@ -192,13 +191,14 @@ public class URLNorm implements Serializable {
 	 * @return the ratio between the difference between f and the other format
 	 *         and the impressions of the other format
 	 */
+	@Deprecated // Only the index should be used
 	public double
 		getDifferencePercent(URLFormat f) {
 		double output = 0.0;
-		if (format[0] == null || format[1] == null)
+		if (!isFormatSet()) {
 			throw new InvalidURLNormException(
-					"Tried to check the difference between the formats"
-							+ " without defining both formats.");
+					"Tried to check the difference between the formats without defining both formats.");
+		}
 		if (format[0] != f && format[1] != f)
 			throw new InvalidURLNormException(
 					"Tried to check if a format is missing"
@@ -244,7 +244,7 @@ public class URLNorm implements Serializable {
 	}
 	
 	/**
-	 * Adds a URLElement instance to the relevant LinkeList and adds its page
+	 * Adds a URLElement instance to the relevant LinkedList and adds its page
 	 * impressions count to the relevant array. Checks that both the URLElement
 	 * and the current URLNorm are properly set. If the normalised url is still
 	 * null, it sets it to the normalised url of the new element.
@@ -267,9 +267,9 @@ public class URLNorm implements Serializable {
 	public boolean
 		add(URLElement u, int pos) {
 		boolean output = false;
-		if (format[0] == null || format[1] == null)
-			throw new InvalidURLNormException("Tried to add an element "
-					+ "without defining both formats.");
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException("Tried to add an element without defining both formats.");
+		}
 		if (pos < 0 || pos >= format.length)
 			throw new RuntimeException(
 					"Tried to add a URLElement to a URLNorm instance in an invalid position: " + pos + "!");
@@ -304,12 +304,13 @@ public class URLNorm implements Serializable {
 	 *             if at least one of the formats has not been set correctly or
 	 *             the wrong URLFormat is passed as an argument
 	 */
+	@Deprecated // Only the index should be used
 	public boolean
 		isMissing(URLFormat f) {
-		if (format[0] == null || format[1] == null)
+		if (!isFormatSet()) {
 			throw new InvalidURLNormException(
-					"Tried to check if a format is missing"
-							+ " without defining both formats.");
+					"Tried to check if a format is missing without defining both formats.");
+		}
 		if (format[0] != f && format[1] != f)
 			throw new InvalidURLNormException(
 					"Tried to check if a format is missing"
@@ -332,10 +333,10 @@ public class URLNorm implements Serializable {
 	 */
 	public boolean
 		isMissing(int index) {
-		if (format[0] == null || format[1] == null)
+		if (!isFormatSet()) {
 			throw new InvalidURLNormException(
-					"Tried to check if a format is missing"
-							+ " without defining both formats.");
+					"Tried to check if a format is missing without defining both formats.");
+		}
 		if (index < 0 || index >= format.length)
 			throw new IndexOutOfBoundsException(
 					"There are only 2 formats in a URLNorm object: the index can only be 0 or 1!");
@@ -355,9 +356,9 @@ public class URLNorm implements Serializable {
 		if (index < 0 || index >= format.length)
 			throw new IndexOutOfBoundsException(
 					"There are only 2 formats in a URLNorm object: the index can only be 0 or 1!");
-		if (format[0] == null || format[1] == null)
-			throw new InvalidURLNormException("Tried to extract the elements"
-					+ " without defining both formats.");
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException("Tried to extract the elements without defining both formats.");
+		}
 		output = elements[index]
 				.toArray(new URLElement[elements[index].size()]);
 		output = ArraySort.insertionSortDesc(output);
@@ -370,12 +371,13 @@ public class URLNorm implements Serializable {
 	 *            the format for which the elements should be exported
 	 * @return a sorted (desc) array of URLElements in the specified format
 	 */
+	@Deprecated // Only the index should be used
 	public URLElement[]
 		getUrlElements(URLFormat f) {
 		int index = 0;
-		if (format[0] == null || format[1] == null)
-			throw new InvalidURLNormException("Tried to extract the elements"
-					+ " without defining both formats.");
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException("Tried to extract the elements without defining both formats.");
+		}
 		if (format[0] == f) {
 			index = 0;
 		} else if (format[1] == f) {
@@ -417,9 +419,8 @@ public class URLNorm implements Serializable {
 		if (index < 0 || index > 1) {
 			throw new IndexOutOfBoundsException();
 		}
-		if (format[0] == null || format[1] == null) {
-			throw new InvalidURLNormException(
-					"At least one format is missing!");
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException("At least one format is missing!");
 		}
 		StringBuilder outputB = new StringBuilder();
 		for (Object element : this.elements[index].toArray()) {
@@ -444,9 +445,8 @@ public class URLNorm implements Serializable {
 		if (index < 0 || index > 1) {
 			throw new IndexOutOfBoundsException();
 		}
-		if (format[0] == null || format[1] == null) {
-			throw new InvalidURLNormException(
-					"At least one format is missing!");
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException("At least one format is missing!");
 		}
 		StringBuilder outputB = new StringBuilder();
 		for (Object element : this.elements[index].toArray()) {
@@ -467,8 +467,9 @@ public class URLNorm implements Serializable {
 	public String
 		toCsv(URLFormat f) {
 		int index = 0;
-		if (format[0] == null || format[1] == null)
-			throw new InvalidURLNormException("At least one format is null!");
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException("At least one format is missing!");
+		}
 		if (format[0] == f) {
 			index = 0;
 		} else if (format[1] == f) {
@@ -492,8 +493,9 @@ public class URLNorm implements Serializable {
 	public String
 		toCsv(URLFormat f, char sep) {
 		int index = 0;
-		if (format[0] == null || format[1] == null)
-			throw new InvalidURLNormException("At least one format is null!");
+		if (!isFormatSet()) {
+			throw new InvalidURLNormException("At least one format is missing!");
+		}
 		if (format[0] == f) {
 			index = 0;
 		} else if (format[1] == f) {
