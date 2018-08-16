@@ -76,68 +76,11 @@ public class URLNorm implements Serializable {
 		noExtension = original.getNoExtension();
 		url = original.getUrl();
 		for (URLElement e : original.getUrlElements(0))
-			add(e);
+			add(e, 0);
 		for (URLElement e : original.getUrlElements(1))
-			add(e);
+			add(e, 1);
 	}
 	
-	@Deprecated
-	public URLNorm(URLFormat format01, URLFormat format02) {
-		this(format01, format02, false); // Default behaviour to ensure
-											// consistency with legacy code:
-											// noExtension is false
-	}
-	
-	@Deprecated
-	public URLNorm(URLElement element01, URLFormat format02) {
-		this(element01, format02, false); // Default behaviour to ensure
-											// consistency with legacy code:
-											// noExtension is false
-	}
-
-	@SuppressWarnings("unchecked")
-	@Deprecated // Only the formats should be specified.
-				// The different elements should be added later specifying also the position
-				// element 1 or 2
-	public URLNorm(URLElement element01, URLFormat format02,
-			boolean noExtension) {
-		elements = new HashSet[2];
-		elements[0] = new HashSet<URLElement>();
-		elements[1] = new HashSet<URLElement>();
-		impressions = new int[2];
-		format = new URLFormat[2];
-		format[0] = element01.getFormat();
-		format[1] = format02;
-		this.noExtension = noExtension;
-		add(element01);
-		url = element01.normalise(noExtension);
-	}
-
-	@Deprecated
-	public URLNorm(URLFormat format0, URLFormat format1, URLElement first) {
-		this(format0, format1, first, false); // Default behaviour to ensure
-												// consistency with legacy code:
-												// noExtension is false
-	}
-
-	@SuppressWarnings("unchecked")
-	@Deprecated // Only the formats should be specified.
-				// The different elements should be added later specifying also the position
-				// element 1 or 2
-	public URLNorm(URLFormat format0, URLFormat format1, URLElement first,
-			boolean noExtension) {
-		elements = new HashSet[2];
-		elements[0] = new HashSet<URLElement>();
-		elements[1] = new HashSet<URLElement>();
-		impressions = new int[2];
-		format = new URLFormat[2];
-		format[0] = format0;
-		format[1] = format1;
-		this.noExtension = noExtension;
-		add(first);
-		url = first.normalise(noExtension);
-	}
-
 	public boolean
 		getNoExtension() {
 		return noExtension;
@@ -298,54 +241,6 @@ public class URLNorm implements Serializable {
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * Adds a URLElement instance to the relevant LinkeList and adds its page
-	 * impressions count to the relevant array. Checks that both the URLElement
-	 * and the current URLNorm are properly set. If the normalised url is still
-	 * null, it sets it to the normalised url of the new element.
-	 * 
-	 * This older method signature is temporarily kept to ensure consistency with
-	 * legacy code. The position is inferred from the format if the formats for
-	 * the different lists are wrong, otherwise an exception is thrown.
-	 * 
-	 * Precondition: both formats must be set
-	 * 
-	 * @param u
-	 *            the URLElement that needs to be added
-	 * @throws InvalidURLNormException
-	 *             if at least one of the formats has not been set correctly or
-	 *             if the URL has the wrong format
-	 * @throws InvalidURLNormException
-	 *             if the URL is not null, but it is different from the
-	 *             normalised url from the new element.
-	 * @throws RuntimeException
-	 *             if the URLElement is in a format that is not included in the
-	 *             URLNorm instance
-	 * @return true if the operation was successful
-	 */
-	@Deprecated
-	public boolean
-		add(URLElement u) {
-		boolean output = false;
-		if (format[0] == null || format[1] == null)
-			throw new InvalidURLNormException("Tried to add an element without defining both formats.");
-		if (format[0] == format[1])
-			throw new InvalidURLNormException("Tried to add an element without specifying the position and both formats are equal.");
-		if (url == null) {
-			url = u.normalise(noExtension);
-		} else if (!u.normalise(noExtension).equals(url))
-			throw new InvalidURLNormException("Wrong URL!");
-		if (u.getFormat() == format[0]) {
-			add(u, 0);
-		} else if (u.getFormat() == format[1]) {
-			add(u, 1);
-		} else {
-			throw new RuntimeException(
-					"Tried to add a URLElement in the wrong format to a URLNorm instance!");
-		}
-		return output;
 	}
 	
 	/**
