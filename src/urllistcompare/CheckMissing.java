@@ -23,11 +23,11 @@ import java.util.GregorianCalendar;
 //import urllistcompare.unittests.URLFormatTest;
 //import urllistcompare.util.ArraySort;
 
-/**
- * @author Rocco Barbini (roccobarbi@gmail.com)
- * 
+/** 
  * This class provides a command line interface that allows users to compare two lists of URLs and check if
  * some are missing from one file or the other.
+ * 
+ * @author Rocco Barbini (roccobarbi@gmail.com)
  *
  */
 public class CheckMissing {
