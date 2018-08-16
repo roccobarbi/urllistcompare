@@ -726,6 +726,7 @@ public class CheckBasicDifferences {
 						noExtension);
 				for (int i = 0; i < CARDINALITY; i++) {
 					reader[i].setDestination(list);
+					reader[i].setPosition(i);
 					if (!reader[i].read()) {
 						System.out.println("Errore nella lettura del file "
 								+ reader[i].getName() + "!");
