@@ -9,6 +9,11 @@ package urllistcompare.exceptions;
  */
 public class ConfigurationFormatException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2580284357704875766L;
+
 	public ConfigurationFormatException() {
 		this("Error in the configuration format!");
 	}
