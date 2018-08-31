@@ -197,12 +197,22 @@ public class ConfigParser {
 		},	
 		FORMAT() {
 			public mode read(String instruction) {
+				mode output = FORMAT;
+				String command = "", value = "";
 				if (instruction.trim().equals("[[input]]")) {
-					return INPUT;
-				} else {
-					// TODO: actually read the format
-					return FORMAT;
+					output = INPUT;
+				} else if (instruction.trim().length() > 0 ){
+					if (instruction.contains("=")) {
+						command = instruction.split("=")[0];
+						value = instruction.split("=")[0];
+						switch (command) {
+						// Manage all commands: error on default.
+						}
+					} else {
+						// Error: invalid command
+					}
 				}
+				return output;
 			}
 		},		
 	INPUT() {
