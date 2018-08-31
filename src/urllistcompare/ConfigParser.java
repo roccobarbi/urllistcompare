@@ -43,7 +43,7 @@ public class ConfigParser {
 		saveBinary = false;
 	}
 	
-	public String getConfigSampleContents() {
+	public static String getConfigSampleContents() {
 		return null;
 	}
 
