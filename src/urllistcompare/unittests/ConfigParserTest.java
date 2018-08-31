@@ -87,7 +87,7 @@ public class ConfigParserTest {
 			config = new File(folder + "testConfig-full.toml");
 			parser = new ConfigParser(config);
 		} catch (FileNotFoundException | WrongExtensionException | ConfigurationFormatException e) {
-			fail("Exception thrown when none is expected is expected with file testConfig-full!");
+			fail("Exception thrown when none is expected is expected with file testConfig-full! " + e.getClass());
 			e.printStackTrace();
 		}
 	}

@@ -6,6 +6,7 @@ package urllistcompare;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import urllistcompare.exceptions.ConfigurationFormatException;
@@ -16,7 +17,7 @@ import urllistcompare.exceptions.WrongExtensionException;
  *
  */
 public class ConfigParser {
-	
+
 	private final File input;
 	private final CSVReader[] readers;
 	private final String outputFileName;
@@ -24,7 +25,7 @@ public class ConfigParser {
 	private final boolean checkMissing;
 	private final boolean checkBasicDifferences;
 	private final boolean saveBinary;
-	
+
 	public ConfigParser() {
 		input = null;
 		readers = null;
@@ -34,9 +35,14 @@ public class ConfigParser {
 		checkBasicDifferences = false;
 		saveBinary = false;
 	}
-	
-	public ConfigParser(File input) throws FileNotFoundException, WrongExtensionException, ConfigurationFormatException {
+
+	public ConfigParser(File input)
+			throws FileNotFoundException, WrongExtensionException, ConfigurationFormatException {
 		Scanner inputStream;
+		String line;
+		mode status = mode.IDLE;
+		String instruction = "";
+		ArrayList<CSVReader> readers = new ArrayList<CSVReader>(); // temporary output
 		if (!input.exists() || !input.canRead()) {
 			throw new FileNotFoundException();
 		}
@@ -46,18 +52,21 @@ public class ConfigParser {
 		// Try reading the file
 		this.input = input;
 		try {
-			inputStream = new Scanner(input); 
+			inputStream = new Scanner(input);
 		} catch (FileNotFoundException e) {
-			System.err.println("Problema nell'apertura del file " + input.getName());
-			throw new FileNotFoundException();
+			throw new FileNotFoundException("Problema nell'apertura del file " + input.getName());
 		}
-		try{
-			while(true){
-				if(!inputStream.hasNextLine())
+		try {
+			while (true) {
+				if (!inputStream.hasNextLine())
 					throw new EOFException("End of file reached!");
+				line = inputStream.nextLine();
+				// TODO: logic that reads instruction statements as per the toml standard and
+				// assigns it to the instruction string.
+				status = status.read(instruction);
 			}
-		} catch(EOFException e){
-			System.out.println("File " + input.getName() + " letto correttamente!");
+		} catch (EOFException e) {
+			// do nothing, the file has been read
 		} catch (Exception e) {
 			// Close the input stream
 			inputStream.close();
@@ -67,14 +76,18 @@ public class ConfigParser {
 			// Close the stream
 			inputStream.close();
 		}
-		readers = null;
+		this.readers = readers.toArray(new CSVReader[0]);
+		if (this.readers == null || this.readers.length < 1) {
+			// No readers, the configuration must have been wrong or empty
+			throw new ConfigurationFormatException("No readers were created!");
+		}
 		outputFileName = null;
 		binaryFileName = null;
 		checkMissing = false;
 		checkBasicDifferences = false;
 		saveBinary = false;
 	}
-	
+
 	public static String getConfigSampleContents() {
 		StringBuilder output = new StringBuilder();
 		output.append("[format]\n");
@@ -139,7 +152,7 @@ public class ConfigParser {
 	public String getOutputFileName() {
 		return outputFileName;
 	}
-	
+
 	/**
 	 * @return the binaryFileName
 	 */
@@ -160,11 +173,52 @@ public class ConfigParser {
 	public boolean isCheckBasicDifferences() {
 		return checkBasicDifferences;
 	}
-	
+
 	/**
 	 * @return true if saveBinary is toggled on
 	 */
 	public boolean isSaveBinary() {
 		return saveBinary;
 	}
+
+	// Defines different behaviours while reading different parts of the config file
+	private static enum mode {
+
+		IDLE() {
+			public mode read(String instruction) {
+				if (instruction.trim().equals("[format]")) {
+					return FORMAT;
+				} else if (instruction.trim().equals("[[input]]")) {
+					return INPUT;
+				} else {
+					return IDLE;
+				}
+			}
+		},	
+		FORMAT() {
+			public mode read(String instruction) {
+				if (instruction.trim().equals("[[input]]")) {
+					return INPUT;
+				} else {
+					// TODO: actually read the format
+					return FORMAT;
+				}
+			}
+		},		
+	INPUT() {
+			public mode read(String instruction) {
+				if (instruction.trim().equals("[format]")) {
+					return FORMAT;
+				} else {
+					// TODO: actually read the format
+					return INPUT;
+				}
+			}
+		};
+
+	public mode read(String instruction) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+};
 }
