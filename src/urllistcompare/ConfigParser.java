@@ -3,8 +3,10 @@
  */
 package urllistcompare;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import urllistcompare.exceptions.ConfigurationFormatException;
 import urllistcompare.exceptions.WrongExtensionException;
@@ -34,13 +36,37 @@ public class ConfigParser {
 	}
 	
 	public ConfigParser(File input) throws FileNotFoundException, WrongExtensionException, ConfigurationFormatException {
+		Scanner inputStream;
 		if (!input.exists() || !input.canRead()) {
 			throw new FileNotFoundException();
 		}
 		if (!input.getName().endsWith(".toml")) {
 			throw new WrongExtensionException();
 		}
+		// Try reading the file
 		this.input = input;
+		try {
+			inputStream = new Scanner(input); 
+		} catch (FileNotFoundException e) {
+			System.err.println("Problema nell'apertura del file " + input.getName());
+			throw new FileNotFoundException();
+		}
+		try{
+			while(true){
+				if(!inputStream.hasNextLine())
+					throw new EOFException("End of file reached!");
+			}
+		} catch(EOFException e){
+			System.out.println("File " + input.getName() + " letto correttamente!");
+		} catch (Exception e) {
+			// Close the input stream
+			inputStream.close();
+			// Stop all engines, but in a way that can be catched
+			throw new RuntimeException("Unrecoverable error while reading " + input.getName() + ": " + e.getMessage());
+		} finally {
+			// Close the stream
+			inputStream.close();
+		}
 		readers = null;
 		outputFileName = null;
 		binaryFileName = null;
