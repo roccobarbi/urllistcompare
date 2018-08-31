@@ -46,6 +46,13 @@ public class ConfigParser {
 	public static String getConfigSampleContents() {
 		StringBuilder output = new StringBuilder();
 		output.append("[format]\n");
+		output.append("# Available formats:\n");
+		output.append("# WTKDEF: www_domain_com.path.path.file_ext\n");
+		output.append("# URLNORM: http://www.domain.com/path/path/file.ext\n");
+		output.append("# NOPROTNORM: www.domain.com/path/path/file.ext\n");
+		output.append("# FULLURL: http://www.domain.com/PATH/path/file.ext?query#fragment\n");
+		output.append("# GOOG: /path/path/file.ext?query#fragment\n");
+		output.append("# NOPROTFULL: www.domain.com/PATH/path/file.ext?query#fragment\n");
 		output.append("f1 = \"URLNORM\"\n");
 		output.append("f2 = \"GOOG\"\n");
 		output.append("output = \"someoutputfile.csv\"\n");
