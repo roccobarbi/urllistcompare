@@ -11,7 +11,8 @@ import org.junit.runners.Suite;
 	URLElementTest.class,
 	URLNormTest.class,
 	URLListTest.class,
-	ParserTest.class
+	ParserTest.class,
+	ConfigParserTest.class
 })
 
 public class MainTestSuite {
