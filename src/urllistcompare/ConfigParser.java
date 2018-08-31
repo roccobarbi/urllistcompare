@@ -44,7 +44,40 @@ public class ConfigParser {
 	}
 	
 	public static String getConfigSampleContents() {
-		return null;
+		StringBuilder output = new StringBuilder();
+		output.append("[format]\n");
+		output.append("f1 = \"URLNORM\"\n");
+		output.append("f2 = \"GOOG\"\n");
+		output.append("output = \"someoutputfile.csv\"\n");
+		output.append("binary = \"somebinary.ulst\"\n");
+		output.append("checkMissing = true");
+		output.append("checkBasicDifference = true");
+		output.append("saveBinary = true");
+		output.append("\n");
+		output.append("[[input]]\n");
+		output.append("file = \"input0.csv\"\n");
+		output.append("dSep = \".\"\n");
+		output.append("isTsep = true\n");
+		output.append("tSep= \",\"\n");
+		output.append("urlIndex = \"0\"\n");
+		output.append("piIndex = \"1\"\n");
+		output.append("headers = \"1\" # any int, the header rows\n");
+		output.append("footer = \"2\" # any int, the footer rows\n");
+		output.append("index = \"0\"\n");
+		output.append("format = \"URLNORM\"\n");
+		output.append("\n");
+		output.append("[[input]]\n");
+		output.append("file = \"input1.csv\"\n");
+		output.append("dSep = \".\"\n");
+		output.append("isTsep = true\n");
+		output.append("tSep= \",\"\n");
+		output.append("urlIndex = \"0\"\n");
+		output.append("piIndex = \"1\"\n");
+		output.append("headers = \"1\" # any int, the header rows\n");
+		output.append("footer = \"2\" # any int, the footer rows\n");
+		output.append("index = \"1\"\n");
+		output.append("format = \"GOOG\"");
+		return output.toString();
 	}
 
 	/**
