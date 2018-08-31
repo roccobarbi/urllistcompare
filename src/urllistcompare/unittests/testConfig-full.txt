@@ -1,0 +1,43 @@
+[format]
+f1 = "URLNORM"
+f2 = "GOOG"
+output = "someoutputfile"
+binary = "somebinary"
+saveBinary = true
+checkMissing = true
+checkBasicDifference = false
+
+[[input]]
+file = "input0.csv"
+dSep = "."
+isTsep = true
+tSep= ","
+urlIndex = "0"
+piIndex = "1"
+headers = "1" # any int, the header rows
+footer = "2" # any int, the footer rows
+index = "0"
+format = "URLNORM"
+
+[[input]]
+file = "input1.csv"
+dSep = "."
+isTsep = true
+tSep= ","
+urlIndex = "0"
+piIndex = "1"
+headers = "1" # any int, the header rows
+footer = "2" # any int, the footer rows
+index = "1"
+format = "GOOG"
+
+[[input]]
+file = "input2.csv"
+dSep = "."
+isTsep = false
+urlIndex = "0"
+piIndex = "1"
+headers = "1" # any int, the header rows
+footer = "2" # any int, the footer rows
+index = "0"
+format = "URLNORM"

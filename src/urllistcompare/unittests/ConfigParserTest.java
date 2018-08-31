@@ -81,6 +81,14 @@ public class ConfigParserTest {
 		} catch (ConfigurationFormatException e) {
 			e.printStackTrace();
 		}
+		// Test on a full config file
+		try {
+			config = new File("urllistcompare/src/unittests/testConfig-full.toml");
+			parser = new ConfigParser(config);
+		} catch (FileNotFoundException | WrongExtensionException | ConfigurationFormatException e) {
+			fail("Exception thrown when none is expected is expected with file testConfig-full!");
+			e.printStackTrace();
+		}
 	}
 
 }
