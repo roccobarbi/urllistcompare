@@ -34,6 +34,12 @@ public class ConfigParser {
 	}
 	
 	public ConfigParser(File input) throws FileNotFoundException, WrongExtensionException, ConfigurationFormatException {
+		if (!input.exists() || !input.canRead()) {
+			throw new FileNotFoundException();
+		}
+		if (!input.getName().endsWith(".toml")) {
+			throw new WrongExtensionException();
+		}
 		this.input = input;
 		readers = null;
 		outputFileName = null;

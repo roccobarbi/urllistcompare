@@ -40,10 +40,11 @@ public class ConfigParserTest {
 	
 	@Test
 	public void ConfigParserArgTest() {
+		String folder = "src" + File.separator + "urllistcompare" + File.separator + "unittests" + File.separator;
 		File config;
 		ConfigParser parser;
 		try {
-			config = new File("urllistcompare/src/unittests/fictionalTestConfig.txt");
+			config = new File(folder + "fictionalTestConfig.txt");
 			parser = new ConfigParser(config);
 			fail("No exception thrown when FileNotFoundException is expected!");
 		} catch (FileNotFoundException e) {
@@ -56,22 +57,22 @@ public class ConfigParserTest {
 			e.printStackTrace();
 		}
 		try {
-			config = new File("urllistcompare/src/unittests/testConfig.txt");
+			config = new File(folder + "testConfig.txt");
 			parser = new ConfigParser(config);
 			fail("No exception thrown when WrongExtensionException is expected!");
 		} catch (FileNotFoundException e) {
+			fail("Wrong exception: FileNotFoundException when WrongExtensionException is expected!");
 			e.printStackTrace();
 		} catch (WrongExtensionException e) {
-			fail("Wrong exception: FileNotFoundException when WrongExtensionException is expected!");
 			e.printStackTrace();
 		} catch (ConfigurationFormatException e) {
 			fail("Wrong exception: ConfigurationFormatException when WrongExtensionException is expected!");
 			e.printStackTrace();
 		}
 		try {
-			config = new File("urllistcompare/src/unittests/testConfig-empty.toml");
+			config = new File(folder + "testConfig-empty.toml");
 			parser = new ConfigParser(config);
-			fail("No exception thrown when WrongExtensionException is expected!");
+			fail("No exception thrown when ConfigurationFormatException is expected!");
 		} catch (FileNotFoundException e) {
 			fail("Wrong exception: FileNotFoundException when ConfigurationFormatException is expected!");
 			e.printStackTrace();
@@ -83,7 +84,7 @@ public class ConfigParserTest {
 		}
 		// Test on a full config file
 		try {
-			config = new File("urllistcompare/src/unittests/testConfig-full.toml");
+			config = new File(folder + "testConfig-full.toml");
 			parser = new ConfigParser(config);
 		} catch (FileNotFoundException | WrongExtensionException | ConfigurationFormatException e) {
 			fail("Exception thrown when none is expected is expected with file testConfig-full!");
